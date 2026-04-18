@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAKATAKA — Underground Movement</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;400;700;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+
+  :root {
+    --black: #0a0a0a;
+    --white: #f0ede8;
+    --gray: #141414;
+    --mid: #1e1e1e;
+    --accent: #c8b89a;
+    --accent2: #e8d5b0;
+    --dim: #555;
+    --font-display: 'Unbounded', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--font-mono);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  .cursor {
+    position: fixed; width: 8px; height: 8px;
+    background: var(--accent); border-radius: 50%;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s;
+  }
+  .cursor-ring {
+    position: fixed; width: 32px; height: 32px;
+    border: 1px solid rgba(200,184,154,0.35);
+    border-radius: 50%; pointer-events: none; z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: width 0.2s, height 0.2s;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 24px 48px;
+    display: flex; justify-content: space-between; align-items: center;
+    background: linear-gradient(to bottom, rgba(10,10,10,0.97) 0%, transparent 100%);
+  }
+  .nav-logo { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+  .nav-logo svg { width: 36px; height: 36px; }
+  .nav-logo-text {
+    font-family: var(--font-display); font-weight: 700;
+    font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--white);
+  }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--dim); text-decoration: none; transition: color 0.2s; cursor: none;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-right { display: flex; gap: 20px; }
+  .nav-right a {
+    font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--dim); text-decoration: none; transition: color 0.2s; cursor: none;
+  }
+  .nav-right a:hover { color: var(--accent); }
+
+  /* HERO */
+  .hero {
+    height: 100vh; position: relative;
+    display: flex; align-items: flex-end;
+    padding: 0 48px 80px;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 75% 35%, rgba(200,184,154,0.06) 0%, transparent 55%),
+      radial-gradient(ellipse at 15% 75%, rgba(200,184,154,0.03) 0%, transparent 45%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+    background-size: 72px 72px;
+  }
+  .hero-logo-bg {
+    position: absolute; right: -100px; top: 50%;
+    transform: translateY(-50%);
+    width: 720px; height: 720px; opacity: 0.035;
+    animation: slowspin 80s linear infinite;
+  }
+  @keyframes slowspin {
+    from { transform: translateY(-50%) rotate(0deg); }
+    to { transform: translateY(-50%) rotate(360deg); }
+  }
+  .hero-content { position: relative; z-index: 2; max-width: 850px; }
+  .hero-eyebrow {
+    font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 28px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .hero-eyebrow::before {
+    content: ''; display: block; width: 36px; height: 1px; background: var(--accent);
+  }
+  .hero-title {
+    font-family: var(--font-display); font-weight: 900;
+    font-size: clamp(56px, 10vw, 130px);
+    line-height: 0.88; letter-spacing: -0.025em;
+    text-transform: uppercase; color: var(--white);
+  }
+  .hero-title .outline {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(240,237,232,0.2);
+  }
+  .hero-sub {
+    font-size: 11px; line-height: 1.85; color: var(--dim);
+    max-width: 440px; margin-top: 28px; margin-bottom: 44px;
+  }
+  .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+
+  .btn {
+    font-family: var(--font-mono); font-size: 9px;
+    letter-spacing: 0.22em; text-transform: uppercase; text-decoration: none;
+    padding: 14px 28px; border: 1px solid;
+    transition: all 0.22s; display: inline-flex; align-items: center; gap: 8px;
+    cursor: none;
+  }
+  .btn-prim { background: var(--accent); color: var(--black); border-color: var(--accent); }
+  .btn-prim:hover { background: var(--accent2); border-color: var(--accent2); }
+  .btn-out { background: transparent; color: var(--white); border-color: rgba(240,237,232,0.15); }
+  .btn-out:hover { border-color: var(--accent); color: var(--accent); }
+
+  .hero-scroll {
+    position: absolute; bottom: 48px; right: 48px;
+    font-size: 8px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--dim);
+    writing-mode: vertical-rl; animation: bob 2.2s ease-in-out infinite;
+  }
+  @keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(8px)} }
+
+  /* TICKER */
+  .ticker {
+    overflow: hidden; border-top: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    padding: 11px 0; background: var(--gray);
+  }
+  .ticker-track { display: flex; animation: tick 22s linear infinite; white-space: nowrap; }
+  .ticker-item {
+    font-family: var(--font-display); font-size: 10px; font-weight: 700;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(255,255,255,0.12); padding-right: 64px; flex-shrink: 0;
+  }
+  .ticker-item em { color: var(--accent); font-style: normal; }
+  @keyframes tick { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+  /* COMMON */
+  section { padding: 112px 48px; }
+  .sec-label {
+    font-size: 8px; letter-spacing: 0.35em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 56px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .sec-label::before { content:''; display:block; width:28px; height:1px; background:var(--accent); }
+  .sec-title {
+    font-family: var(--font-display); font-weight: 700;
+    font-size: clamp(26px, 3.5vw, 48px);
+    letter-spacing: -0.025em; text-transform: uppercase; line-height: 1;
+  }
+  .row-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 0; }
+  .divider { height: 1px; background: linear-gradient(to right, transparent, rgba(200,184,154,0.15), transparent); margin: 0 48px; }
+
+  /* REVEAL */
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+  .reveal.vis { opacity: 1; transform: none; }
+
+  /* LATEST RELEASE */
+  .release-feat {
+    border-top: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    background: var(--gray);
+  }
+  .release-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .artwork-wrap { position: relative; aspect-ratio: 1; overflow: hidden; }
+  .artwork-inner {
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, #181818 0%, #252525 50%, #121212 100%);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .artwork-inner svg { width: 58%; height: 58%; opacity: 0.1; transition: opacity 0.4s; }
+  .artwork-wrap:hover .artwork-inner svg { opacity: 0.18; }
+  .artwork-badge {
+    position: absolute; top: 16px; left: 16px;
+    background: var(--accent); color: var(--black);
+    font-size: 7px; letter-spacing: 0.22em; text-transform: uppercase;
+    padding: 5px 11px; font-family: var(--font-mono);
+  }
+  .rel-catalog { font-size: 8px; letter-spacing: 0.3em; color: var(--accent); text-transform: uppercase; margin-bottom: 14px; }
+  .rel-title {
+    font-family: var(--font-display); font-weight: 900;
+    font-size: clamp(30px, 4vw, 58px); text-transform: uppercase;
+    letter-spacing: -0.025em; line-height: 0.92; margin-bottom: 20px;
+  }
+  .rel-artist { font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--dim); margin-bottom: 28px; }
+  .rel-desc { font-size: 11px; line-height: 1.9; color: var(--dim); margin-bottom: 36px; max-width: 380px; }
+  .tracklist { margin-bottom: 36px; }
+  .track {
+    display: flex; justify-content: space-between;
+    padding: 11px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 10px; color: var(--dim); letter-spacing: 0.04em;
+    transition: color 0.18s; cursor: none;
+  }
+  .track:hover { color: var(--white); }
+  .track-n { color: var(--accent); font-size: 8px; width: 22px; }
+  .stream-links { display: flex; gap: 10px; flex-wrap: wrap; }
+  .s-btn {
+    font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase;
+    padding: 8px 14px; border: 1px solid rgba(255,255,255,0.1);
+    color: var(--dim); text-decoration: none; transition: all 0.18s; cursor: none;
+  }
+  .s-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* RELEASES GRID */
+  .filter-row { display: flex; gap: 3px; }
+  .f-btn {
+    font-family: var(--font-mono); font-size: 8px;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    padding: 8px 18px; border: 1px solid rgba(255,255,255,0.08);
+    background: transparent; color: var(--dim);
+    cursor: none; transition: all 0.18s;
+  }
+  .f-btn:hover, .f-btn.on { background: var(--accent); color: var(--black); border-color: var(--accent); }
+  .releases-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; margin-top: 56px; }
+  .rel-card { position: relative; aspect-ratio: 1; overflow: hidden; cursor: none; }
+  .rel-card-art {
+    width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+    transition: transform 0.4s;
+  }
+  .rel-card:hover .rel-card-art { transform: scale(1.05); }
+  .rel-card-art svg { width: 48%; height: 48%; opacity: 0.07; }
+  .rel-card-ov {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, transparent 55%);
+    padding: 18px; display: flex; flex-direction: column; justify-content: flex-end;
+    opacity: 0; transition: opacity 0.28s;
+  }
+  .rel-card:hover .rel-card-ov { opacity: 1; }
+  .rc-title { font-family: var(--font-display); font-size: 12px; font-weight: 700; text-transform: uppercase; margin-bottom: 3px; }
+  .rc-meta { font-size: 8px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); }
+
+  /* ARTISTS */
+  .artists-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 56px; }
+  .artist-card { position: relative; aspect-ratio: 3/4; overflow: hidden; cursor: none; display: flex; flex-direction: column; justify-content: flex-end; padding: 26px; }
+  .ac-bg { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+  .ac-bg svg { width: 65%; opacity: 0.045; transition: transform 0.5s, opacity 0.3s; }
+  .artist-card:hover .ac-bg svg { transform: scale(1.06); opacity: 0.08; }
+  .ac-ov {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.08) 55%, transparent 100%);
+  }
+  .ac-info { position: relative; z-index: 2; }
+  .ac-name {
+    font-family: var(--font-display); font-size: 18px; font-weight: 700;
+    text-transform: uppercase; margin-bottom: 5px; letter-spacing: -0.01em;
+  }
+  .ac-loc { font-size: 8px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+  .tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tag {
+    font-size: 7px; letter-spacing: 0.15em; text-transform: uppercase;
+    padding: 4px 9px; border: 1px solid rgba(255,255,255,0.1); color: var(--dim);
+  }
+
+  /* PODCAST */
+  .podcast-bg { background: var(--black); border-top: 1px solid rgba(255,255,255,0.05); }
+  .podcast-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 72px; align-items: start; }
+  .episodes { display: flex; flex-direction: column; gap: 2px; }
+  .ep-item {
+    display: grid; grid-template-columns: 44px 1fr 32px; gap: 14px;
+    align-items: center; padding: 18px; background: var(--gray);
+    border: 1px solid transparent; transition: all 0.2s;
+    cursor: none; text-decoration: none; color: inherit;
+  }
+  .ep-item:hover { border-color: rgba(200,184,154,0.18); }
+  .ep-item.on { border-color: var(--accent); background: rgba(200,184,154,0.04); }
+  .ep-num { font-family: var(--font-display); font-size: 20px; font-weight: 900; color: rgba(255,255,255,0.07); }
+  .ep-item.on .ep-num { color: var(--accent); }
+  .ep-name { font-size: 10px; letter-spacing: 0.04em; margin-bottom: 3px; }
+  .ep-dur { font-size: 8px; letter-spacing: 0.15em; color: var(--dim); text-transform: uppercase; }
+  .play-btn {
+    width: 30px; height: 30px; border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    transition: all 0.18s;
+  }
+  .ep-item:hover .play-btn { border-color: var(--accent); }
+  .play-btn::after {
+    content: ''; border-left: 7px solid var(--dim);
+    border-top: 4px solid transparent; border-bottom: 4px solid transparent;
+    margin-left: 2px; transition: border-color 0.18s;
+  }
+  .ep-item:hover .play-btn::after { border-left-color: var(--accent); }
+
+  .player-sticky { position: sticky; top: 96px; }
+  .player-art {
+    aspect-ratio: 1; background: var(--gray); margin-bottom: 28px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .player-art svg { width: 55%; opacity: 0.07; animation: slowspin 50s linear infinite; }
+  .player-art-lbl {
+    position: absolute; bottom: 18px; left: 18px;
+    font-size: 8px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent);
+  }
+  .player-title { font-family: var(--font-display); font-size: 20px; font-weight: 700; text-transform: uppercase; letter-spacing: -0.01em; margin-bottom: 6px; }
+  .player-meta { font-size: 9px; color: var(--dim); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 22px; }
+  .player-bar { height: 1px; background: rgba(255,255,255,0.08); margin-bottom: 6px; position: relative; cursor: none; }
+  .player-prog { position: absolute; left: 0; top: 0; height: 100%; width: 35%; background: var(--accent); }
+  .player-times { display: flex; justify-content: space-between; font-size: 8px; color: var(--dim); letter-spacing: 0.1em; margin-bottom: 22px; }
+  .player-ctrl { display: flex; align-items: center; gap: 20px; }
+  .c-btn { background: none; border: none; color: var(--dim); cursor: none; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; transition: color 0.18s; }
+  .c-btn:hover { color: var(--white); }
+  .c-play {
+    width: 44px; height: 44px; border: 1px solid var(--accent); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; cursor: none; transition: all 0.18s;
+  }
+  .c-play:hover { background: var(--accent); }
+  .c-play::after {
+    content: ''; border-left: 12px solid var(--accent);
+    border-top: 8px solid transparent; border-bottom: 8px solid transparent;
+    margin-left: 3px; transition: border-color 0.18s;
+  }
+  .c-play:hover::after { border-left-color: var(--black); }
+
+  /* NEWS */
+  .news-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 56px; }
+  .news-card { background: var(--gray); text-decoration: none; color: inherit; display: block; border: 1px solid transparent; transition: border-color 0.2s; cursor: none; }
+  .news-card:hover { border-color: rgba(200,184,154,0.18); }
+  .nc-img { aspect-ratio: 16/9; background: var(--mid); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+  .nc-img svg { width: 38%; opacity: 0.06; transition: transform 0.4s, opacity 0.4s; }
+  .news-card:hover .nc-img svg { transform: scale(1.1); opacity: 0.1; }
+  .nc-type {
+    position: absolute; top: 11px; left: 11px;
+    font-size: 7px; letter-spacing: 0.22em; text-transform: uppercase;
+    padding: 4px 10px; background: var(--accent); color: var(--black);
+  }
+  .nc-body { padding: 22px; }
+  .nc-date { font-size: 8px; letter-spacing: 0.15em; color: var(--dim); text-transform: uppercase; margin-bottom: 10px; }
+  .nc-head { font-family: var(--font-display); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: -0.01em; line-height: 1.3; margin-bottom: 10px; }
+  .nc-exc { font-size: 10px; line-height: 1.75; color: var(--dim); }
+
+  /* MERCH */
+  .merch-bg { background: var(--gray); }
+  .merch-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; margin-top: 56px; }
+  .merch-card { cursor: none; text-decoration: none; color: inherit; display: block; background: var(--mid); border: 1px solid transparent; transition: border-color 0.2s; }
+  .merch-card:hover { border-color: rgba(200,184,154,0.2); }
+  .m-img { aspect-ratio: 3/4; background: var(--gray); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+  .m-img svg { width: 40%; opacity: 0.07; transition: transform 0.4s; }
+  .merch-card:hover .m-img svg { transform: scale(1.08); }
+  .m-tag {
+    position: absolute; top: 11px; right: 11px;
+    font-size: 7px; letter-spacing: 0.2em; text-transform: uppercase;
+    padding: 4px 9px; background: rgba(0,0,0,0.75); color: var(--accent);
+    border: 1px solid rgba(200,184,154,0.2);
+  }
+  .m-body { padding: 18px; }
+  .m-name { font-family: var(--font-display); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 7px; }
+  .m-price { font-size: 10px; color: var(--accent); letter-spacing: 0.1em; }
+
+  /* BOOKING */
+  .booking-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+  .booking-copy { font-size: 11px; line-height: 1.9; color: var(--dim); margin-bottom: 40px; max-width: 400px; }
+  .set-types { display: flex; flex-direction: column; gap: 2px; margin-bottom: 40px; }
+  .set-item { display: flex; gap: 20px; align-items: center; padding: 18px; background: var(--gray); }
+  .set-lbl { font-family: var(--font-display); font-size: 10px; font-weight: 700; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; min-width: 72px; }
+  .set-desc { font-size: 10px; color: var(--dim); }
+  .form-g { margin-bottom: 2px; }
+  .f-input {
+    width: 100%; background: var(--gray); border: 1px solid transparent;
+    color: var(--white); font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.04em;
+    padding: 15px 18px; outline: none; transition: border-color 0.2s; cursor: none;
+  }
+  .f-input::placeholder { color: var(--dim); }
+  .f-input:focus { border-color: var(--accent); }
+  .f-row { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+  textarea.f-input { resize: vertical; min-height: 110px; }
+  .form-footer { margin-top: 14px; display: flex; justify-content: space-between; align-items: center; }
+  .form-note { font-size: 9px; color: var(--dim); letter-spacing: 0.08em; }
+
+  /* ABOUT */
+  .about-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 112px; align-items: center; }
+  .about-logo-box {
+    display: flex; align-items: center; justify-content: center;
+    padding: 80px; background: var(--gray); position: relative; overflow: hidden;
+  }
+  .about-logo-box::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at center, rgba(200,184,154,0.07) 0%, transparent 68%);
+  }
+  .about-logo-box svg { width: 200px; height: 200px; position: relative; z-index: 1; }
+  .about-quote {
+    font-family: var(--font-display); font-size: clamp(16px, 2vw, 24px);
+    font-weight: 300; line-height: 1.45; letter-spacing: -0.01em;
+    margin-bottom: 36px; color: rgba(240,237,232,0.75);
+  }
+  .about-body { font-size: 11px; line-height: 1.92; color: var(--dim); }
+
+  /* CONTACT */
+  .contact-bg { background: var(--gray); border-top: 1px solid rgba(255,255,255,0.05); }
+  .contact-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; margin-top: 56px; }
+  .c-item {
+    padding: 36px 28px; background: var(--mid); text-decoration: none; color: inherit;
+    display: block; border: 1px solid transparent; transition: border-color 0.2s; cursor: none;
+  }
+  .c-item:hover { border-color: rgba(200,184,154,0.2); }
+  .c-type { font-size: 7px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
+  .c-val { font-size: 10px; letter-spacing: 0.04em; color: var(--white); word-break: break-all; }
+  .social-row { display: flex; gap: 2px; margin-top: 2px; }
+  .soc-item {
+    flex: 1; padding: 24px; background: var(--mid);
+    text-decoration: none; color: var(--dim);
+    font-size: 8px; letter-spacing: 0.25em; text-transform: uppercase;
+    text-align: center; transition: all 0.2s;
+    border: 1px solid transparent; cursor: none;
+  }
+  .soc-item:hover { color: var(--accent); border-color: rgba(200,184,154,0.18); }
+
+  /* FOOTER */
+  footer {
+    padding: 44px 48px; border-top: 1px solid rgba(255,255,255,0.05);
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--dim);
+  }
+  .foot-logo { display: flex; align-items: center; gap: 12px; }
+  .foot-logo svg { width: 22px; height: 22px; }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    nav { padding: 18px 20px; }
+    .nav-links { display: none; }
+    section { padding: 72px 20px; }
+    .hero { padding: 0 20px 64px; }
+    .hero-title { font-size: 48px; }
+    .hero-logo-bg { display: none; }
+    .release-inner { grid-template-columns: 1fr; gap: 36px; }
+    .releases-grid { grid-template-columns: repeat(2, 1fr); }
+    .artists-grid { grid-template-columns: 1fr; }
+    .news-grid { grid-template-columns: 1fr; }
+    .merch-grid { grid-template-columns: repeat(2, 1fr); }
+    .booking-layout { grid-template-columns: 1fr; gap: 44px; }
+    .about-layout { grid-template-columns: 1fr; gap: 44px; }
+    .contact-grid { grid-template-columns: repeat(2, 1fr); }
+    .podcast-layout { grid-template-columns: 1fr; }
+    .divider { margin: 0 20px; }
+    footer { flex-direction: column; gap: 14px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="curR"></div>
+
+<!-- LOGO SVG INLINE DEF (reused) -->
+<svg style="display:none" id="logoSvg">
+  <symbol id="logo" viewBox="0 0 1000 1000">
+    <path d="M128.507 350.375C192.024 289.144 260.347 223.144 333.368 152.549C342.137 150.34 350.975 148.551 359.813 147.184C371.528 135.821 383.312 124.354 395.167 112.816C363.18 121.864 331.054 135.225 299.207 153.356C292.859 159.493 286.616 165.56 280.443 171.522C288.896 167.524 297.454 163.982 306.082 160.861C246.878 218.059 192.656 270.312 143.624 317.445C138.047 328.387 132.997 339.398 128.472 350.375H128.507ZM98.2393 501.489C209.736 393.51 324.144 282.656 441.428 168.997C490.32 121.653 502.21 96.7191 475.835 98.7882C467.803 99.3142 459.771 100.121 451.669 101.173C424.979 105.276 393.554 126.773 358.691 160.44C272.692 243.729 190.376 323.302 111.953 399.086C108.972 410.063 106.481 421.005 104.517 431.911C144.255 393.405 184.659 354.268 225.73 314.464C228.956 321.618 232.569 328.948 236.567 336.488C190.306 381.341 144.641 425.634 99.5721 469.33C98.6602 480.131 98.2393 490.863 98.2744 501.489H98.2393ZM381.874 163.526C395.448 150.375 406.39 143.572 414.632 143.677C417.228 143.747 419.823 143.817 422.419 143.957C430.661 144.308 427.083 152.164 411.792 167.033C368.266 209.151 325.231 250.778 282.758 291.845C277.146 285.918 271.815 280.202 266.8 274.836C304.574 238.294 342.978 201.19 381.909 163.526H381.874ZM523.885 508.608C523.885 496.894 514.38 487.356 502.63 487.356C490.881 487.356 481.376 496.859 481.376 508.608C481.376 520.356 490.881 529.86 502.63 529.86C514.38 529.86 523.885 520.356 523.885 508.608ZM901.2 476.204C759.4 613.57 613.601 754.899 464.12 899.91C474.572 900.857 485.164 901.383 495.791 901.489C635.311 766.191 770.728 634.962 901.726 508.082C902.006 497.385 901.796 486.759 901.2 476.239V476.204Z" fill="currentColor"/>
+  </symbol>
+</svg>
+
+<!-- NAV -->
+<nav>
+  <a href="#home" class="nav-logo">
+    <svg viewBox="0 0 1000 1000" fill="none" xmlns="http://www.w3.org/2000/svg" style="color:var(--accent)">
+      <use href="#logo"/>
+    </svg>
+    <span class="nav-logo-text">TakaTaka</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#releases">Releases</a></li>
+    <li><a href="#artists">Artists</a></li>
+    <li><a href="#radio">Radio</a></li>
+    <li><a href="#merch">Merch</a></li>
+    <li><a href="#booking">Booking</a></li>
+    <li><a href="#news">News</a></li>
+    <li><a href="#about">About</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="https://soundcloud.com/takatakaspb" target="_blank">SoundCloud</a>
+    <a href="https://www.instagram.com/takatakaspb" target="_blank">Instagram</a>
+    <a href="https://t.me/takatakaspb" target="_blank">Telegram</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-logo-bg">
+    <svg viewBox="0 0 1000 1000" fill="none" xmlns="http://www.w3.org/2000/svg" style="color:white">
+      <use href="#logo"/>
+    </svg>
+  </div>
+  <div class="hero-content reveal">
+    <div class="hero-eyebrow">Underground Movement · Saint Petersburg · Since 2015</div>
+    <h1 class="hero-title">
+      TAKA<br>
+      <span class="outline">TAKA</span>
+    </h1>
+    <p class="hero-sub">A movement of the modern underground music scene — microhouse &amp; minimal waves. Gathering the best sets of talented DJs and musicians.</p>
+    <div class="hero-ctas">
+      <a href="https://soundcloud.com/takatakaspb" target="_blank" class="btn btn-prim">↗ SoundCloud</a>
+      <a href="#releases" class="btn btn-out">Releases</a>
+      <a href="#radio" class="btn btn-out">Podcast</a>
+    </div>
+  </div>
+  <div class="hero-scroll">Scroll</div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="ticker-item">TAKATAKA <em>·</em> MICROHOUSE <em>·</em> MINIMAL WAVE <em>·</em> UNDERGROUND MOVEMENT <em>·</em> SPB <em>·</em> VINYL &amp; DIGITAL <em>·</em> </span>
+    <span class="ticker-item">PODCAST SERIES <em>·</em> TAKATAKA <em>·</em> MICROHOUSE <em>·</em> MINIMAL WAVE <em>·</em> UNDERGROUND MOVEMENT <em>·</em> SPB <em>·</em> VINYL &amp; DIGITAL <em>·</em> </span>
+  </div>
+</div>
+
+<!-- LATEST RELEASE -->
+<section class="release-feat reveal">
+  <div class="sec-label">Latest Release</div>
+  <div class="release-inner">
+    <div class="artwork-wrap">
+      <div class="artwork-inner">
+        <svg viewBox="0 0 1000 1000" fill="none" style="color:white">
+          <use href="#logo"/>
+        </svg>
+      </div>
+      <div class="artwork-badge">New · 2024</div>
+    </div>
+    <div>
+      <div class="rel-catalog">TKT-012 · Digital + Vinyl</div>
+      <h2 class="rel-title">Pattern<br>Variations</h2>
+      <div class="rel-artist">Various Artists</div>
+      <p class="rel-desc">A hypnotic journey through microhouse and minimal wave structures. Four tracks exploring rhythm as architecture — each release on the TakaTaka imprint is a precise statement.</p>
+      <div class="tracklist">
+        <div class="track"><span class="track-n">A1</span><span>Oscillation Protocol</span><span>07:42</span></div>
+        <div class="track"><span class="track-n">A2</span><span>Micro Ritual</span><span>06:18</span></div>
+        <div class="track"><span class="track-n">B1</span><span>Phase Collapse</span><span>08:05</span></div>
+        <div class="track"><span class="track-n">B2</span><span>Signal Drift</span><span>07:33</span></div>
+      </div>
+      <div class="stream-links">
+        <a href="https://soundcloud.com/takatakaspb" target="_blank" class="s-btn">SoundCloud</a>
+        <a href="#" class="s-btn">Bandcamp</a>
+        <a href="#" class="s-btn">Spotify</a>
+        <a href="#" class="s-btn">Buy Vinyl ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RELEASES -->
+<section id="releases" style="padding-top:0" class="reveal">
+  <div class="row-header">
+    <div class="sec-label" style="margin-bottom:0">Releases Archive</div>
+    <div class="filter-row">
+      <button class="f-btn on">All</button>
+      <button class="f-btn">Digital</button>
+      <button class="f-btn">Vinyl</button>
+      <button class="f-btn">EP</button>
+      <button class="f-btn">VA</button>
+    </div>
+  </div>
+  <div class="releases-grid">
+    <div class="rel-card" style="background:#161616">
+      <div class="rel-card-art" style="background:#161616"><svg viewBox="0 0 1000 1000" fill="none" style="color:white"><use href="#logo"/></svg></div>
+      <div class="rel-card-ov"><div class="rc-title">TKT-011</div><div class="rc-meta">Vinyl · 2024</div></div>
+    </div>
+    <div class="rel-card" style="background:#1a1714">
+      <div class="rel-card-art" style="background:#1a1714"><svg viewBox="0 0 1000 1000" fill="none"><circle cx="500" cy="500" r="350" fill="none" stroke="white" stroke-width="1" opacity="0.15"/><circle cx="500" cy="500" r="50" fill="white" opacity="0.1"/></svg></div>
+      <div class="rel-card-ov"><div class="rc-title">TKT-010</div><div class="rc-meta">Digital · 2024</div></div>
+    </div>
+    <div class="rel-card" style="background:#121212">
+      <div class="rel-card-art" style="background:#121212"><svg viewBox="0 0 1000 1000" fill="none"><rect x="200" y="200" width="600" height="600" fill="none" stroke="white" stroke-width="1" opacity="0.1" transform="rotate(45 500 500)"/><circle cx="500" cy="500" r="100" fill="white" opacity="0.04"/></svg></div>
+      <div class="rel-card-ov"><div class="rc-title">TKT-009</div><div class="rc-meta">Vinyl · 2023</div></div>
+    </div>
+    <div class="rel-card" style="background:#181614">
+      <div class="rel-card-art" style="background:#181614"><svg viewBox="0 0 1000 1000" fill="none"><line x1="100" y1="100" x2="900" y2="900" stroke="#c8b89a" stroke-width="0.5" opacity="0.2"/><line x1="900" y1="100" x2="100" y2="900" stroke="#c8b89a" stroke-width="0.5" opacity="0.2"/><circle cx="500" cy="500" r="250" fill="none" stroke="white" stroke-width="1" opacity="0.06"/></svg></div>
+      <div class="rel-card-ov"><div class="rc-title">TKT-008</div><div class="rc-meta">EP · 2023</div></div>
+    </div>
+    <div class="rel-card" style="background:#141414">
+      <div class="rel-card-art" style="background:#141414"><svg viewBox="0 0 1000 1000" fill="none"><polygon points="500,80 920,760 80,760" fill="none" stroke="white" stroke-width="1" opacity="0.08"/></svg></div>
+      <div class="rel-card-ov"><div class="rc-title">TKT-007</div><div class="rc-meta">Vinyl · 2022</div></div>
+    </div>
+    <div class="rel-card" style="background:#161818">
+      <div class="rel-card-art" style="background:#161818"><svg viewBox="0 0 1000 1000" fill="none"><path d="M200 500 Q500 100 800 500 Q500 900 200 500Z" fill="none" stroke="white" stroke-width="1" opacity="0.08"/></svg></div>
+      <div class="rel-card-ov"><div class="rc-title">TKT-006</div><div class="rc-meta">Digital · 2022</div></div>
+    </div>
+    <div class="rel-card" style="background:#131313">
+      <div class="rel-card-art" style="background:#131313"><svg viewBox="0 0 1000 1000" fill="none"><circle cx="500" cy="500" r="400" fill="none" stroke="white" stroke-width="0.5" stroke-dasharray="18 9" opacity="0.08"/><circle cx="500" cy="500" r="200" fill="none" stroke="#c8b89a" stroke-width="0.5" stroke-dasharray="9 9" opacity="0.08"/></svg></div>
+      <div class="rel-card-ov"><div class="rc-title">TKT-005</div><div class="rc-meta">VA · 2021</div></div>
+    </div>
+    <div class="rel-card" style="background:#181818">
+      <div class="rel-card-art" style="background:#181818"><svg viewBox="0 0 1000 1000" fill="none"><rect x="250" y="250" width="500" height="500" fill="none" stroke="white" stroke-width="1" opacity="0.06"/><rect x="350" y="350" width="300" height="300" fill="none" stroke="#c8b89a" stroke-width="1" opacity="0.07"/></svg></div>
+      <div class="rel-card-ov"><div class="rc-title">TKT-004</div><div class="rc-meta">Vinyl · 2021</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ARTISTS -->
+<section id="artists" class="reveal">
+  <div class="row-header">
+    <div>
+      <div class="sec-label">Artists</div>
+      <h2 class="sec-title">The Movement</h2>
+    </div>
+    <a href="#booking" class="btn btn-out">Booking Enquiry</a>
+  </div>
+  <div class="artists-grid">
+    <div class="artist-card" style="background:#141414">
+      <div class="ac-bg"><svg viewBox="0 0 1000 1000" fill="none" style="color:white"><use href="#logo"/></svg></div>
+      <div class="ac-ov"></div>
+      <div class="ac-info">
+        <div class="ac-name">TakaTaka</div>
+        <div class="ac-loc">Saint Petersburg, RU</div>
+        <div class="tags"><span class="tag">Microhouse</span><span class="tag">Minimal</span><span class="tag">DJ</span></div>
+      </div>
+    </div>
+    <div class="artist-card" style="background:#181410">
+      <div class="ac-bg"><svg viewBox="0 0 1000 1000" fill="none"><circle cx="500" cy="500" r="320" fill="none" stroke="white" stroke-width="1" opacity="0.4"/><circle cx="500" cy="500" r="160" fill="none" stroke="#c8b89a" stroke-width="1" opacity="0.3"/><circle cx="500" cy="500" r="40" fill="white" opacity="0.1"/></svg></div>
+      <div class="ac-ov"></div>
+      <div class="ac-info">
+        <div class="ac-name">Resident 01</div>
+        <div class="ac-loc">Saint Petersburg, RU</div>
+        <div class="tags"><span class="tag">Minimal Wave</span><span class="tag">Live</span></div>
+      </div>
+    </div>
+    <div class="artist-card" style="background:#141618">
+      <div class="ac-bg"><svg viewBox="0 0 1000 1000" fill="none"><rect x="200" y="200" width="600" height="600" fill="none" stroke="white" stroke-width="1" opacity="0.3" transform="rotate(30 500 500)"/><rect x="300" y="300" width="400" height="400" fill="none" stroke="#c8b89a" stroke-width="0.5" opacity="0.2" transform="rotate(15 500 500)"/></svg></div>
+      <div class="ac-ov"></div>
+      <div class="ac-info">
+        <div class="ac-name">Resident 02</div>
+        <div class="ac-loc">Moscow, RU</div>
+        <div class="tags"><span class="tag">Microhouse</span><span class="tag">Vinyl</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PODCAST / RADIO -->
+<section class="podcast-bg reveal" id="radio">
+  <div class="sec-label">Radio</div>
+  <h2 class="sec-title" style="margin-bottom:56px">TakaTaka Podcast</h2>
+  <div class="podcast-layout">
+    <div class="episodes">
+      <a class="ep-item on" href="https://soundcloud.com/takatakaspb" target="_blank">
+        <div class="ep-num">42</div>
+        <div><div class="ep-name">TakaTaka Podcast #042</div><div class="ep-dur">58:14 · Microhouse · 2024</div></div>
+        <div class="play-btn"></div>
+      </a>
+      <a class="ep-item" href="https://soundcloud.com/takatakaspb" target="_blank">
+        <div class="ep-num">41</div>
+        <div><div class="ep-name">TakaTaka Podcast #041</div><div class="ep-dur">61:30 · Minimal Wave · 2024</div></div>
+        <div class="play-btn"></div>
+      </a>
+      <a class="ep-item" href="https://soundcloud.com/takatakaspb" target="_blank">
+        <div class="ep-num">40</div>
+        <div><div class="ep-name">TakaTaka Podcast #040</div><div class="ep-dur">54:48 · Underground · 2024</div></div>
+        <div class="play-btn"></div>
+      </a>
+      <a class="ep-item" href="https://soundcloud.com/takatakaspb" target="_blank">
+        <div class="ep-num">39</div>
+        <div><div class="ep-name">TakaTaka Podcast #039</div><div class="ep-dur">67:22 · Microhouse · 2023</div></div>
+        <div class="play-btn"></div>
+      </a>
+      <a class="ep-item" href="https://soundcloud.com/takatakaspb" target="_blank">
+        <div class="ep-num">38</div>
+        <div><div class="ep-name">TakaTaka Podcast #038</div><div class="ep-dur">55:10 · Minimal · 2023</div></div>
+        <div class="play-btn"></div>
+      </a>
+      <a href="https://soundcloud.com/takatakaspb" target="_blank" class="btn btn-out" style="margin-top:14px; justify-content:center;">All Episodes on SoundCloud ↗</a>
+    </div>
+
+    <div class="player-sticky">
+      <div class="player-art">
+        <svg viewBox="0 0 1000 1000" fill="none" style="color:white">
+          <use href="#logo"/>
+        </svg>
+        <div class="player-art-lbl">Now Playing</div>
+      </div>
+      <div class="player-title">Podcast #042</div>
+      <div class="player-meta">TakaTaka · Microhouse · 2024</div>
+      <div class="player-bar"><div class="player-prog"></div></div>
+      <div class="player-times"><span>20:28</span><span>58:14</span></div>
+      <div class="player-ctrl">
+        <button class="c-btn">← Prev</button>
+        <div class="c-play"></div>
+        <button class="c-btn">Next →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- NEWS -->
+<section id="news" class="reveal">
+  <div class="row-header">
+    <div>
+      <div class="sec-label">News</div>
+      <h2 class="sec-title">Latest Updates</h2>
+    </div>
+    <a href="#" class="btn btn-out">All News</a>
+  </div>
+  <div class="news-grid">
+    <a href="#" class="news-card">
+      <div class="nc-img">
+        <svg viewBox="0 0 1000 1000" fill="none" style="color:white"><use href="#logo"/></svg>
+        <span class="nc-type">Release</span>
+      </div>
+      <div class="nc-body">
+        <div class="nc-date">Feb 2024</div>
+        <div class="nc-head">TKT-012 "Pattern Variations" Now Available</div>
+        <p class="nc-exc">New VA compilation available on all platforms and limited vinyl edition through our store.</p>
+      </div>
+    </a>
+    <a href="#" class="news-card">
+      <div class="nc-img">
+        <svg viewBox="0 0 1000 1000" fill="none"><circle cx="500" cy="500" r="280" fill="none" stroke="white" stroke-width="1" opacity="0.2"/></svg>
+        <span class="nc-type">Podcast</span>
+      </div>
+      <div class="nc-body">
+        <div class="nc-date">Jan 2024</div>
+        <div class="nc-head">Podcast #042 — New Episode Released</div>
+        <p class="nc-exc">The latest installment in our ongoing series explores deep microhouse textures and hypnotic minimal structures.</p>
+      </div>
+    </a>
+    <a href="#" class="news-card">
+      <div class="nc-img">
+        <svg viewBox="0 0 1000 1000" fill="none"><polygon points="500,180 840,740 160,740" fill="none" stroke="#c8b89a" stroke-width="1" opacity="0.25"/></svg>
+        <span class="nc-type" style="background:transparent;border:1px solid rgba(200,184,154,0.4);color:var(--accent)">Merch</span>
+      </div>
+      <div class="nc-body">
+        <div class="nc-date">Dec 2023</div>
+        <div class="nc-head">Winter Drop — Limited Edition Apparel</div>
+        <p class="nc-exc">New limited drop featuring our signature monochrome aesthetic on premium organic cotton.</p>
+      </div>
+    </a>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- MERCH -->
+<section class="merch-bg reveal" id="merch">
+  <div class="row-header">
+    <div>
+      <div class="sec-label">Merch Store</div>
+      <h2 class="sec-title">Objects</h2>
+    </div>
+    <div class="filter-row">
+      <button class="f-btn on">All</button>
+      <button class="f-btn">Vinyl</button>
+      <button class="f-btn">Apparel</button>
+      <button class="f-btn">Limited</button>
+    </div>
+  </div>
+  <div class="merch-grid">
+    <a href="#" class="merch-card">
+      <div class="m-img">
+        <svg viewBox="0 0 1000 1000" fill="none"><circle cx="500" cy="500" r="370" fill="none" stroke="white" stroke-width="1" opacity="0.12"/><circle cx="500" cy="500" r="52" fill="white" opacity="0.08"/></svg>
+        <span class="m-tag">12" Vinyl</span>
+      </div>
+      <div class="m-body"><div class="m-name">TKT-012 Vinyl</div><div class="m-price">€ 18.00</div></div>
+    </a>
+    <a href="#" class="merch-card">
+      <div class="m-img">
+        <svg viewBox="0 0 1000 1000" fill="none"><rect x="260" y="180" width="480" height="640" rx="3" fill="none" stroke="white" stroke-width="1" opacity="0.09"/></svg>
+        <span class="m-tag">T-Shirt</span>
+      </div>
+      <div class="m-body"><div class="m-name">Logo Tee — Black</div><div class="m-price">€ 28.00</div></div>
+    </a>
+    <a href="#" class="merch-card">
+      <div class="m-img">
+        <svg viewBox="0 0 1000 1000" fill="none"><rect x="180" y="120" width="640" height="760" rx="2" fill="none" stroke="white" stroke-width="1" opacity="0.08"/></svg>
+        <span class="m-tag" style="background:rgba(200,184,154,0.1);border:1px solid var(--accent);color:var(--accent)">Limited</span>
+      </div>
+      <div class="m-body"><div class="m-name">Poster A1 — Vol.1</div><div class="m-price">€ 22.00</div></div>
+    </a>
+    <a href="#" class="merch-card">
+      <div class="m-img">
+        <svg viewBox="0 0 1000 1000" fill="none"><circle cx="500" cy="500" r="280" fill="none" stroke="#c8b89a" stroke-width="1" opacity="0.1"/><circle cx="500" cy="500" r="370" fill="none" stroke="white" stroke-width="0.5" stroke-dasharray="12 8" opacity="0.06"/></svg>
+        <span class="m-tag">Bundle</span>
+      </div>
+      <div class="m-body"><div class="m-name">Vinyl Bundle x3</div><div class="m-price">€ 48.00</div></div>
+    </a>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- BOOKING -->
+<section id="booking" class="reveal">
+  <div class="booking-layout">
+    <div>
+      <div class="sec-label">Booking</div>
+      <h2 class="sec-title" style="margin-bottom:28px">Work With<br>the Movement</h2>
+      <p class="booking-copy">TakaTaka artists are available for bookings at clubs, festivals, and private events. Our residents bring deep knowledge of the microhouse and minimal wave spectrum, with both DJ and live set capabilities.</p>
+      <div class="set-types">
+        <div class="set-item"><div class="set-lbl">DJ Set</div><div class="set-desc">2–4 hour vinyl / digital sets · deep house, microhouse, minimal</div></div>
+        <div class="set-item"><div class="set-lbl">Live</div><div class="set-desc">Original live hardware performances · 60–90 min</div></div>
+        <div class="set-item"><div class="set-lbl">B2B</div><div class="set-desc">Back-to-back formats available with resident artists</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="sec-label" style="margin-bottom:28px">Booking Request</div>
+      <div class="f-row"><div class="form-g"><input type="text" class="f-input" placeholder="Your Name"></div><div class="form-g"><input type="text" class="f-input" placeholder="Organisation / Venue"></div></div>
+      <div class="f-row"><div class="form-g"><input type="text" class="f-input" placeholder="City / Country"></div><div class="form-g"><input type="text" class="f-input" placeholder="Event Date"></div></div>
+      <div class="f-row"><div class="form-g"><input type="text" class="f-input" placeholder="Venue Capacity"></div><div class="form-g"><input type="text" class="f-input" placeholder="Budget Range"></div></div>
+      <div class="form-g"><textarea class="f-input" placeholder="Tell us about your event..."></textarea></div>
+      <div class="form-g"><input type="email" class="f-input" placeholder="Your Email"></div>
+      <div class="form-footer">
+        <span class="form-note">or: takatakaspb@gmail.com</span>
+        <button class="btn btn-prim" style="border:none;cursor:none">Send Request →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ABOUT -->
+<section id="about" class="reveal">
+  <div class="about-layout">
+    <div class="about-logo-box">
+      <svg viewBox="0 0 1000 1000" fill="none" xmlns="http://www.w3.org/2000/svg" style="color:var(--accent)">
+        <use href="#logo"/>
+      </svg>
+    </div>
+    <div>
+      <div class="sec-label">About</div>
+      <p class="about-quote">"A movement of the modern underground music scene — microhouse &amp; minimal waves."</p>
+      <p class="about-body">TakaTaka is an independent music label and collective based in Saint Petersburg, Russia. Founded as a platform for the deepest sounds of the underground electronic spectrum — where microhouse meets minimal wave, where rhythm becomes ritual.<br><br>The TakaTaka Podcast series gathers the best sets of talented DJs and musicians from across the underground community, presenting each episode as a close look at the intentions and ideas that drive this movement.<br><br>We operate at the intersection of digital and physical — releasing music on vinyl and digital platforms, building community around the sound, and maintaining a commitment to artistic integrity.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONTACT -->
+<section class="contact-bg reveal" id="contact">
+  <div class="sec-label">Contact</div>
+  <h2 class="sec-title">Connect</h2>
+  <div class="contact-grid">
+    <a href="mailto:takatakaspb@gmail.com" class="c-item">
+      <div class="c-type">Demo Submissions</div>
+      <div class="c-val">takatakaspb@gmail.com</div>
+    </a>
+    <a href="mailto:takatakaspb@gmail.com" class="c-item">
+      <div class="c-type">Booking</div>
+      <div class="c-val">takatakaspb@gmail.com</div>
+    </a>
+    <a href="mailto:takatakaspb@gmail.com" class="c-item">
+      <div class="c-type">Press</div>
+      <div class="c-val">takatakaspb@gmail.com</div>
+    </a>
+    <div class="c-item" style="border-color:rgba(200,184,154,0.08)">
+      <div class="c-type">Demos</div>
+      <div class="c-val" style="color:var(--dim);font-size:9px;line-height:1.7">Send WAV/MP3 + short bio. We listen to everything received.</div>
+    </div>
+  </div>
+  <div class="social-row">
+    <a href="https://soundcloud.com/takatakaspb" target="_blank" class="soc-item">SoundCloud</a>
+    <a href="https://www.instagram.com/takatakaspb" target="_blank" class="soc-item">Instagram</a>
+    <a href="https://t.me/takatakaspb" target="_blank" class="soc-item">Telegram</a>
+    <a href="https://www.facebook.com/takatakaspb" target="_blank" class="soc-item">Facebook</a>
+    <a href="https://www.vk.com/takatakaspb" target="_blank" class="soc-item">VKontakte</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-logo">
+    <svg viewBox="0 0 1000 1000" fill="none" style="color:var(--accent)"><use href="#logo"/></svg>
+    TakaTaka — Underground Movement
+  </div>
+  <div>© 2024 TakaTaka · Saint Petersburg</div>
+  <div>Microhouse · Minimal Wave · Underground</div>
+</footer>
+
+<script>
+  // Cursor
+  const cur = document.getElementById('cur');
+  const curR = document.getElementById('curR');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove', e=>{
+    mx=e.clientX; my=e.clientY;
+    cur.style.left=mx+'px'; cur.style.top=my+'px';
+  });
+  (function animR(){
+    rx+=(mx-rx)*0.11; ry+=(my-ry)*0.11;
+    curR.style.left=rx+'px'; curR.style.top=ry+'px';
+    requestAnimationFrame(animR);
+  })();
+
+  // Filter btns
+  document.querySelectorAll('.filter-row, .filter-row').forEach(row=>{
+    row.querySelectorAll('.f-btn').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        row.querySelectorAll('.f-btn').forEach(b=>b.classList.remove('on'));
+        btn.classList.add('on');
+      });
+    });
+  });
+
+  // Scroll reveal
+  const obs = new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis')})},{threshold:0.08});
+  document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
+
+  // Episode select
+  document.querySelectorAll('.ep-item').forEach(item=>{
+    item.addEventListener('click',e=>{
+      e.preventDefault();
+      document.querySelectorAll('.ep-item').forEach(i=>i.classList.remove('on'));
+      item.classList.add('on');
+    });
+  });
+
+  // Nav scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click',e=>{
+      const t=document.querySelector(a.getAttribute('href'));
+      if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'});}
+    });
+  });
+</script>
+</body>
+</html>

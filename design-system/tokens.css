@@ -1,0 +1,123 @@
+/* ============================================================
+   TAKATAKA RECORDS — Design Tokens
+   Source of truth for all visual values.
+   Used by: Claude Design (onboarding), DESIGN_SYSTEM.md
+   ============================================================ */
+
+/* ── COLORS ─────────────────────────────────────────────── */
+:root {
+  --black:  #080808;   /* Page background, primary surface       */
+  --white:  #f0ede6;   /* Primary text, filled buttons, icons    */
+  --gray:   #141414;   /* Alternate section background           */
+  --gray2:  #1c1c1c;   /* Cards, panels, contact items           */
+  --mid:    #2e2e2e;   /* Borders, dividers                      */
+  --dim:    #555555;   /* Secondary text, labels, placeholders   */
+
+  /* Opacity scale (all derived from --white #f0ede6) */
+  --white-06:  rgba(240, 237, 230, 0.06);   /* Grid lines, bg tints   */
+  --white-10:  rgba(240, 237, 230, 0.10);   /* Card borders on hover  */
+  --white-15:  rgba(240, 237, 230, 0.15);   /* Ghost button border    */
+  --white-22:  rgba(240, 237, 230, 0.22);   /* Cursor ring            */
+  --white-28:  rgba(240, 237, 230, 0.28);   /* Hero L2 text-stroke    */
+  --white-38:  rgba(240, 237, 230, 0.38);   /* Muted outline text     */
+
+  /* FORBIDDEN: No hue-based colors. No #c8ff00. No blues, purples, reds. */
+}
+
+/* ── TYPOGRAPHY ─────────────────────────────────────────── */
+:root {
+  --display: 'Bebas Neue', sans-serif;   /* Headings, titles, logo         */
+  --mono:    'Space Mono', monospace;    /* Body, labels, buttons, forms   */
+}
+
+/*
+  Google Fonts import:
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+
+  RULES:
+  - Bebas Neue → all headings and display text only
+  - Space Mono → everything else (labels, body, buttons, nav, forms)
+  - No serif fonts. No other fonts.
+*/
+
+/* ── FONT SIZES ─────────────────────────────────────────── */
+:root {
+  --fs-hero:    clamp(72px, 10vw, 160px);  /* Hero TAKA/TAKA lockup      */
+  --fs-connect: clamp(52px, 8vw, 120px);   /* CONNECT section heading    */
+  --fs-section: clamp(26px, 3.5vw, 48px);  /* Section titles             */
+  --fs-player:  20px;                       /* Podcast player title       */
+  --fs-card:    13px;                       /* Release/news card titles   */
+
+  --fs-body:    11px;                       /* Body paragraphs            */
+  --fs-label:   8px;                        /* Section labels, eyebrows   */
+  --fs-label-m: 10px;                       /* Larger labels, ticker      */
+  --fs-btn:     9px;                        /* Button text                */
+  --fs-btn-m:   10px;                       /* Medium button text         */
+  --fs-price:   10px;                       /* Merch prices               */
+  --fs-fine:    7px;                        /* Badges, smallest text      */
+  --fs-footer:  8px;                        /* Footer text                */
+}
+
+/* ── LETTER SPACING ─────────────────────────────────────── */
+:root {
+  --ls-hero:    -0.01em;                   /* Hero title                 */
+  --ls-section: -0.025em;                  /* Section headings           */
+  --ls-label:   0.35em;                    /* Section labels             */
+  --ls-label-l: 0.4em;                     /* Wide labels                */
+  --ls-btn:     0.22em;                    /* Buttons                    */
+  --ls-ticker:  0.18em;                    /* Ticker strip               */
+  --ls-body:    0.04em;                    /* Body / track list          */
+  --ls-footer:  0.18em;                    /* Footer                     */
+}
+
+/* ── LINE HEIGHTS ───────────────────────────────────────── */
+:root {
+  --lh-hero:  0.88;   /* Tightly stacked hero title     */
+  --lh-body:  1.9;    /* Comfortable reading             */
+  --lh-quote: 1.45;   /* Larger pull quotes              */
+}
+
+/* ── SPACING ────────────────────────────────────────────── */
+:root {
+  --nav-h:    72px;    /* Navigation height (desktop)    */
+  --nav-h-m:  60px;    /* Navigation height (mobile)     */
+  --px:       48px;    /* Page horizontal padding        */
+  --px-m:     20px;    /* Page horizontal padding mobile */
+  --section:  112px;   /* Section vertical padding       */
+  --section-m: 72px;   /* Section vertical padding mobile*/
+  --gap-tile: 2px;     /* Tight tile grids (releases)    */
+  --gap-card: 24px;    /* Card grids (merch)             */
+  --gap-col:  80px;    /* Column grids                   */
+}
+
+/* ── BORDERS & RADIUS ───────────────────────────────────── */
+:root {
+  /* No border-radius on cards, sections, buttons — this is a flat system */
+  --radius-circle: 50%;  /* Cursor only, cart counter only */
+  --border-card:   1px solid transparent;  /* Default — reveals on hover */
+  --border-input:  1px solid transparent;  /* Form inputs — reveals on focus */
+}
+
+/* ── TRANSITIONS ────────────────────────────────────────── */
+:root {
+  --t-fast:   0.18s ease;   /* Color / border hover       */
+  --t-base:   0.2s ease;    /* Standard hover             */
+  --t-slow:   0.25s ease;   /* Button background          */
+  --t-reveal: 0.65s ease;   /* Scroll reveal              */
+  --t-scale:  0.4s ease;    /* Image scale on hover       */
+}
+
+/* ── SHADOWS ────────────────────────────────────────────── */
+:root {
+  /* No box-shadows in this design system.
+     Depth is created through background color contrast only. */
+}
+
+/* ── Z-INDEX ────────────────────────────────────────────── */
+:root {
+  --z-cursor:  9999;
+  --z-ring:    9998;
+  --z-nav:      100;
+  --z-modal:    200;
+  --z-drawer:   300;
+}

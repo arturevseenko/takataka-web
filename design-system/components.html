@@ -1,0 +1,392 @@
+<!--
+  TAKATAKA RECORDS — Component Library
+  Reference file for Claude Design.
+  Contains all reusable UI patterns with exact CSS.
+  DO NOT use this file directly in production — it is a reference.
+-->
+
+<!-- ══════════════════════════════════════════════════════
+     BUTTONS
+══════════════════════════════════════════════════════════ -->
+
+<!-- PRIMARY BUTTON: White fill → inverts to outline on hover -->
+<button class="btn-primary">Listen Now</button>
+<style>
+.btn-primary {
+  display: inline-block;
+  background: var(--white); color: var(--black);
+  border: 1px solid var(--white);
+  padding: 14px 32px;
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  transition: background 0.25s, color 0.25s;
+  cursor: none;
+}
+.btn-primary:hover { background: transparent; color: var(--white); }
+</style>
+
+<!-- GHOST BUTTON: Outline only, dim border → brightens on hover -->
+<a class="btn-ghost" href="#releases">Explore Releases</a>
+<style>
+.btn-ghost {
+  display: inline-block;
+  background: transparent; color: var(--white);
+  border: 1px solid rgba(240,237,230,0.2);
+  padding: 14px 32px;
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  text-decoration: none;
+  transition: border-color 0.25s;
+  cursor: none;
+}
+.btn-ghost:hover { border-color: rgba(240,237,230,0.6); }
+</style>
+
+<!-- STREAM BUTTON: Tiny link button for platform links -->
+<a class="s-btn" href="#">Bandcamp</a>
+<style>
+.s-btn {
+  font-family: var(--mono); font-size: 8px;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  padding: 8px 14px;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--dim); text-decoration: none;
+  transition: border-color 0.18s, color 0.18s;
+  cursor: none;
+}
+.s-btn:hover { border-color: var(--white); color: var(--white); }
+</style>
+
+<!-- MERCH ADD BUTTON -->
+<button class="merch-add">В корзину</button>
+<style>
+.merch-add {
+  width: 100%; padding: 11px;
+  background: transparent; color: var(--dim);
+  border: 1px solid var(--mid);
+  font-family: var(--mono); font-size: 9px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  cursor: none;
+}
+.merch-add:hover { background: var(--white); color: var(--black); border-color: var(--white); }
+</style>
+
+
+<!-- ══════════════════════════════════════════════════════
+     SECTION LABEL
+══════════════════════════════════════════════════════════ -->
+
+<div class="section-label">001 — Releases</div>
+<style>
+.section-label {
+  font-family: var(--mono);
+  font-size: 10px; letter-spacing: 0.4em; text-transform: uppercase;
+  color: var(--dim); margin-bottom: 56px;
+  display: flex; align-items: center; gap: 14px;
+}
+.section-label::after {
+  content: ''; flex: 1; max-width: 72px;
+  height: 1px; background: var(--mid);
+}
+</style>
+
+
+<!-- ══════════════════════════════════════════════════════
+     HERO TITLE LOCKUP — TAKA / TAKA
+     RULE: L1 = solid white fill. L2 = outline only.
+══════════════════════════════════════════════════════════ -->
+
+<h1 class="hero-title">
+  <span class="l1">TAKA</span>
+  <span class="l2">TAKA</span>
+</h1>
+<style>
+.hero-title {
+  font-family: var(--display);
+  font-size: clamp(72px, 10vw, 160px);
+  line-height: 0.88; letter-spacing: -0.01em;
+}
+.hero-title .l1 {
+  display: block;
+  color: var(--white);           /* FILLED — solid white */
+}
+.hero-title .l2 {
+  display: block;
+  color: transparent;            /* OUTLINE ONLY — no fill */
+  -webkit-text-stroke: 1px rgba(240,237,230,0.28);
+}
+</style>
+
+
+<!-- ══════════════════════════════════════════════════════
+     RELEASE CARD (grid tile)
+══════════════════════════════════════════════════════════ -->
+
+<div class="rel-card">
+  <div class="rel-card-art" style="background:#141414">
+    <!-- artwork image or SVG -->
+  </div>
+  <div class="rel-card-ov">
+    <div class="rc-title">Compilation 003</div>
+    <div class="rc-meta">TKT-003 · Various</div>
+  </div>
+</div>
+<style>
+.rel-card {
+  position: relative; aspect-ratio: 1; overflow: hidden;
+  border: 1px solid transparent; cursor: none;
+}
+.rel-card-art {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.4s;
+}
+.rel-card:hover .rel-card-art { transform: scale(1.05); }
+.rel-card-ov {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, transparent 55%);
+  padding: 18px;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  opacity: 0; transition: opacity 0.28s;
+}
+.rel-card:hover .rel-card-ov { opacity: 1; }
+.rc-title {
+  font-family: var(--display); font-size: 12px; font-weight: 700;
+  text-transform: uppercase; margin-bottom: 3px;
+}
+.rc-meta {
+  font-family: var(--mono); font-size: 8px;
+  letter-spacing: 0.15em; text-transform: uppercase; color: var(--dim);
+}
+</style>
+
+
+<!-- ══════════════════════════════════════════════════════
+     MERCH CARD
+══════════════════════════════════════════════════════════ -->
+
+<div class="merch-card">
+  <div class="merch-img">
+    <div class="merch-img-inner"><!-- artwork --></div>
+    <div class="merch-badge">Limited</div>
+  </div>
+  <div class="merch-name">TakaTaka Logo Tee — Black</div>
+  <div class="merch-price">2 500 ₽</div>
+  <button class="merch-add">В корзину</button>
+</div>
+<style>
+.merch-card {
+  background: var(--gray2);
+  border: 1px solid transparent; transition: border-color 0.2s;
+}
+.merch-card:hover { border-color: rgba(240,237,230,0.1); }
+.merch-img {
+  aspect-ratio: 3/4; position: relative; overflow: hidden;
+  background: var(--gray);
+  display: flex; align-items: center; justify-content: center;
+}
+.merch-img-inner { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+.merch-badge {
+  position: absolute; top: 11px; left: 11px;
+  font-family: var(--mono); font-size: 7px;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  padding: 5px 11px;
+  border: 1px solid rgba(240,237,230,0.3);
+  color: var(--white); background: transparent;
+}
+.merch-name {
+  font-family: var(--display); font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.02em;
+  padding: 14px 16px 4px;
+}
+.merch-price {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.1em; color: var(--dim);
+  padding: 0 16px 14px;
+}
+</style>
+
+
+<!-- ══════════════════════════════════════════════════════
+     CONTACT GRID ITEM
+══════════════════════════════════════════════════════════ -->
+
+<a href="mailto:takatakaspb@gmail.com" class="c-item">
+  <div class="c-type">Demo Submissions</div>
+  <div class="c-val">takatakaspb@gmail.com</div>
+</a>
+<style>
+.c-item {
+  padding: 32px 24px; background: var(--gray2);
+  text-decoration: none; color: inherit; display: block;
+  border: 1px solid transparent; transition: border-color 0.2s; cursor: none;
+}
+.c-item:hover { border-color: rgba(240,237,230,0.1); }
+.c-type {
+  font-family: var(--mono); font-size: 8px;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--dim); margin-bottom: 14px;
+}
+.c-val {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.03em; color: var(--white);
+}
+</style>
+
+
+<!-- ══════════════════════════════════════════════════════
+     SOCIAL ROW ITEM
+══════════════════════════════════════════════════════════ -->
+
+<div class="social-row">
+  <a href="#" class="soc-item">SoundCloud</a>
+  <a href="#" class="soc-item">Instagram</a>
+  <a href="#" class="soc-item">Telegram</a>
+  <a href="#" class="soc-item">Facebook</a>
+  <a href="#" class="soc-item">VKontakte</a>
+</div>
+<style>
+.social-row { display: flex; gap: 2px; }
+.soc-item {
+  flex: 1; padding: 20px 16px; background: var(--gray2);
+  text-decoration: none; color: var(--dim);
+  font-family: var(--mono); font-size: 8px;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  text-align: center;
+  border: 1px solid transparent; transition: all 0.2s; cursor: none;
+}
+.soc-item:hover { color: var(--white); border-color: rgba(240,237,230,0.1); }
+</style>
+
+
+<!-- ══════════════════════════════════════════════════════
+     TICKER STRIP
+══════════════════════════════════════════════════════════ -->
+
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="ticker-item">TAKATAKA · MICROHOUSE · MINIMAL WAVE · UNDERGROUND MOVEMENT · SPB · VINYL & DIGITAL · </span>
+    <span class="ticker-item">TAKATAKA · MICROHOUSE · MINIMAL WAVE · UNDERGROUND MOVEMENT · SPB · VINYL & DIGITAL · </span>
+  </div>
+</div>
+<style>
+.ticker {
+  overflow: hidden;
+  background: var(--gray);
+  border-top: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  padding: 11px 0;
+}
+.ticker-track {
+  display: flex; animation: tick 22s linear infinite; white-space: nowrap;
+}
+.ticker-item {
+  font-family: var(--display); font-size: 10px; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: rgba(255,255,255,0.12); padding-right: 64px; flex-shrink: 0;
+}
+@keyframes tick { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+</style>
+
+
+<!-- ══════════════════════════════════════════════════════
+     FORM INPUT
+══════════════════════════════════════════════════════════ -->
+
+<input type="text" class="f-input" placeholder="Your Name">
+<style>
+.f-input {
+  width: 100%; background: var(--gray);
+  border: 1px solid transparent; color: var(--white);
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.04em;
+  padding: 15px 18px; outline: none;
+  transition: border-color 0.2s;
+}
+.f-input::placeholder { color: var(--dim); }
+.f-input:focus { border-color: var(--white); }
+</style>
+
+
+<!-- ══════════════════════════════════════════════════════
+     DIVIDER
+══════════════════════════════════════════════════════════ -->
+
+<div class="divider"></div>
+<style>
+.divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(240,237,230,0.1), transparent);
+  margin: 0 48px;
+}
+</style>
+
+
+<!-- ══════════════════════════════════════════════════════
+     SCROLL REVEAL
+══════════════════════════════════════════════════════════ -->
+<!--
+  Add class="reveal" to any element that should animate in on scroll.
+  JS uses IntersectionObserver to add class="visible".
+-->
+<style>
+.reveal {
+  opacity: 0; transform: translateY(22px);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+
+
+<!-- ══════════════════════════════════════════════════════
+     CUSTOM CURSOR
+══════════════════════════════════════════════════════════ -->
+<!--
+  Required on EVERY page. Place at top of <body>.
+-->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+<style>
+body { cursor: none; }
+.cursor {
+  position: fixed; width: 8px; height: 8px;
+  background: var(--white); border-radius: 50%;
+  pointer-events: none; z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.12s;
+}
+.cursor-ring {
+  position: fixed; width: 34px; height: 34px;
+  border: 1px solid rgba(240,237,230,0.22); border-radius: 50%;
+  pointer-events: none; z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: left 0.1s ease, top 0.1s ease;
+}
+</style>
+<script>
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursor-ring');
+let mx = 0, my = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+});
+setInterval(() => {
+  ring.style.left = mx + 'px'; ring.style.top = my + 'px';
+}, 80);
+</script>
+
+
+<!-- ══════════════════════════════════════════════════════
+     LOGO VARIANTS
+══════════════════════════════════════════════════════════ -->
+
+<!-- OUTLINE (nav, footer) -->
+<svg viewBox="0 0 1000 1000" fill="none" width="36" height="36" style="opacity:0.85">
+  <path d="M128.507 350.375C192.024 289.144 260.347 223.144 333.368 152.549C342.137 150.34 350.975 148.551 359.813 147.184C371.528 135.821 383.312 124.354 395.167 112.816C363.18 121.864 331.054 135.225 299.207 153.356C292.859 159.493 286.616 165.56 280.443 171.522C288.896 167.524 297.454 163.982 306.082 160.861C246.878 218.059 192.656 270.312 143.624 317.445C138.047 328.387 132.997 339.398 128.472 350.375H128.507ZM98.2393 501.489C209.736 393.51 324.144 282.656 441.428 168.997C490.32 121.653 502.21 96.7191 475.835 98.7882C467.803 99.3142 459.771 100.121 451.669 101.173C424.979 105.276 393.554 126.773 358.691 160.44C272.692 243.729 190.376 323.302 111.953 399.086C108.972 410.063 106.481 421.005 104.517 431.911C144.255 393.405 184.659 354.268 225.73 314.464C228.956 321.618 232.569 328.948 236.567 336.488C190.306 381.341 144.641 425.634 99.5721 469.33C98.6602 480.131 98.2393 490.863 98.2744 501.489H98.2393Z" stroke="white" stroke-width="1.5" fill="none"/>
+</svg>
+
+<!-- SOLID DIM (watermark on artwork) -->
+<svg viewBox="0 0 1000 1000" fill="none" width="36" height="36" style="opacity:0.13">
+  <path d="M128.507 350.375..." fill="white"/>
+</svg>
