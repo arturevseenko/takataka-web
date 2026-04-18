@@ -190,6 +190,24 @@
   .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
   .reveal.vis { opacity: 1; transform: none; }
 
+  /* EVENTS */
+  .events-grid{display:flex;flex-direction:column;gap:2px}
+  .event-card{display:grid;grid-template-columns:100px 1fr auto;gap:40px;align-items:center;padding:28px 32px;background:var(--gray);border:1px solid transparent;text-decoration:none;color:inherit;transition:border-color .2s,background .2s}
+  .event-card:hover{border-color:rgba(240,237,230,.1);background:var(--gray2)}
+  .event-card--past{opacity:.4}.event-card--past:hover{opacity:.65}
+  .event-date-block{display:flex;flex-direction:column;align-items:flex-start;gap:2px}
+  .event-day{font-family:var(--font-display);font-size:48px;font-weight:900;line-height:1;letter-spacing:-.02em;color:var(--white)}
+  .event-month{font-family:var(--font-mono);font-size:9px;letter-spacing:.35em;text-transform:uppercase;color:var(--dim)}
+  .event-info{display:flex;flex-direction:column;gap:8px}
+  .event-label{font-family:var(--font-mono);font-size:8px;letter-spacing:.35em;text-transform:uppercase;color:var(--dim)}
+  .event-title{font-family:var(--font-display);font-size:22px;font-weight:700;text-transform:uppercase;letter-spacing:-.01em;color:var(--white);line-height:1}
+  .event-meta{display:flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+  .event-sep{color:var(--mid)}
+  .event-right{display:flex;flex-direction:column;align-items:flex-end;gap:10px;min-width:80px}
+  .event-time{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;color:var(--dim)}
+  .event-ticket{font-family:var(--font-mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--white);border-bottom:1px solid var(--mid);padding-bottom:3px;transition:border-color .2s}
+  .event-card:hover .event-ticket{border-color:var(--white)}
+
   /* LATEST RELEASE */
   .release-feat {
     border-top: 1px solid rgba(255,255,255,0.05);
@@ -467,6 +485,9 @@
     .podcast-layout { grid-template-columns: 1fr; }
     .divider { margin: 0 20px; }
     footer { flex-direction: column; gap: 14px; text-align: center; }
+    .event-card { grid-template-columns: 70px 1fr; gap: 20px; padding: 20px 20px; }
+    .event-right { display: none; }
+    .event-day { font-size: 36px; }
   }
 
 
@@ -1191,47 +1212,95 @@ body{cursor:none}
 
 <!-- EVENTS -->
 <section id="events" class="reveal">
-  <div class="row-header">
+  <div class="row-header" style="margin-bottom:56px">
     <div>
-      <div class="sec-label">Events</div>
+      <div class="sec-label">003 — Events</div>
       <h2 class="sec-title">Upcoming</h2>
     </div>
     <a href="#" class="btn btn-out">All Events</a>
   </div>
-  <div class="news-grid">
-    <a href="#" class="news-card">
-      <div class="nc-img">
-        <svg viewBox="0 0 1000 1000" fill="none" style="color:white"><use href="#logo"/></svg>
-        <span class="nc-type">Release</span>
+  <div class="events-grid">
+
+    <a href="#" class="event-card reveal">
+      <div class="event-date-block">
+        <div class="event-day">12</div>
+        <div class="event-month">May</div>
       </div>
-      <div class="nc-body">
-        <div class="nc-date">Feb 2024</div>
-        <div class="nc-head">TKT-012 "Pattern Variations" Now Available</div>
-        <p class="nc-exc">New VA compilation available on all platforms and limited vinyl edition through our store.</p>
+      <div class="event-info">
+        <div class="event-label">TakaTaka Night</div>
+        <div class="event-title">Microhouse Session Vol.3</div>
+        <div class="event-meta">
+          <span class="event-venue">Zoccolo 2.0</span>
+          <span class="event-sep">·</span>
+          <span class="event-city">Saint Petersburg</span>
+        </div>
       </div>
-    </a>
-    <a href="#" class="news-card">
-      <div class="nc-img">
-        <svg viewBox="0 0 1000 1000" fill="none"><circle cx="500" cy="500" r="280" fill="none" stroke="white" stroke-width="1" opacity="0.2"/></svg>
-        <span class="nc-type">Podcast</span>
-      </div>
-      <div class="nc-body">
-        <div class="nc-date">Jan 2024</div>
-        <div class="nc-head">Podcast #042 — New Episode Released</div>
-        <p class="nc-exc">The latest installment in our ongoing series explores deep microhouse textures and hypnotic minimal structures.</p>
+      <div class="event-right">
+        <div class="event-time">23:00</div>
+        <div class="event-ticket">Tickets ↗</div>
       </div>
     </a>
-    <a href="#" class="news-card">
-      <div class="nc-img">
-        <svg viewBox="0 0 1000 1000" fill="none"><polygon points="500,180 840,740 160,740" fill="none" stroke="#c8b89a" stroke-width="1" opacity="0.25"/></svg>
-        <span class="nc-type" style="background:transparent;border:1px solid rgba(200,184,154,0.4);color:var(--accent)">Merch</span>
+
+    <a href="#" class="event-card reveal" style="transition-delay:.08s">
+      <div class="event-date-block">
+        <div class="event-day">31</div>
+        <div class="event-month">May</div>
       </div>
-      <div class="nc-body">
-        <div class="nc-date">Dec 2023</div>
-        <div class="nc-head">Winter Drop — Limited Edition Apparel</div>
-        <p class="nc-exc">New limited drop featuring our signature monochrome aesthetic on premium organic cotton.</p>
+      <div class="event-info">
+        <div class="event-label">Festival</div>
+        <div class="event-title">Intervals Open Air</div>
+        <div class="event-meta">
+          <span class="event-venue">Sevkabel Port</span>
+          <span class="event-sep">·</span>
+          <span class="event-city">Saint Petersburg</span>
+        </div>
+      </div>
+      <div class="event-right">
+        <div class="event-time">18:00</div>
+        <div class="event-ticket">Tickets ↗</div>
       </div>
     </a>
+
+    <a href="#" class="event-card reveal" style="transition-delay:.16s">
+      <div class="event-date-block">
+        <div class="event-day">14</div>
+        <div class="event-month">Jun</div>
+      </div>
+      <div class="event-info">
+        <div class="event-label">TakaTaka Night</div>
+        <div class="event-title">Minimal Wave Edition</div>
+        <div class="event-meta">
+          <span class="event-venue">Arma17</span>
+          <span class="event-sep">·</span>
+          <span class="event-city">Moscow</span>
+        </div>
+      </div>
+      <div class="event-right">
+        <div class="event-time">00:00</div>
+        <div class="event-ticket">Tickets ↗</div>
+      </div>
+    </a>
+
+    <a href="#" class="event-card event-card--past reveal" style="transition-delay:.24s">
+      <div class="event-date-block">
+        <div class="event-day">06</div>
+        <div class="event-month">Apr</div>
+      </div>
+      <div class="event-info">
+        <div class="event-label">Club Night</div>
+        <div class="event-title">Underground Movement #11</div>
+        <div class="event-meta">
+          <span class="event-venue">Zoccolo 2.0</span>
+          <span class="event-sep">·</span>
+          <span class="event-city">Saint Petersburg</span>
+        </div>
+      </div>
+      <div class="event-right">
+        <div class="event-time">Past</div>
+        <div class="event-ticket">Archive ↗</div>
+      </div>
+    </a>
+
   </div>
 </section>
 
