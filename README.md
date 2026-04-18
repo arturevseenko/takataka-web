@@ -48,7 +48,7 @@ Claude Design will read:
 
 After onboarding, every new project in Claude Design will automatically use:
 - The monochrome color palette (`#080808`, `#f0ede6`, `#141414` etc.)
-- Bebas Neue + Space Mono typefaces
+- Gilroy + Space Mono typefaces
 - The TAKA/TAKA hero treatment (L1 filled / L2 outline)
 - All component patterns (cards, buttons, labels, ticker etc.)
 
@@ -91,7 +91,7 @@ In Claude Code, `CLAUDE.md` is read automatically at session start.
 | `dim`    | `#555555` | Secondary text, labels          |
 
 **Fonts:**
-- `Bebas Neue` — all headings and display text
+- `Gilroy` — all headings and display text
 - `Space Mono` — everything else (body, labels, buttons, forms)
 
 **Hero title:** `TAKA` (filled white) / `TAKA` (outline only, `-webkit-text-stroke`)

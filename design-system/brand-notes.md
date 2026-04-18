@@ -32,7 +32,7 @@ The design is deliberately restrained:
 1. **Stay monochrome.** The palette is: `#080808` (background), `#f0ede6` (white/text), `#141414` (gray), `#1c1c1c` (card bg), `#2e2e2e` (borders), `#555` (dim text). Nothing else.
 
 2. **Use these two fonts only:**
-   - `Bebas Neue` — all headings, section titles, display text
+   - `Gilroy` — all headings, section titles, display text
    - `Space Mono` — all body text, labels, buttons, forms, nav links
 
 3. **Hero title rule:** The word "TAKA" appears twice stacked. Top line: solid white fill. Bottom line: outline only (transparent fill + thin white stroke). This is the signature treatment of the brand.

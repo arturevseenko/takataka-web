@@ -88,7 +88,7 @@ For each file change:
 
 1. **Monochrome only** — `--black`, `--white`, `--gray`, `--gray2`, `--mid`, `--dim`. Nothing else.
 2. **Hero title:** L1 = filled white, L2 = outline only (`-webkit-text-stroke`). Never change this.
-3. **Fonts:** Bebas Neue for headings / display. Space Mono for everything else. No exceptions.
+3. **Fonts:** Gilroy for headings / display. Space Mono for everything else. No exceptions.
 4. **Hover on cards:** border reveals (`border-color` only), never background color.
 5. **No border-radius** except cursor (50%) and cart counter (50%).
 6. **No box-shadows** — flat design, depth through color only.

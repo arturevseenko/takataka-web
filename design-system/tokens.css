@@ -26,16 +26,16 @@
 
 /* ── TYPOGRAPHY ─────────────────────────────────────────── */
 :root {
-  --display: 'Bebas Neue', sans-serif;   /* Headings, titles, logo         */
+  --display: 'Gilroy', sans-serif;   /* Headings, titles, logo         */
   --mono:    'Space Mono', monospace;    /* Body, labels, buttons, forms   */
 }
 
 /*
   Google Fonts import:
-  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+  @import url('Local woff2 — see fonts/Gilroy/');
 
   RULES:
-  - Bebas Neue → all headings and display text only
+  - Gilroy → all headings and display text only
   - Space Mono → everything else (labels, body, buttons, nav, forms)
   - No serif fonts. No other fonts.
 */

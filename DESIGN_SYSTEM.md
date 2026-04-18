@@ -74,24 +74,24 @@
 
 | Role         | Family          | Weights           | CSS Variable      | Usage                          |
 |--------------|-----------------|-------------------|-------------------|-------------------------------|
-| Display      | `Bebas Neue`    | 400               | `--display`       | Hero titles, section headings, nav logo |
+| Display      | `Gilroy`    | 400               | `--display`       | Hero titles, section headings, nav logo |
 | Mono / Body  | `Space Mono`    | 400, 700 / italic | `--mono`          | Body text, labels, buttons, forms |
 
 ### Google Fonts Import
 
 ```html
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link href="Local woff2 — see fonts/Gilroy/" rel="stylesheet">
 ```
 
 ### Heading Hierarchy
 
 | Level         | Size                             | Family      | Weight | Tracking       | Usage                          |
 |---------------|----------------------------------|-------------|--------|----------------|-------------------------------|
-| Hero Mega     | `clamp(72px, 10vw, 160px)`       | Bebas Neue  | 400    | `-0.01em`      | TAKA / TAKA hero lockup        |
-| Section Title | `clamp(26px, 3.5vw, 48px)`       | Bebas Neue  | 400    | `-0.025em`     | CONNECT, RELEASES, SHOP        |
-| Card Title    | `11–13px`                        | Bebas Neue  | 700    | `0.02em`       | Merch card names               |
-| Player Title  | `20px`                           | Bebas Neue  | 700    | `-0.01em`      | Podcast player                 |
-| Contact Title | `clamp(52px, 8vw, 120px)`        | Bebas Neue  | 900    | `-0.02em`      | CONNECT section heading        |
+| Hero Mega     | `clamp(72px, 10vw, 160px)`       | Gilroy  | 400    | `-0.01em`      | TAKA / TAKA hero lockup        |
+| Section Title | `clamp(26px, 3.5vw, 48px)`       | Gilroy  | 400    | `-0.025em`     | CONNECT, RELEASES, SHOP        |
+| Card Title    | `11–13px`                        | Gilroy  | 700    | `0.02em`       | Merch card names               |
+| Player Title  | `20px`                           | Gilroy  | 700    | `-0.01em`      | Podcast player                 |
+| Contact Title | `clamp(52px, 8vw, 120px)`        | Gilroy  | 900    | `-0.02em`      | CONNECT section heading        |
 
 ### Body / UI Text
 
@@ -107,12 +107,12 @@
 
 ### Typography Rules ✅
 
-1. **Display font (Bebas Neue)** — headings, section titles, logo text, nav brand name only
+1. **Display font (Gilroy)** — headings, section titles, logo text, nav brand name only
 2. **Mono font (Space Mono)** — everything else: body, labels, buttons, forms, nav links
-3. **UPPERCASE** — Bebas Neue is always uppercase (by nature). Space Mono labels: `text-transform: uppercase`
+3. **UPPERCASE** — Space Mono labels (and UI text): `text-transform: uppercase`
 4. **Hero title treatment:** First line `TAKA` — solid white fill. Second line `TAKA` — outline only (`-webkit-text-stroke: 1px`, `color: transparent`)
 5. **Line height for hero:** `0.88` — tightly stacked
-6. **NEVER** use bold for large Bebas Neue headings (font is inherently bold in appearance)
+6. **Use** Gilroy Heavy (900) or ExtraBold (800) for large display headings — these weights have the most impact
 7. **Letter spacing for labels:** `0.3em` – `0.4em` — always very wide
 8. **No serif fonts anywhere** — this is a mono + display system only
 
@@ -307,7 +307,7 @@ The hero title is the most important visual element. The `TAKA / TAKA` lockup fo
 }
 ```
 
-**Font:** Bebas Neue, `clamp(72px, 10vw, 160px)`, `line-height: 0.88`
+**Font:** Gilroy, `clamp(72px, 10vw, 160px)`, `line-height: 0.88`
 
 ### Perspective Grid Background
 
@@ -571,7 +571,7 @@ takataka-website.html → REFERENCE ONLY — original prototype (not linked in p
 
 1. **Monochrome only** — No color additions without explicit approval. If in doubt: white, gray, or transparent.
 
-2. **Don't break typography** — Bebas Neue for headings, Space Mono for everything else. No exceptions.
+2. **Don't break typography** — Gilroy for headings, Space Mono for everything else. No exceptions.
 
 3. **Preserve grid tightness** — The `2px` gap in release/news grids is intentional. Don't change to larger gaps.
 
@@ -600,14 +600,14 @@ takataka-website.html → REFERENCE ONLY — original prototype (not linked in p
 - Keep sections alternating between `--black` and `--gray` backgrounds
 - Use `border: 1px solid transparent` + hover `border-color` for card hover states
 - Maintain `0.28–0.38` opacity for the outline text stroke on hero L2
-- Keep Bebas Neue for anything headline-sized
+- Keep Gilroy for anything headline-sized
 - Keep Space Mono for labels even at very small sizes (7–8px)
 
 ### ❌ DON'T
 
 - Add any hue-based color — not even a subtle tint
 - Change the hero title treatment (L1 filled / L2 outline)
-- Use `font-weight: bold` with Bebas Neue (already visually heavy)
+- Use `font-weight: bold` with Gilroy (already visually heavy)
 - Use `transition-all` on section-level or card-level blocks
 - Add box shadows (not used in this design system)
 - Use `border-radius` except for cursor (50%) and cart counter (50%)
@@ -623,7 +623,7 @@ takataka-website.html → REFERENCE ONLY — original prototype (not linked in p
 | Vanilla HTML  | All pages — single-file architecture   |
 | CSS Variables | Design tokens (`--black`, `--white` etc.) |
 | Space Mono    | Body / UI typeface (Google Fonts)      |
-| Bebas Neue    | Display typeface (Google Fonts)        |
+| Gilroy    | Display typeface (local woff2, fonts/)   |
 | Vanilla JS    | Cursor, cart, modals, reveal, filters  |
 | localStorage  | Cart persistence across pages          |
 | IntersectionObserver | Scroll reveal system          |
