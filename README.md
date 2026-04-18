@@ -10,15 +10,22 @@
 ```
 takataka-web/
 │
-├── index.html                        ← Main page (current monochrome version)
+├── index.html                        ← Main page (current version)
 ├── booking.html                      ← Booking page with file upload
 ├── cart.html                         ← Merch cart and checkout
 ├── takataka-website.html             ← ⚠️ REFERENCE ONLY — original prototype
 │
+├── fonts/
+│   ├── Gilroy/                       ← Gilroy woff2 (Heavy, ExtraBold, Bold, SemiBold, Medium, Regular, Light)
+│   └── SpaceMono/                    ← Space Mono woff2 (Regular, Bold, Italic, BoldItalic)
+│
+├── assets/
+│   └── logo.svg                      ← TakaTaka SVG logo (currentColor)
+│
 ├── design-system/
 │   ├── tokens.css                    ← All CSS variables / design tokens
 │   ├── components.html               ← All UI component patterns
-│   └── brand-notes.md                ← Plain-text brand context
+│   └── brand-notes.md                ← Plain-text brand context for Claude Design
 │
 ├── DESIGN_SYSTEM.md                  ← Full design system documentation
 ├── CLAUDE.md                         ← AI agent workflow instructions
@@ -29,51 +36,32 @@ takataka-web/
 
 ---
 
-## Setting Up Claude Design
+## Pages
 
-Claude Design reads this repository during onboarding to build your design system automatically.
-
-### Step 1 — Point Claude Design at this repo
-
-Go to [claude.ai/design](https://claude.ai/design) → onboarding → **Connect codebase** → paste the GitHub repo URL.
-
-Claude Design will read:
-- `design-system/tokens.css` — all color and typography tokens
-- `design-system/components.html` — all UI component patterns
-- `design-system/brand-notes.md` — brand context and rules
-- `DESIGN_SYSTEM.md` — full design documentation
-- `index.html` — to understand the actual codebase
-
-### Step 2 — Every project inherits the design system
-
-After onboarding, every new project in Claude Design will automatically use:
-- The monochrome color palette (`#080808`, `#f0ede6`, `#141414` etc.)
-- Gilroy + Space Mono typefaces
-- The TAKA/TAKA hero treatment (L1 filled / L2 outline)
-- All component patterns (cards, buttons, labels, ticker etc.)
-
-### Step 3 — Refine through conversation
-
-Describe what you want. Claude Design will build it using the TakaTaka design system. Refine with inline comments, direct edits, or conversation.
-
-### Step 4 — Export or hand off to Claude Code
-
-Export as HTML, PPTX, PDF, or Canva. Or hand off directly to Claude Code for implementation.
+| Page                    | Description                                                        |
+|-------------------------|--------------------------------------------------------------------|
+| `index.html`            | Main: hero, releases, events, radio, shop, booking, contact       |
+| `booking.html`          | Artist roster, EPK, booking request form + file upload            |
+| `cart.html`             | Merch cart, checkout, promo code                                  |
+| `takataka-website.html` | ⚠️ Reference prototype only — do not modify                       |
 
 ---
 
-## Working with Claude Code / Claude.ai Projects
+## Page Structure (index.html)
 
-If using Claude Code (terminal) or Claude.ai Projects:
+Sections in order:
 
-| File to provide         | Why                                       |
-|-------------------------|-------------------------------------------|
-| `CLAUDE.md`             | Workflow instructions — read first always |
-| `DESIGN_SYSTEM.md`      | Visual rules for any design task          |
-| `ENGINEERING_GUIDE.md`  | Code standards for any logic task         |
-| `index.html`            | Upload when working on main page          |
-
-In Claude Code, `CLAUDE.md` is read automatically at session start.
+1. **Nav** — fixed, logo left, links center, socials right
+2. **Hero** — TAKA/TAKA lockup, perspective grid, vinyl artwork
+3. **Ticker** — scrolling text strip
+4. **Latest Release** — featured release, tracklist, stream buttons
+5. **Releases** — 4-column grid, filter tabs
+6. **Events** — upcoming shows with date, venue, city, ticket link
+7. **Radio** — podcast episodes, sound wave visualizer, sticky player
+8. **Shop** — 3-column merch grid, add to cart
+9. **Booking** — set types + quick form + link to booking.html
+10. **Contact** — 4-column email grid, social row
+11. **Footer** — single minimal row
 
 ---
 
@@ -91,10 +79,10 @@ In Claude Code, `CLAUDE.md` is read automatically at session start.
 | `dim`    | `#555555` | Secondary text, labels          |
 
 **Fonts:**
-- `Gilroy` — all headings and display text
-- `Space Mono` — everything else (body, labels, buttons, forms)
+- `Gilroy` — all headings and display text (local woff2)
+- `Space Mono` — everything else: body, labels, buttons, forms (local woff2)
 
-**Hero title:** `TAKA` (filled white) / `TAKA` (outline only, `-webkit-text-stroke`)
+**Hero title:** `TAKA` (solid white fill) / `TAKA` (outline only, `-webkit-text-stroke`)
 
 Full documentation → `DESIGN_SYSTEM.md`  
 All tokens → `design-system/tokens.css`  
@@ -102,14 +90,19 @@ All components → `design-system/components.html`
 
 ---
 
-## Pages
+## Setting Up Claude Design
 
-| Page                    | Description                                                 |
-|-------------------------|-------------------------------------------------------------|
-| `index.html`            | Main: hero, releases, news, radio, merch, contact          |
-| `booking.html`          | Artist roster, EPK, booking request form + file upload     |
-| `cart.html`             | Merch cart, checkout, promo code                           |
-| `takataka-website.html` | ⚠️ Reference prototype only — do not modify                |
+1. Go to [claude.ai/design](https://claude.ai/design) → onboarding → **Connect codebase**
+2. Paste: `https://github.com/arturevseenko/takataka-web`
+3. Upload fonts and logo from `fonts/` and `assets/` folders
+4. Add notes from `design-system/brand-notes.md`
+
+---
+
+## Cart System
+
+Cart state is stored in `localStorage` under key `tkt_cart`.  
+All pages share the same cart. Items persist across sessions.
 
 ---
 
