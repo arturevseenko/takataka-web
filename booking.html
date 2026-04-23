@@ -19,14 +19,14 @@
 :root{--black:#080808;--white:#f0ede6;--accent:#c8ff00;--gray:#141414;--gray2:#1c1c1c;--mid:#2e2e2e;--dim:#555;--display:'Gilroy',sans-serif;--mono:'Space Mono',monospace;--nav-h:72px}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{background:var(--black);color:var(--white);font-family:var(--mono);overflow-x:hidden;cursor:none;-webkit-font-smoothing:antialiased}
+body{background:var(--black);color:var(--white);font-family:var(--mono);overflow-x:hidden;cursor:none;-webkit-font-smoothing:antialiased}body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(240,237,230,0.022) 1px,transparent 1px),linear-gradient(90deg,rgba(240,237,230,0.022) 1px,transparent 1px);background-size:80px 80px;pointer-events:none;z-index:0}
 a{color:inherit;text-decoration:none;cursor:none}
 button{cursor:none;font-family:var(--mono)}
 img,svg{display:block;max-width:100%}
 ul{list-style:none}
 body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.045'/%3E%3C/svg%3E");pointer-events:none;z-index:900;opacity:.28}
-.cursor{position:fixed;width:8px;height:8px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .12s}
-.cursor-ring{position:fixed;width:34px;height:34px;border:1px solid rgba(200,255,0,.35);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:left .1s ease,top .1s ease,transform .2s,border-color .2s}
+.cursor{position:fixed;width:8px;height:8px;background:var(--white);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .12s}
+.cursor-ring{position:fixed;width:34px;height:34px;border:1px solid rgba(240,237,230,.22);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:left .1s ease,top .1s ease,transform .2s,border-color .2s}
 
 /* NAV */
 .site-nav{position:fixed;top:0;left:0;right:0;z-index:200;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 48px;background:rgba(8,8,8,.9);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.05)}
@@ -209,8 +209,8 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .booking-form-sub{font-size:11px;color:var(--dim);letter-spacing:.04em;line-height:1.6;margin-bottom:28px}
 .form-field{margin-bottom:16px}
 .form-label{font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim);display:block;margin-bottom:7px}
-.form-input{width:100%;background:var(--black);border:1px solid var(--mid);color:var(--white);font-family:var(--mono);font-size:12px;padding:12px 14px;outline:none;transition:border-color .25s}
-.form-input:focus{border-color:var(--accent)}
+.form-input{width:100%;background:var(--gray);border:1px solid rgba(240,237,230,0.18);color:var(--white);font-family:var(--mono);font-size:12px;padding:12px 14px;outline:none;transition:border-color .25s}
+.form-input:focus{border-color:rgba(240,237,230,0.6)}
 .form-input::placeholder{color:var(--dim)}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 textarea.form-input{resize:vertical;min-height:90px}
@@ -332,7 +332,7 @@ select.form-input{appearance:none;background-image:url("data:image/svg+xml,%3Csv
   <nav class="nav-center">
     <a href="index.html">Releases</a>
     <a href="index.html">Artists</a>
-    <a href="index.html">Radio</a>
+    <a href="index.html#radio">Podcast</a>
     <a href="booking.html" class="active">Booking</a>
     <a href="index.html">Merch</a>
     <a href="index.html">News</a>
@@ -348,7 +348,7 @@ select.form-input{appearance:none;background-image:url("data:image/svg+xml,%3Csv
 </nav>
 
 <div class="nav-drawer" id="nav-drawer">
-  <a href="index.html">Releases</a><a href="index.html">Artists</a><a href="index.html">Radio</a><a href="booking.html">Booking</a><a href="index.html">Merch</a><a href="index.html">News</a>
+  <a href="index.html">Releases</a><a href="index.html">Artists</a><a href="index.html#radio">Podcast</a><a href="booking.html">Booking</a><a href="index.html">Merch</a><a href="index.html">News</a>
   <div class="nav-drawer-actions">
     <button class="btn-ghost" onclick="openLogin()">Войти</button>
     <button class="btn-primary" onclick="openCart()">Корзина</button>
