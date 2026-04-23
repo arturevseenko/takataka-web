@@ -21,7 +21,7 @@
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--cream);font-family:var(--mono);overflow-x:hidden;cursor:none;-webkit-font-smoothing:antialiased}
+body{background:var(--bg);color:var(--cream);font-family:var(--mono);overflow-x:hidden;cursor:none;-webkit-font-smoothing:antialiased}body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(240,237,230,0.022) 1px,transparent 1px),linear-gradient(90deg,rgba(240,237,230,0.022) 1px,transparent 1px);background-size:80px 80px;pointer-events:none;z-index:0}
 a{color:inherit;text-decoration:none}
 button{background:none;border:0;color:inherit;font-family:inherit;cursor:none}
 ul{list-style:none}
@@ -414,7 +414,7 @@ footer{padding:40px 48px;border-top:1px solid var(--g3);display:flex;justify-con
   <ul class="nav-links">
     <li><a href="#releases">Releases</a></li>
     <li><a href="#events">Events</a></li>
-    <li><a href="#radio">Radio</a></li>
+    <li><a href="#radio">Podcast</a></li>
     <li><a href="#shop">Shop</a></li>
     <li><a href="#booking">Booking</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -440,7 +440,7 @@ footer{padding:40px 48px;border-top:1px solid var(--g3);display:flex;justify-con
     <p class="hero-sub">A movement of the modern underground music scene — microhouse &amp; minimal waves. Gathering the best sets of talented DJs and musicians from Saint Petersburg.</p>
     <div class="hero-ctas">
       <a href="#releases" class="btn btn-fill">Latest Releases</a>
-      <a href="#radio" class="btn btn-ghost">Listen Live</a>
+      <a href="#radio" class="btn btn-ghost">Listen ↗</a>
     </div>
   </div>
 
@@ -457,7 +457,7 @@ footer{padding:40px 48px;border-top:1px solid var(--g3);display:flex;justify-con
     </div>
   </div>
 
-  <div class="hero-scroll" style="right:48px;left:auto"><span>Scroll</span><span class="hero-scroll-line"></span></div>
+  <div class="hero-scroll"><span>Scroll</span><span class="hero-scroll-line"></span></div>
 </section>
 
 <!-- ══ 3. TICKER ════════════════════════════════════════════ -->
@@ -543,7 +543,7 @@ footer{padding:40px 48px;border-top:1px solid var(--g3);display:flex;justify-con
   <div class="events-list reveal">
     <a class="ev-card" href="#">
       <div class="ev-date"><span class="ev-day">14</span><span class="ev-mon">Jun</span></div>
-      <div class="ev-info"><span class="ev-label">Berlin, DE</span><span class="ev-name">Berghain</span><span class="ev-venue">Voss &amp; Möhr<span class="ev-sep">—</span>TakaTaka Night</span></div>
+      <div class="ev-info"><span class="ev-label">Saint Petersburg, RU</span><span class="ev-name">Berghain</span><span class="ev-venue">Voss &amp; Möhr<span class="ev-sep">—</span>TakaTaka Night</span></div>
       <div class="ev-right"><span class="ev-time">23:00</span><span class="ev-ticket">Tickets</span></div>
     </a>
     <a class="ev-card" href="#">
@@ -569,7 +569,6 @@ footer{padding:40px 48px;border-top:1px solid var(--g3);display:flex;justify-con
   </div>
 </section>
 
-<!-- ══ 7. RADIO (preserved exactly) ══════════════════════════ -->
 <section class="radio" id="radio">
   <div class="radio-grid"></div>
   <div class="radio-glow"></div>
@@ -824,21 +823,21 @@ footer{padding:40px 48px;border-top:1px solid var(--g3);display:flex;justify-con
     </div>
   </div>
   <div class="contact-grid reveal">
-    <a class="c-item" href="/cdn-cgi/l/email-protection#63010c0c080a0d042317020802170208024d0d0617">
+    <a class="c-item" href="/cdn-cgi/l/email-protection#14767b7b7f7d7a735460757f7560757f753a7a7160">
       <p class="c-type">Booking</p>
-      <p class="c-val"><span class="__cf_email__" data-cfemail="d4b6bbbbbfbdbab394a0b5bfb5a0b5bfb5fabab1a0">[email&#160;protected]</span></p>
+      <p class="c-val"><span class="__cf_email__" data-cfemail="dcbeb3b3b7b5b2bb9ca8bdb7bda8bdb7bdf2b2b9a8">[email&#160;protected]</span></p>
     </a>
-    <a class="c-item" href="/cdn-cgi/l/email-protection#1d6d6f786e6e5d697c767c697c767c33737869">
+    <a class="c-item" href="/cdn-cgi/l/email-protection#ff8f8d9a8c8cbf8b9e949e8b9e949ed1919a8b">
       <p class="c-type">Press &amp; Media</p>
-      <p class="c-val"><span class="__cf_email__" data-cfemail="2c5c5e495f5f6c584d474d584d474d02424958">[email&#160;protected]</span></p>
+      <p class="c-val"><span class="__cf_email__" data-cfemail="3242405741417246535953465359531c5c5746">[email&#160;protected]</span></p>
     </a>
-    <a class="c-item" href="/cdn-cgi/l/email-protection#0b6f6e6664784b7f6a606a7f6a606a25656e7f">
+    <a class="c-item" href="/cdn-cgi/l/email-protection#cbafaea6a4b88bbfaaa0aabfaaa0aae5a5aebf">
       <p class="c-type">Demo Submissions</p>
-      <p class="c-val"><span class="__cf_email__" data-cfemail="3753525a58447743565c5643565c5619595243">[email&#160;protected]</span></p>
+      <p class="c-val"><span class="__cf_email__" data-cfemail="254140484a566551444e4451444e440b4b4051">[email&#160;protected]</span></p>
     </a>
-    <a class="c-item" href="/cdn-cgi/l/email-protection#7811161e17380c1913190c19131956161d0c">
+    <a class="c-item" href="/cdn-cgi/l/email-protection#573e3931381723363c3623363c3679393223">
       <p class="c-type">General</p>
-      <p class="c-val"><span class="__cf_email__" data-cfemail="2940474f46695d4842485d48424807474c5d">[email&#160;protected]</span></p>
+      <p class="c-val"><span class="__cf_email__" data-cfemail="3a53545c557a4e5b515b4e5b515b14545f4e">[email&#160;protected]</span></p>
     </a>
   </div>
   <div class="social-row reveal" style="margin-top:2px">
@@ -858,7 +857,7 @@ footer{padding:40px 48px;border-top:1px solid var(--g3);display:flex;justify-con
     <svg viewBox="0 0 1000 1000" width="20" height="20"><use href="#logo"/></svg>
     <span>TakaTaka Records</span>
   </div>
-  <span>© 2024 TakaTaka Records — Berlin</span>
+  <span>© 2024 TakaTaka Records — Saint Petersburg</span>
   <span>Underground Movement</span>
 </footer>
 
