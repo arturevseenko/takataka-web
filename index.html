@@ -5,918 +5,419 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TAKATAKA — Underground Movement</title>
 <style>
-  @font-face { font-family: 'Gilroy'; src: url('fonts/Gilroy/Gilroy-Heavy.woff2') format('woff2'); font-weight: 900; font-style: normal; font-display: swap; }
-  @font-face { font-family: 'Gilroy'; src: url('fonts/Gilroy/Gilroy-ExtraBold.woff2') format('woff2'); font-weight: 800; font-style: normal; font-display: swap; }
-  @font-face { font-family: 'Gilroy'; src: url('fonts/Gilroy/Gilroy-Bold.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: swap; }
-  @font-face { font-family: 'Gilroy'; src: url('fonts/Gilroy/Gilroy-SemiBold.woff2') format('woff2'); font-weight: 600; font-style: normal; font-display: swap; }
-  @font-face { font-family: 'Gilroy'; src: url('fonts/Gilroy/Gilroy-Medium.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: swap; }
-  @font-face { font-family: 'Gilroy'; src: url('fonts/Gilroy/Gilroy-Regular.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
-  @font-face { font-family: 'Gilroy'; src: url('fonts/Gilroy/Gilroy-Light.woff2') format('woff2'); font-weight: 300; font-style: normal; font-display: swap; }
-  @font-face { font-family: 'Space Mono'; src: url('fonts/SpaceMono/SpaceMono-Regular.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
-  @font-face { font-family: 'Space Mono'; src: url('fonts/SpaceMono/SpaceMono-Bold.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: swap; }
-  @font-face { font-family: 'Space Mono'; src: url('fonts/SpaceMono/SpaceMono-Italic.woff2') format('woff2'); font-weight: 400; font-style: italic; font-display: swap; }
-  @font-face { font-family: 'Space Mono'; src: url('fonts/SpaceMono/SpaceMono-BoldItalic.woff2') format('woff2'); font-weight: 700; font-style: italic; font-display: swap; }
-
-  :root {
-    --black: #0a0a0a;
-    --white: #f0ede8;
-    --gray: #141414;
-    --mid: #1e1e1e;
-    --accent: #c8b89a;
-    --accent2: #e8d5b0;
-    --dim: #555;
-    --font-display: 'Gilroy', sans-serif;
-    --font-mono: 'Space Mono', monospace;
-  }
-
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    background: var(--black);
-    color: var(--white);
-    font-family: var(--font-mono);
-    overflow-x: hidden;
-    cursor: none;
-  }
-
-  .cursor {
-    position: fixed; width: 8px; height: 8px;
-    background: var(--accent); border-radius: 50%;
-    pointer-events: none; z-index: 9999;
-    transform: translate(-50%, -50%);
-    transition: transform 0.1s;
-  }
-  .cursor-ring {
-    position: fixed; width: 32px; height: 32px;
-    border: 1px solid rgba(200,184,154,0.35);
-    border-radius: 50%; pointer-events: none; z-index: 9998;
-    transform: translate(-50%, -50%);
-    transition: width 0.2s, height 0.2s;
-  }
-
-  /* NAV */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    padding: 24px 48px;
-    display: flex; justify-content: space-between; align-items: center;
-    background: linear-gradient(to bottom, rgba(10,10,10,0.97) 0%, transparent 100%);
-  }
-  .nav-logo { display: flex; align-items: center; gap: 14px; text-decoration: none; }
-  .nav-logo svg { width: 36px; height: 36px; }
-  .nav-logo-text {
-    font-family: var(--font-display); font-weight: 700;
-    font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
-    color: var(--white);
-  }
-  .nav-links { display: flex; gap: 32px; list-style: none; }
-  .nav-links a {
-    font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase;
-    color: var(--dim); text-decoration: none; transition: color 0.2s; cursor: none;
-  }
-  .nav-links a:hover { color: var(--accent); }
-  .nav-right { display: flex; gap: 20px; }
-  .nav-right a {
-    font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
-    color: var(--dim); text-decoration: none; transition: color 0.2s; cursor: none;
-  }
-  .nav-right a:hover { color: var(--accent); }
-
-  /* HERO */
-  .hero {
-    height: 100vh; position: relative;
-    display: flex; align-items: flex-end;
-    padding: 0 48px 80px;
-    overflow: hidden;
-  }
-  .hero-bg {
-    position: absolute; inset: 0;
-    background:
-      radial-gradient(ellipse at 75% 35%, rgba(200,184,154,0.06) 0%, transparent 55%),
-      radial-gradient(ellipse at 15% 75%, rgba(200,184,154,0.03) 0%, transparent 45%);
-  }
-  .hero-grid {
-    position: absolute; inset: 0;
-    background-image:
-      linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
-    background-size: 72px 72px;
-  }
-  .hero-logo-bg {
-    position: absolute; right: -100px; top: 50%;
-    transform: translateY(-50%);
-    width: 720px; height: 720px; opacity: 0.035;
-    animation: slowspin 80s linear infinite;
-  }
-  @keyframes slowspin {
-    from { transform: translateY(-50%) rotate(0deg); }
-    to { transform: translateY(-50%) rotate(360deg); }
-  }
-  .hero-content { position: relative; z-index: 2; max-width: 850px; }
-  .hero-eyebrow {
-    font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase;
-    color: var(--accent); margin-bottom: 28px;
-    display: flex; align-items: center; gap: 14px;
-  }
-  .hero-eyebrow::before {
-    content: ''; display: block; width: 36px; height: 1px; background: var(--accent);
-  }
-  .hero-title {
-    font-family: var(--font-display); font-weight: 900;
-    font-size: clamp(56px, 10vw, 130px);
-    line-height: 0.88; letter-spacing: -0.025em;
-    text-transform: uppercase; color: var(--white);
-  }
-  .hero-title .outline {
-    color: transparent;
-    -webkit-text-stroke: 1px rgba(240,237,232,0.2);
-  }
-  .hero-sub {
-    font-size: 11px; line-height: 1.85; color: var(--dim);
-    max-width: 440px; margin-top: 28px; margin-bottom: 44px;
-  }
-  .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
-
-  .btn {
-    font-family: var(--font-mono); font-size: 9px;
-    letter-spacing: 0.22em; text-transform: uppercase; text-decoration: none;
-    padding: 14px 28px; border: 1px solid;
-    transition: all 0.22s; display: inline-flex; align-items: center; gap: 8px;
-    cursor: none;
-  }
-  .btn-prim { background: var(--accent); color: var(--black); border-color: var(--accent); }
-  .btn-prim:hover { background: var(--accent2); border-color: var(--accent2); }
-  .btn-out { background: transparent; color: var(--white); border-color: rgba(240,237,232,0.15); }
-  .btn-out:hover { border-color: var(--accent); color: var(--accent); }
-
-  .hero-scroll {
-    position: absolute; bottom: 48px; right: 48px;
-    font-size: 8px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--dim);
-    writing-mode: vertical-rl; animation: bob 2.2s ease-in-out infinite;
-  }
-  @keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(8px)} }
-
-  /* TICKER */
-  .ticker {
-    overflow: hidden; border-top: 1px solid rgba(255,255,255,0.05);
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-    padding: 11px 0; background: var(--gray);
-  }
-  .ticker-track { display: flex; animation: tick 22s linear infinite; white-space: nowrap; }
-  .ticker-item {
-    font-family: var(--font-display); font-size: 10px; font-weight: 700;
-    letter-spacing: 0.18em; text-transform: uppercase;
-    color: rgba(255,255,255,0.12); padding-right: 64px; flex-shrink: 0;
-  }
-  .ticker-item em { color: var(--accent); font-style: normal; }
-  @keyframes tick { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-
-  /* COMMON */
-  section { padding: 112px 48px; }
-  .sec-label {
-    font-size: 8px; letter-spacing: 0.35em; text-transform: uppercase;
-    color: var(--accent); margin-bottom: 56px;
-    display: flex; align-items: center; gap: 14px;
-  }
-  .sec-label::before { content:''; display:block; width:28px; height:1px; background:var(--accent); }
-  .sec-title {
-    font-family: var(--font-display); font-weight: 700;
-    font-size: clamp(26px, 3.5vw, 48px);
-    letter-spacing: -0.025em; text-transform: uppercase; line-height: 1;
-  }
-  .row-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 0; }
-  .divider { height: 1px; background: linear-gradient(to right, transparent, rgba(200,184,154,0.15), transparent); margin: 0 48px; }
-
-  /* REVEAL */
-  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
-  .reveal.vis { opacity: 1; transform: none; }
-
-  /* EVENTS */
-  .events-grid{display:flex;flex-direction:column;gap:2px}
-  .event-card{display:grid;grid-template-columns:100px 1fr auto;gap:40px;align-items:center;padding:28px 32px;background:var(--gray);border:1px solid transparent;text-decoration:none;color:inherit;transition:border-color .2s,background .2s}
-  .event-card:hover{border-color:rgba(240,237,230,.1);background:var(--gray2)}
-  .event-card--past{opacity:.4}.event-card--past:hover{opacity:.65}
-  .event-date-block{display:flex;flex-direction:column;align-items:flex-start;gap:2px}
-  .event-day{font-family:var(--font-display);font-size:48px;font-weight:900;line-height:1;letter-spacing:-.02em;color:var(--white)}
-  .event-month{font-family:var(--font-mono);font-size:9px;letter-spacing:.35em;text-transform:uppercase;color:var(--dim)}
-  .event-info{display:flex;flex-direction:column;gap:8px}
-  .event-label{font-family:var(--font-mono);font-size:8px;letter-spacing:.35em;text-transform:uppercase;color:var(--dim)}
-  .event-title{font-family:var(--font-display);font-size:22px;font-weight:700;text-transform:uppercase;letter-spacing:-.01em;color:var(--white);line-height:1}
-  .event-meta{display:flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
-  .event-sep{color:var(--mid)}
-  .event-right{display:flex;flex-direction:column;align-items:flex-end;gap:10px;min-width:80px}
-  .event-time{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;color:var(--dim)}
-  .event-ticket{font-family:var(--font-mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--white);border-bottom:1px solid var(--mid);padding-bottom:3px;transition:border-color .2s}
-  .event-card:hover .event-ticket{border-color:var(--white)}
-
-  /* LATEST RELEASE */
-  .release-feat {
-    border-top: 1px solid rgba(255,255,255,0.05);
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-    background: var(--gray);
-  }
-  .release-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
-  .artwork-wrap { position: relative; aspect-ratio: 1; overflow: hidden; }
-  .artwork-inner {
-    width: 100%; height: 100%;
-    background: linear-gradient(135deg, #181818 0%, #252525 50%, #121212 100%);
-    display: flex; align-items: center; justify-content: center;
-  }
-  .artwork-inner svg { width: 58%; height: 58%; opacity: 0.1; transition: opacity 0.4s; }
-  .artwork-wrap:hover .artwork-inner svg { opacity: 0.18; }
-  .artwork-badge {
-    position: absolute; top: 16px; left: 16px;
-    background: var(--accent); color: var(--black);
-    font-size: 7px; letter-spacing: 0.22em; text-transform: uppercase;
-    padding: 5px 11px; font-family: var(--font-mono);
-  }
-  .rel-catalog { font-size: 8px; letter-spacing: 0.3em; color: var(--accent); text-transform: uppercase; margin-bottom: 14px; }
-  .rel-title {
-    font-family: var(--font-display); font-weight: 900;
-    font-size: clamp(30px, 4vw, 58px); text-transform: uppercase;
-    letter-spacing: -0.025em; line-height: 0.92; margin-bottom: 20px;
-  }
-  .rel-artist { font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--dim); margin-bottom: 28px; }
-  .rel-desc { font-size: 11px; line-height: 1.9; color: var(--dim); margin-bottom: 36px; max-width: 380px; }
-  .tracklist { margin-bottom: 36px; }
-  .track {
-    display: flex; justify-content: space-between;
-    padding: 11px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
-    font-size: 10px; color: var(--dim); letter-spacing: 0.04em;
-    transition: color 0.18s; cursor: none;
-  }
-  .track:hover { color: var(--white); }
-  .track-n { color: var(--accent); font-size: 8px; width: 22px; }
-  .stream-links { display: flex; gap: 10px; flex-wrap: wrap; }
-  .s-btn {
-    font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase;
-    padding: 8px 14px; border: 1px solid rgba(255,255,255,0.1);
-    color: var(--dim); text-decoration: none; transition: all 0.18s; cursor: none;
-  }
-  .s-btn:hover { border-color: var(--accent); color: var(--accent); }
-
-  /* RELEASES GRID */
-  .filter-row { display: flex; gap: 3px; }
-  .f-btn {
-    font-family: var(--font-mono); font-size: 8px;
-    letter-spacing: 0.22em; text-transform: uppercase;
-    padding: 8px 18px; border: 1px solid rgba(255,255,255,0.08);
-    background: transparent; color: var(--dim);
-    cursor: none; transition: all 0.18s;
-  }
-  .f-btn:hover, .f-btn.on { background: var(--accent); color: var(--black); border-color: var(--accent); }
-  .releases-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; margin-top: 56px; }
-  .rel-card { position: relative; aspect-ratio: 1; overflow: hidden; cursor: none; }
-  .rel-card-art {
-    width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
-    transition: transform 0.4s;
-  }
-  .rel-card:hover .rel-card-art { transform: scale(1.05); }
-  .rel-card-art svg { width: 48%; height: 48%; opacity: 0.07; }
-  .rel-card-ov {
-    position: absolute; inset: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, transparent 55%);
-    padding: 18px; display: flex; flex-direction: column; justify-content: flex-end;
-    opacity: 0; transition: opacity 0.28s;
-  }
-  .rel-card:hover .rel-card-ov { opacity: 1; }
-  .rc-title { font-family: var(--font-display); font-size: 12px; font-weight: 700; text-transform: uppercase; margin-bottom: 3px; }
-  .rc-meta { font-size: 8px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); }
-
-  /* ARTISTS */
-  .artists-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 56px; }
-  .artist-card { position: relative; aspect-ratio: 3/4; overflow: hidden; cursor: none; display: flex; flex-direction: column; justify-content: flex-end; padding: 26px; }
-  .ac-bg { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
-  .ac-bg svg { width: 65%; opacity: 0.045; transition: transform 0.5s, opacity 0.3s; }
-  .artist-card:hover .ac-bg svg { transform: scale(1.06); opacity: 0.08; }
-  .ac-ov {
-    position: absolute; inset: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.08) 55%, transparent 100%);
-  }
-  .ac-info { position: relative; z-index: 2; }
-  .ac-name {
-    font-family: var(--font-display); font-size: 18px; font-weight: 700;
-    text-transform: uppercase; margin-bottom: 5px; letter-spacing: -0.01em;
-  }
-  .ac-loc { font-size: 8px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
-  .tags { display: flex; gap: 6px; flex-wrap: wrap; }
-  .tag {
-    font-size: 7px; letter-spacing: 0.15em; text-transform: uppercase;
-    padding: 4px 9px; border: 1px solid rgba(255,255,255,0.1); color: var(--dim);
-  }
-
-  /* PODCAST */
-  .podcast-bg { background: var(--black); border-top: 1px solid rgba(255,255,255,0.05); }
-  .podcast-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 72px; align-items: start; }
-  .episodes { display: flex; flex-direction: column; gap: 2px; }
-  .ep-item {
-    display: grid; grid-template-columns: 44px 1fr 32px; gap: 14px;
-    align-items: center; padding: 18px; background: var(--gray);
-    border: 1px solid transparent; transition: all 0.2s;
-    cursor: none; text-decoration: none; color: inherit;
-  }
-  .ep-item:hover { border-color: rgba(200,184,154,0.18); }
-  .ep-item.on { border-color: var(--accent); background: rgba(200,184,154,0.04); }
-  .ep-num { font-family: var(--font-display); font-size: 20px; font-weight: 900; color: rgba(255,255,255,0.07); }
-  .ep-item.on .ep-num { color: var(--accent); }
-  .ep-name { font-size: 10px; letter-spacing: 0.04em; margin-bottom: 3px; }
-  .ep-dur { font-size: 8px; letter-spacing: 0.15em; color: var(--dim); text-transform: uppercase; }
-  .play-btn {
-    width: 30px; height: 30px; border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-    transition: all 0.18s;
-  }
-  .ep-item:hover .play-btn { border-color: var(--accent); }
-  .play-btn::after {
-    content: ''; border-left: 7px solid var(--dim);
-    border-top: 4px solid transparent; border-bottom: 4px solid transparent;
-    margin-left: 2px; transition: border-color 0.18s;
-  }
-  .ep-item:hover .play-btn::after { border-left-color: var(--accent); }
-
-  .player-sticky { position: sticky; top: 96px; }
-  .player-art {
-    aspect-ratio: 1; background: var(--gray); margin-bottom: 28px;
-    display: flex; align-items: center; justify-content: center;
-    position: relative; overflow: hidden;
-  }
-  .player-art svg { width: 55%; opacity: 0.07; animation: slowspin 50s linear infinite; }
-  .player-art-lbl {
-    position: absolute; bottom: 18px; left: 18px;
-    font-size: 8px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent);
-  }
-  .player-title { font-family: var(--font-display); font-size: 20px; font-weight: 700; text-transform: uppercase; letter-spacing: -0.01em; margin-bottom: 6px; }
-  .player-meta { font-size: 9px; color: var(--dim); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 22px; }
-  .player-bar { height: 1px; background: rgba(255,255,255,0.08); margin-bottom: 6px; position: relative; cursor: none; }
-  .player-prog { position: absolute; left: 0; top: 0; height: 100%; width: 35%; background: var(--accent); }
-  .player-times { display: flex; justify-content: space-between; font-size: 8px; color: var(--dim); letter-spacing: 0.1em; margin-bottom: 22px; }
-  .player-ctrl { display: flex; align-items: center; gap: 20px; }
-  .c-btn { background: none; border: none; color: var(--dim); cursor: none; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; transition: color 0.18s; }
-  .c-btn:hover { color: var(--white); }
-  .c-play {
-    width: 44px; height: 44px; border: 1px solid var(--accent); border-radius: 50%;
-    display: flex; align-items: center; justify-content: center; cursor: none; transition: all 0.18s;
-  }
-  .c-play:hover { background: var(--accent); }
-  .c-play::after {
-    content: ''; border-left: 12px solid var(--accent);
-    border-top: 8px solid transparent; border-bottom: 8px solid transparent;
-    margin-left: 3px; transition: border-color 0.18s;
-  }
-  .c-play:hover::after { border-left-color: var(--black); }
-
-  /* NEWS */
-  .news-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 56px; }
-  .news-card { background: var(--gray); text-decoration: none; color: inherit; display: block; border: 1px solid transparent; transition: border-color 0.2s; cursor: none; }
-  .news-card:hover { border-color: rgba(200,184,154,0.18); }
-  .nc-img { aspect-ratio: 16/9; background: var(--mid); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-  .nc-img svg { width: 38%; opacity: 0.06; transition: transform 0.4s, opacity 0.4s; }
-  .news-card:hover .nc-img svg { transform: scale(1.1); opacity: 0.1; }
-  .nc-type {
-    position: absolute; top: 11px; left: 11px;
-    font-size: 7px; letter-spacing: 0.22em; text-transform: uppercase;
-    padding: 4px 10px; background: var(--accent); color: var(--black);
-  }
-  .nc-body { padding: 22px; }
-  .nc-date { font-size: 8px; letter-spacing: 0.15em; color: var(--dim); text-transform: uppercase; margin-bottom: 10px; }
-  .nc-head { font-family: var(--font-display); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: -0.01em; line-height: 1.3; margin-bottom: 10px; }
-  .nc-exc { font-size: 10px; line-height: 1.75; color: var(--dim); }
-
-  /* MERCH */
-  .merch-bg { background: var(--gray); }
-  .merch-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; margin-top: 56px; }
-  .merch-card { cursor: none; text-decoration: none; color: inherit; display: block; background: var(--mid); border: 1px solid transparent; transition: border-color 0.2s; }
-  .merch-card:hover { border-color: rgba(200,184,154,0.2); }
-  .m-img { aspect-ratio: 3/4; background: var(--gray); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-  .m-img svg { width: 40%; opacity: 0.07; transition: transform 0.4s; }
-  .merch-card:hover .m-img svg { transform: scale(1.08); }
-  .m-tag {
-    position: absolute; top: 11px; right: 11px;
-    font-size: 7px; letter-spacing: 0.2em; text-transform: uppercase;
-    padding: 4px 9px; background: rgba(0,0,0,0.75); color: var(--accent);
-    border: 1px solid rgba(200,184,154,0.2);
-  }
-  .m-body { padding: 18px; }
-  .m-name { font-family: var(--font-display); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 7px; }
-  .m-price { font-size: 10px; color: var(--accent); letter-spacing: 0.1em; }
-
-  /* BOOKING */
-  .booking-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
-  .booking-copy { font-size: 11px; line-height: 1.9; color: var(--dim); margin-bottom: 40px; max-width: 400px; }
-  .set-types { display: flex; flex-direction: column; gap: 2px; margin-bottom: 40px; }
-  .set-item { display: flex; gap: 20px; align-items: center; padding: 18px; background: var(--gray); }
-  .set-lbl { font-family: var(--font-display); font-size: 10px; font-weight: 700; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; min-width: 72px; }
-  .set-desc { font-size: 10px; color: var(--dim); }
-  .form-g { margin-bottom: 2px; }
-  .f-input {
-    width: 100%; background: var(--gray); border: 1px solid transparent;
-    color: var(--white); font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.04em;
-    padding: 15px 18px; outline: none; transition: border-color 0.2s; cursor: none;
-  }
-  .f-input::placeholder { color: var(--dim); }
-  .f-input:focus { border-color: var(--accent); }
-  .f-row { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
-  textarea.f-input { resize: vertical; min-height: 110px; }
-  .form-footer { margin-top: 14px; display: flex; justify-content: space-between; align-items: center; }
-  .form-note { font-size: 9px; color: var(--dim); letter-spacing: 0.08em; }
-
-  /* ABOUT */
-  .about-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 112px; align-items: center; }
-  .about-logo-box {
-    display: flex; align-items: center; justify-content: center;
-    padding: 80px; background: var(--gray); position: relative; overflow: hidden;
-  }
-  .about-logo-box::before {
-    content: ''; position: absolute; inset: 0;
-    background: radial-gradient(ellipse at center, rgba(200,184,154,0.07) 0%, transparent 68%);
-  }
-  .about-logo-box svg { width: 200px; height: 200px; position: relative; z-index: 1; }
-  .about-quote {
-    font-family: var(--font-display); font-size: clamp(16px, 2vw, 24px);
-    font-weight: 300; line-height: 1.45; letter-spacing: -0.01em;
-    margin-bottom: 36px; color: rgba(240,237,232,0.75);
-  }
-  .about-body { font-size: 11px; line-height: 1.92; color: var(--dim); }
-
-  /* CONTACT */
-  .contact-bg { background: var(--gray); border-top: 1px solid rgba(255,255,255,0.05); }
-  .contact-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; margin-top: 56px; }
-  .c-item {
-    padding: 36px 28px; background: var(--mid); text-decoration: none; color: inherit;
-    display: block; border: 1px solid transparent; transition: border-color 0.2s; cursor: none;
-  }
-  .c-item:hover { border-color: rgba(200,184,154,0.2); }
-  .c-type { font-size: 7px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
-  .c-val { font-size: 10px; letter-spacing: 0.04em; color: var(--white); word-break: break-all; }
-  .social-row { display: flex; gap: 2px; margin-top: 2px; }
-  .soc-item {
-    flex: 1; padding: 24px; background: var(--mid);
-    text-decoration: none; color: var(--dim);
-    font-size: 8px; letter-spacing: 0.25em; text-transform: uppercase;
-    text-align: center; transition: all 0.2s;
-    border: 1px solid transparent; cursor: none;
-  }
-  .soc-item:hover { color: var(--accent); border-color: rgba(200,184,154,0.18); }
-
-  /* FOOTER */
-  footer {
-    padding: 44px 48px; border-top: 1px solid rgba(255,255,255,0.05);
-    display: flex; justify-content: space-between; align-items: center;
-    font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--dim);
-  }
-  .foot-logo { display: flex; align-items: center; gap: 12px; }
-  .foot-logo svg { width: 22px; height: 22px; }
-
-  /* MOBILE */
-  @media (max-width: 768px) {
-    nav { padding: 18px 20px; }
-    .nav-links { display: none; }
-    section { padding: 72px 20px; }
-    .hero { padding: 0 20px 64px; }
-    .hero-title { font-size: 48px; }
-    .hero-logo-bg { display: none; }
-    .release-inner { grid-template-columns: 1fr; gap: 36px; }
-    .releases-grid { grid-template-columns: repeat(2, 1fr); }
-    .artists-grid { grid-template-columns: 1fr; }
-    .news-grid { grid-template-columns: 1fr; }
-    .merch-grid { grid-template-columns: repeat(2, 1fr); }
-    .booking-layout { grid-template-columns: 1fr; gap: 44px; }
-    .about-layout { grid-template-columns: 1fr; gap: 44px; }
-    .contact-grid { grid-template-columns: repeat(2, 1fr); }
-    .podcast-layout { grid-template-columns: 1fr; }
-    .divider { margin: 0 20px; }
-    footer { flex-direction: column; gap: 14px; text-align: center; }
-    .event-card { grid-template-columns: 70px 1fr; gap: 20px; padding: 20px 20px; }
-    .event-right { display: none; }
-    .event-day { font-size: 36px; }
-  }
-
-
-/* ── RADIO SECTION (Claude Design) ─────────────────────── */
-@font-face { font-family:'Gilroy'; src:url('fonts/Gilroy-Bold.woff2') format('woff2'); font-weight:700; font-display:swap; }
-@font-face { font-family:'Gilroy'; src:url('fonts/Gilroy-Heavy.woff2') format('woff2'); font-weight:900; font-display:swap; }
-@font-face { font-family:'Space Mono'; src:url('fonts/SpaceMono-Regular.woff2') format('woff2'); font-weight:400; font-display:swap; }
+@font-face{font-family:'Gilroy';src:url('fonts/Gilroy/Gilroy-Heavy.woff2') format('woff2');font-weight:900;font-display:swap}
+@font-face{font-family:'Gilroy';src:url('fonts/Gilroy/Gilroy-Bold.woff2') format('woff2');font-weight:700;font-display:swap}
+@font-face{font-family:'Space Mono';src:url('fonts/SpaceMono/SpaceMono-Regular.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'Space Mono';src:url('fonts/SpaceMono/SpaceMono-Bold.woff2') format('woff2');font-weight:700;font-display:swap}
+@font-face{font-family:'Space Mono';src:url('fonts/SpaceMono/SpaceMono-Italic.woff2') format('woff2');font-weight:400;font-style:italic;font-display:swap}
 
 :root{
-  --black:#080808; --white:#f0ede6;
-  --gray:#141414; --gray2:#1c1c1c;
-  --mid:#2e2e2e; --dim:#555555;
+  --bg:#080808;--cream:#f0ede6;
+  --g1:#141414;--g2:#1c1c1c;--g3:#2e2e2e;--dim:#555;
+  --black:#080808;--white:#f0ede6;
+  --gray:#141414;--gray2:#1c1c1c;--mid:#2e2e2e;
   --display:'Gilroy',sans-serif;
-  --mono:'Space Mono',ui-monospace,monospace;
+  --mono:'Space Mono',monospace;
 }
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{background:var(--black);color:var(--white);font-family:var(--mono);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--cream);font-family:var(--mono);overflow-x:hidden;cursor:none;-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}
-button{background:none;border:0;color:inherit;cursor:pointer;font-family:inherit}
+button{background:none;border:0;color:inherit;font-family:inherit;cursor:none}
+ul{list-style:none}
 
-/* ─── Custom cursor ─────────────────────────────── */
-body{cursor:none}
-.cursor-dot,.cursor-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:10000;transform:translate(-50%,-50%)}
-.cursor-dot{width:8px;height:8px;background:var(--white);border-radius:50%}
-.cursor-ring{width:34px;height:34px;border:1px solid rgba(240,237,230,0.5);border-radius:50%}
+/* CURSOR */
+.c-dot,.c-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:9999;border-radius:50%;transform:translate(-50%,-50%)}
+.c-dot{width:7px;height:7px;background:var(--cream)}
+.c-ring{width:32px;height:32px;border:1px solid rgba(240,237,230,0.3)}
 
-/* ─── Shell ─────────────────────────────────────── */
-.radio{
-  position:relative;
-  padding: 120px 48px 140px;
-  background: var(--black);
-  overflow:hidden;
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;height:62px;
+  display:grid;grid-template-columns:200px 1fr 200px;align-items:center;padding:0 48px;
+  background:rgba(8,8,8,0.92);border-bottom:1px solid var(--g3);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
 }
+.nav-logo{display:flex;align-items:center;gap:11px}
+.nav-logo svg{width:24px;height:24px;color:var(--cream)}
+.nav-logo-name{font-family:var(--display);font-weight:700;font-size:11px;letter-spacing:0.28em;text-transform:uppercase}
+.nav-links{display:flex;gap:0;justify-content:center}
+.nav-links a{font-size:8.5px;letter-spacing:0.22em;text-transform:uppercase;color:var(--dim);padding:0 18px;height:62px;display:flex;align-items:center;border-right:1px solid transparent;transition:color 0.2s}
+.nav-links a:hover{color:var(--cream)}
+.nav-right{display:flex;gap:22px;justify-content:flex-end;align-items:center}
+.nav-right a{font-size:8.5px;letter-spacing:0.2em;text-transform:uppercase;color:var(--dim);transition:color 0.2s}
+.nav-right a:hover{color:var(--cream)}
 
-/* Ambient grid — denser than hero, section-specific */
-.radio-grid{
-  position:absolute;inset:0;pointer-events:none;
-  background-image:
-    linear-gradient(rgba(240,237,230,0.022) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(240,237,230,0.022) 1px, transparent 1px);
-  background-size: 96px 96px;
-  mask-image: radial-gradient(ellipse 70% 80% at 50% 40%, #000 20%, transparent 85%);
-  -webkit-mask-image: radial-gradient(ellipse 70% 80% at 50% 40%, #000 20%, transparent 85%);
+/* HERO */
+.hero{
+  min-height:100vh;position:relative;overflow:hidden;
+  display:grid;grid-template-columns:1fr 1fr;align-items:center;
+  padding:62px 48px 80px;
 }
-.radio-glow{
-  position:absolute;inset:0;pointer-events:none;
+.hero-pgrid{position:absolute;bottom:0;left:0;right:0;height:55%;perspective:800px;overflow:hidden;pointer-events:none;z-index:0}
+.hero-pgrid-inner{
+  width:100%;height:240%;
+  transform:rotateX(72deg);transform-origin:top center;
+  background-image:linear-gradient(rgba(240,237,230,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(240,237,230,0.05) 1px,transparent 1px);
+  background-size:88px 88px;
+  mask-image:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,0.6) 30%,rgba(0,0,0,0.35) 75%,transparent 100%);
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,0.6) 30%,rgba(0,0,0,0.35) 75%,transparent 100%);
+}
+.hero-glow{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 55% 65% at 68% 38%,rgba(240,237,230,0.045) 0%,transparent 65%)}
+.hero-left{position:relative;z-index:2;padding-top:20px}
+.hero-tag{font-size:8.5px;letter-spacing:0.42em;text-transform:uppercase;color:var(--dim);margin-bottom:40px;display:flex;align-items:center;gap:14px}
+.hero-tag::before{content:'';width:28px;height:1px;background:var(--dim);display:block}
+.hero-title{font-family:var(--display);font-weight:900;font-size:clamp(80px,11vw,160px);line-height:0.84;letter-spacing:-0.03em;text-transform:uppercase}
+.hero-title .outline{color:transparent;-webkit-text-stroke:1.5px rgba(240,237,230,0.2)}
+.hero-sub{font-size:10px;line-height:2.1;color:var(--dim);max-width:370px;margin:32px 0 48px;text-wrap:pretty}
+.hero-ctas{display:flex;gap:10px}
+.btn{font-family:var(--mono);font-size:9px;letter-spacing:0.22em;text-transform:uppercase;padding:14px 28px;border:1px solid;display:inline-flex;align-items:center;gap:8px;transition:all 0.2s;cursor:none}
+.btn-fill{background:var(--cream);color:var(--bg);border-color:var(--cream)}
+.btn-fill:hover{background:rgba(240,237,230,0.85)}
+.btn-ghost{background:transparent;color:var(--cream);border-color:var(--g3)}
+.btn-ghost:hover{border-color:var(--cream)}
+.hero-scroll{position:absolute;bottom:36px;left:48px;z-index:2;font-size:8px;letter-spacing:0.32em;text-transform:uppercase;color:var(--dim);display:flex;align-items:center;gap:16px}
+.hero-scroll-line{height:1px;background:var(--dim);animation:hline 2.4s ease-in-out infinite}
+@keyframes hline{0%,100%{width:24px}50%{width:48px}}
+
+/* VINYL */
+.hero-right{position:relative;z-index:2;display:flex;align-items:center;justify-content:center}
+.vinyl-wrap{position:relative;width:min(460px,42vw);aspect-ratio:1}
+.vinyl-disc{
+  width:100%;height:100%;border-radius:50%;position:relative;
+  animation:vspin 10s linear infinite;
   background:
-    radial-gradient(ellipse 700px 500px at 20% 30%, rgba(240,237,230,0.035), transparent 60%),
-    radial-gradient(ellipse 500px 400px at 85% 80%, rgba(240,237,230,0.025), transparent 60%);
+    repeating-radial-gradient(circle at 50% 50%,
+      #0e0e0e 0px,#0e0e0e 1.5px,
+      #151515 1.5px,#151515 3px,
+      #0a0a0a 3px,#0a0a0a 5px,
+      #131313 5px,#131313 7px);
 }
-.radio-noise{
-  position:absolute;inset:0;pointer-events:none;opacity:0.28;mix-blend-mode:screen;
+@keyframes vspin{to{transform:rotate(360deg)}}
+.vinyl-disc::before{
+  content:'';position:absolute;inset:0;border-radius:50%;
+  background:conic-gradient(rgba(255,255,255,0.05) 0deg,transparent 40deg,rgba(255,255,255,0.03) 80deg,transparent 140deg,rgba(255,255,255,0.05) 200deg,transparent 260deg,rgba(255,255,255,0.03) 300deg,transparent 360deg);
 }
+.vinyl-label{
+  position:absolute;inset:31%;border-radius:50%;
+  background:var(--g1);display:flex;align-items:center;justify-content:center;z-index:2;
+  border:1px solid var(--g3);
+}
+.vinyl-label svg{width:48%;height:48%;color:var(--cream);opacity:0.45}
+.vinyl-spindle{position:absolute;inset:49%;border-radius:50%;background:var(--bg);z-index:3}
+.vinyl-shine{position:absolute;inset:0;border-radius:50%;pointer-events:none;background:radial-gradient(ellipse at 28% 22%,rgba(255,255,255,0.07) 0%,transparent 48%)}
+.vinyl-shadow{position:absolute;bottom:-28px;left:10%;right:10%;height:28px;background:radial-gradient(ellipse at 50% 0%,rgba(0,0,0,0.6) 0%,transparent 70%)}
 
-/* ─── Section head ─────────────────────────────── */
-.radio-head{
-  position:relative;z-index:2;
-  display:grid;grid-template-columns:1fr auto;align-items:end;
-  margin-bottom: 80px;
-  gap:40px;
+/* TICKER */
+.ticker{overflow:hidden;border-top:1px solid var(--g3);border-bottom:1px solid var(--g3);padding:13px 0;background:var(--g1)}
+.ticker-track{display:flex;white-space:nowrap;animation:tick 36s linear infinite}
+.ticker-item{font-family:var(--display);font-weight:700;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(240,237,230,0.08);padding-right:72px;flex-shrink:0}
+.ticker-item .hi{color:rgba(240,237,230,0.28)}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* COMMON SECTION */
+.section{padding:120px 48px}
+.sec-eyebrow{font-size:8px;letter-spacing:0.42em;text-transform:uppercase;color:var(--dim);margin-bottom:16px;display:flex;align-items:center;gap:14px}
+.sec-eyebrow::before{content:'';width:24px;height:1px;background:var(--dim);display:block;flex-shrink:0}
+.sec-title{font-family:var(--display);font-weight:700;font-size:clamp(28px,4vw,52px);letter-spacing:-0.025em;text-transform:uppercase;line-height:1}
+.sec-header-row{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:64px}
+.sec-link{font-size:8.5px;letter-spacing:0.28em;text-transform:uppercase;color:var(--dim);border-bottom:1px solid var(--g3);padding-bottom:3px;transition:color 0.2s,border-color 0.2s}
+.sec-link:hover{color:var(--cream);border-color:var(--cream)}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.6s ease,transform 0.6s ease}
+.reveal.vis{opacity:1;transform:none}
+
+/* LATEST RELEASE */
+.latest{background:var(--g1);border-top:1px solid var(--g3);border-bottom:1px solid var(--g3)}
+.release-inner{display:grid;grid-template-columns:1fr 1fr;gap:96px;align-items:center}
+.rel-art-wrap{position:relative;aspect-ratio:1;overflow:hidden}
+.rel-art-inner{
+  width:100%;height:100%;
+  background:linear-gradient(135deg,var(--g2) 0%,#1a1a1a 60%,#0e0e0e 100%);
+  display:flex;align-items:center;justify-content:center;position:relative;
 }
-.r-eyebrow{
-  font-family:var(--mono);font-size:10px;
-  letter-spacing:0.4em;text-transform:uppercase;color:var(--dim);
-  margin-bottom:28px;
-  display:flex;align-items:center;gap:14px;
+.rel-art-inner svg{width:52%;height:52%;color:var(--cream);opacity:0.07;transition:opacity 0.4s}
+.rel-art-wrap:hover .rel-art-inner svg{opacity:0.14}
+.rel-art-lines{position:absolute;inset:0;background-image:linear-gradient(rgba(240,237,230,0.018) 1px,transparent 1px);background-size:100% 40px}
+.rel-badge{position:absolute;top:16px;left:16px;background:var(--cream);color:var(--bg);font-size:7px;letter-spacing:0.22em;text-transform:uppercase;padding:5px 11px}
+.rel-cat{font-size:8px;letter-spacing:0.32em;color:var(--dim);text-transform:uppercase;margin-bottom:12px}
+.rel-title{font-family:var(--display);font-weight:900;font-size:clamp(36px,5vw,70px);text-transform:uppercase;letter-spacing:-0.03em;line-height:0.88;margin-bottom:18px}
+.rel-artist{font-size:9.5px;letter-spacing:0.24em;text-transform:uppercase;color:var(--dim);margin-bottom:32px}
+.tracklist{margin-bottom:36px;border-top:1px solid var(--g3)}
+.track{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid rgba(240,237,230,0.04);font-size:10px;color:var(--dim);transition:color 0.18s;cursor:none}
+.track:hover{color:var(--cream)}
+.track-left{display:flex;align-items:center;gap:14px}
+.track-n{font-size:7.5px;color:rgba(240,237,230,0.25);width:18px;text-align:right}
+.track-dur{font-size:9px;letter-spacing:0.06em;color:rgba(240,237,230,0.3)}
+.stream-row{display:flex;gap:8px;flex-wrap:wrap}
+.s-btn{font-size:8px;letter-spacing:0.2em;text-transform:uppercase;padding:9px 16px;border:1px solid var(--g3);color:var(--dim);transition:all 0.18s;cursor:none}
+.s-btn:hover{border-color:var(--cream);color:var(--cream)}
+
+/* RELEASES */
+.filter-row{display:flex;gap:2px;margin-bottom:2px}
+.f-btn{font-family:var(--mono);font-size:8px;letter-spacing:0.22em;text-transform:uppercase;padding:9px 20px;border:1px solid var(--g3);color:var(--dim);background:transparent;transition:all 0.18s;cursor:none}
+.f-btn:hover,.f-btn.on{background:var(--cream);color:var(--bg);border-color:var(--cream)}
+.releases-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:64px}
+.rel-card{position:relative;aspect-ratio:1;overflow:hidden;cursor:none;border:1px solid transparent;transition:border-color 0.22s}
+.rel-card:hover{border-color:rgba(240,237,230,0.1)}
+.rel-card[data-hidden]{display:none}
+.rel-card-bg{
+  width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+  transition:transform 0.45s;
 }
+.rel-card:hover .rel-card-bg{transform:scale(1.04)}
+.rel-card-bg svg{width:44%;height:44%;color:var(--cream);opacity:0.06}
+.rel-card-ov{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(8,8,8,0.92) 0%,rgba(8,8,8,0.2) 50%,transparent 75%);
+  padding:20px;display:flex;flex-direction:column;justify-content:flex-end;
+  opacity:0;transition:opacity 0.26s;
+}
+.rel-card:hover .rel-card-ov{opacity:1}
+.rc-type{font-size:7px;letter-spacing:0.28em;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
+.rc-title{font-family:var(--display);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:-0.01em;margin-bottom:3px}
+.rc-year{font-size:8px;letter-spacing:0.15em;text-transform:uppercase;color:var(--dim)}
+/* card tones */
+.tone-a{background:linear-gradient(145deg,#111 0%,#1a1a1a 100%)}
+.tone-b{background:linear-gradient(145deg,#0d0d0d 0%,#181818 100%)}
+.tone-c{background:linear-gradient(145deg,#131313 0%,#1f1f1f 100%)}
+.tone-d{background:linear-gradient(145deg,#0f0f0f 0%,#1c1c1c 100%)}
+
+/* EVENTS */
+.events-list{display:flex;flex-direction:column;gap:2px}
+.ev-card{
+  display:grid;grid-template-columns:90px 1fr auto;gap:48px;align-items:center;
+  padding:28px 32px;background:var(--g1);
+  border:1px solid transparent;text-decoration:none;color:inherit;
+  transition:border-color 0.22s,background 0.22s;
+}
+.ev-card:hover{border-color:rgba(240,237,230,0.1);background:var(--g2)}
+.ev-date{display:flex;flex-direction:column;gap:3px}
+.ev-day{font-family:var(--display);font-size:52px;font-weight:900;line-height:1;letter-spacing:-0.025em;color:var(--cream)}
+.ev-mon{font-size:8px;letter-spacing:0.38em;text-transform:uppercase;color:var(--dim)}
+.ev-info{display:flex;flex-direction:column;gap:7px}
+.ev-label{font-size:7.5px;letter-spacing:0.36em;text-transform:uppercase;color:var(--dim)}
+.ev-name{font-family:var(--display);font-size:20px;font-weight:700;text-transform:uppercase;letter-spacing:-0.01em;line-height:1}
+.ev-venue{font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--dim);display:flex;align-items:center;gap:10px}
+.ev-sep{color:var(--g3)}
+.ev-right{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.ev-time{font-size:10px;letter-spacing:0.1em;color:var(--dim)}
+.ev-ticket{font-size:8.5px;letter-spacing:0.22em;text-transform:uppercase;color:var(--cream);border-bottom:1px solid var(--g3);padding-bottom:3px;transition:border-color 0.2s}
+.ev-card:hover .ev-ticket{border-color:var(--cream)}
+
+/* ─── RADIO (exact from source, preserved) ─────────── */
+.radio{position:relative;padding:120px 48px 140px;background:var(--black);overflow:hidden}
+.radio-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(240,237,230,0.022) 1px,transparent 1px),linear-gradient(90deg,rgba(240,237,230,0.022) 1px,transparent 1px);background-size:96px 96px;mask-image:radial-gradient(ellipse 70% 80% at 50% 40%,#000 20%,transparent 85%);-webkit-mask-image:radial-gradient(ellipse 70% 80% at 50% 40%,#000 20%,transparent 85%)}
+.radio-glow{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 700px 500px at 20% 30%,rgba(240,237,230,0.035),transparent 60%),radial-gradient(ellipse 500px 400px at 85% 80%,rgba(240,237,230,0.025),transparent 60%)}
+.radio-head{position:relative;z-index:2;display:grid;grid-template-columns:1fr auto;align-items:end;margin-bottom:80px;gap:40px}
+.r-eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:0.4em;text-transform:uppercase;color:var(--dim);margin-bottom:28px;display:flex;align-items:center;gap:14px}
 .r-eyebrow .dash{width:28px;height:1px;background:var(--dim);display:inline-block}
-.r-title{
-  font-family:var(--display);font-weight:900;
-  font-size:clamp(56px, 9vw, 140px);line-height:0.86;
-  letter-spacing:-0.025em;text-transform:uppercase;color:var(--white);
-}
+.r-title{font-family:var(--display);font-weight:900;font-size:clamp(56px,9vw,140px);line-height:0.86;letter-spacing:-0.025em;text-transform:uppercase;color:var(--white)}
 .r-title .outline{color:transparent;-webkit-text-stroke:1px rgba(240,237,230,0.32);display:block}
 .r-title .solid{display:block}
-.r-meta{
-  display:flex;flex-direction:column;align-items:flex-end;gap:24px;
-  padding-bottom:18px;
-}
+.r-meta{display:flex;flex-direction:column;align-items:flex-end;gap:24px;padding-bottom:18px}
 .r-meta .row{font-family:var(--mono);font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:var(--dim);border-left:1px solid var(--mid);padding:2px 0 2px 18px}
 .r-meta .row b{display:block;color:var(--white);font-weight:400;margin-top:6px;letter-spacing:0.18em}
-.r-meta .link{
-  font-family:var(--mono);font-size:10px;letter-spacing:0.3em;text-transform:uppercase;
-  color:var(--dim);border-bottom:1px solid var(--mid);padding-bottom:4px;
-  transition:color 0.25s, border-color 0.25s;
-}
+.r-meta .link{font-family:var(--mono);font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:var(--dim);border-bottom:1px solid var(--mid);padding-bottom:4px;transition:color 0.25s,border-color 0.25s}
 .r-meta .link:hover{color:var(--white);border-color:var(--white)}
-
-/* ─── Visualizer stage ─────────────────────────── */
-.viz-stage{
-  position:relative;z-index:2;
-  background: var(--gray);
-  border:1px solid var(--mid);
-  padding: 48px 48px 40px;
-  margin-bottom: 2px;
-  display:grid;grid-template-columns: auto 1fr auto;gap:48px;align-items:center;
-  min-height: 260px;
-}
+.viz-stage{position:relative;z-index:2;background:var(--gray);border:1px solid var(--mid);padding:48px 48px 40px;margin-bottom:2px;display:grid;grid-template-columns:auto 1fr auto;gap:48px;align-items:center;min-height:260px}
 .viz-left{display:flex;flex-direction:column;gap:14px;min-width:180px}
-.viz-status{
-  display:flex;align-items:center;gap:10px;
-  font-family:var(--mono);font-size:9px;letter-spacing:0.35em;text-transform:uppercase;color:var(--dim);
-}
-.viz-dot{
-  width:8px;height:8px;background:var(--white);border-radius:50%;
-  animation: pulse 1.6s ease-in-out infinite;
-}
+.viz-status{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:9px;letter-spacing:0.35em;text-transform:uppercase;color:var(--dim)}
+.viz-dot{width:8px;height:8px;background:var(--white);border-radius:50%;animation:pulse 1.6s ease-in-out infinite}
 .viz-dot.off{animation:none;opacity:0.25}
-@keyframes pulse{
-  0%,100%{opacity:0.35;transform:scale(0.8)}
-  50%{opacity:1;transform:scale(1.1)}
-}
-.viz-ep{
-  font-family:var(--mono);font-size:8px;letter-spacing:0.35em;text-transform:uppercase;color:var(--dim);
-}
-.viz-name{
-  font-family:var(--display);font-weight:900;font-size:28px;line-height:1;
-  letter-spacing:-0.015em;text-transform:uppercase;color:var(--white);
-}
-.viz-genre{
-  font-family:var(--mono);font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:var(--dim);
-  margin-top:6px;
-}
-
-/* the wave itself */
-.viz-bars{
-  display:flex;align-items:center;justify-content:center;gap:3px;
-  height: 160px; width:100%;
-  padding: 0 20px;
-}
-.viz-bar{
-  width:3px; background: var(--white); display:block;
-  transition: height 0.2s ease, opacity 0.3s ease;
-  will-change: height;
-}
-
+@keyframes pulse{0%,100%{opacity:0.35;transform:scale(0.8)}50%{opacity:1;transform:scale(1.1)}}
+.viz-ep{font-family:var(--mono);font-size:8px;letter-spacing:0.35em;text-transform:uppercase;color:var(--dim)}
+.viz-name{font-family:var(--display);font-weight:900;font-size:28px;line-height:1;letter-spacing:-0.015em;text-transform:uppercase;color:var(--white)}
+.viz-genre{font-family:var(--mono);font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:var(--dim);margin-top:6px}
+.viz-bars{display:flex;align-items:center;justify-content:center;gap:3px;height:160px;width:100%;padding:0 20px}
+.viz-bar{width:3px;background:var(--white);display:block;transition:height 0.2s ease,opacity 0.3s ease;will-change:height}
 .viz-right{display:flex;flex-direction:column;align-items:flex-end;gap:18px;min-width:180px}
-.viz-dur{
-  font-family:var(--display);font-weight:700;font-size:42px;line-height:1;letter-spacing:-0.01em;color:var(--white);
-  font-variant-numeric: tabular-nums;
-}
-.viz-elapsed{
-  font-family:var(--mono);font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:var(--dim);
-}
+.viz-dur{font-family:var(--display);font-weight:700;font-size:42px;line-height:1;letter-spacing:-0.01em;color:var(--white);font-variant-numeric:tabular-nums}
+.viz-elapsed{font-family:var(--mono);font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:var(--dim)}
 .viz-actions{display:flex;gap:6px;align-items:center}
-.viz-btn{
-  font-family:var(--mono);font-size:8px;letter-spacing:0.3em;text-transform:uppercase;color:var(--dim);
-  padding:8px 12px;border:1px solid var(--mid);transition:color 0.2s, border-color 0.2s;
-}
+.viz-btn{font-family:var(--mono);font-size:8px;letter-spacing:0.3em;text-transform:uppercase;color:var(--dim);padding:8px 12px;border:1px solid var(--mid);transition:color 0.2s,border-color 0.2s;cursor:none}
 .viz-btn:hover{color:var(--white);border-color:var(--white)}
-
-/* progress strip under visualizer */
-.viz-progress-wrap{
-  position:relative;z-index:2;
-  display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:24px;
-  background:var(--gray);border:1px solid var(--mid);border-top:0;
-  padding: 16px 24px;
-}
-.viz-progress-wrap .lbl{
-  font-family:var(--mono);font-size:8px;letter-spacing:0.35em;text-transform:uppercase;color:var(--dim);
-  font-variant-numeric: tabular-nums;
-}
-.viz-progress{
-  position:relative;height:1px;background:var(--mid);cursor:pointer;
-}
-.viz-progress .fill{
-  position:absolute;left:0;top:0;bottom:0;background:var(--white);
-  box-shadow: 0 0 0 0 rgba(0,0,0,0); /* none — kept for clarity */
-}
-.viz-progress .knob{
-  position:absolute;top:50%;width:10px;height:10px;background:var(--white);
-  transform:translate(-50%,-50%);
-}
-.viz-progress::before{
-  content:'';position:absolute;inset:-10px 0;
-}
-
-/* ─── Main grid: episode list + sticky player ─── */
-.radio-body{
-  position:relative;z-index:2;
-  display:grid;grid-template-columns: 1fr 380px;gap:80px;
-  margin-top: 80px;
-}
-
-/* list */
-.ep-head{
-  display:grid;grid-template-columns: 50px 56px 1fr 1fr 100px 80px;
-  gap:24px;align-items:center;
-  padding:0 0 16px;
-  border-bottom:1px solid var(--mid);
-  margin-bottom:2px;
-}
+.viz-progress-wrap{position:relative;z-index:2;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:24px;background:var(--gray);border:1px solid var(--mid);border-top:0;padding:16px 24px}
+.viz-progress-wrap .lbl{font-family:var(--mono);font-size:8px;letter-spacing:0.35em;text-transform:uppercase;color:var(--dim);font-variant-numeric:tabular-nums}
+.viz-progress{position:relative;height:1px;background:var(--mid);cursor:pointer}
+.viz-progress .fill{position:absolute;left:0;top:0;bottom:0;background:var(--white)}
+.viz-progress .knob{position:absolute;top:50%;width:10px;height:10px;background:var(--white);transform:translate(-50%,-50%)}
+.viz-progress::before{content:'';position:absolute;inset:-10px 0}
+.radio-body{position:relative;z-index:2;display:grid;grid-template-columns:1fr 380px;gap:80px;margin-top:80px}
+.ep-head{display:grid;grid-template-columns:50px 56px 1fr 1fr 100px 80px;gap:24px;align-items:center;padding:0 0 16px;border-bottom:1px solid var(--mid);margin-bottom:2px}
 .ep-head span{font-family:var(--mono);font-size:8px;letter-spacing:0.35em;text-transform:uppercase;color:var(--dim)}
 .ep-head .r{text-align:right}
-
 .ep-list{display:flex;flex-direction:column}
-.ep-row{
-  display:grid;grid-template-columns: 50px 56px 1fr 1fr 100px 80px;
-  gap:24px;align-items:center;
-  padding:22px 16px;
-  border:1px solid transparent;
-  border-top-color: var(--mid);
-  background: transparent;
-  transition: border-color 0.25s, background 0.25s;
-  cursor:pointer;
-  position:relative;
-}
-.ep-row:first-child{border-top-color:var(--mid)}
+.ep-row{display:grid;grid-template-columns:50px 56px 1fr 1fr 100px 80px;gap:24px;align-items:center;padding:22px 16px;border:1px solid transparent;border-top-color:var(--mid);background:transparent;transition:border-color 0.25s,background 0.25s;cursor:none;position:relative}
 .ep-row:last-child{border-bottom-color:var(--mid)}
-.ep-row:hover{
-  border-color: rgba(240,237,230,0.1);
-  background: rgba(240,237,230,0.015);
-}
-.ep-row.active{
-  border-color: rgba(240,237,230,0.22);
-  background: rgba(240,237,230,0.03);
-}
-.ep-row.active .ep-num, .ep-row.active .ep-name{color:var(--white)}
-
+.ep-row:hover{border-color:rgba(240,237,230,0.1);background:rgba(240,237,230,0.015)}
+.ep-row.active{border-color:rgba(240,237,230,0.22);background:rgba(240,237,230,0.03)}
+.ep-row.active .ep-num,.ep-row.active .ep-name{color:var(--white)}
 .ep-index{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;color:var(--dim);font-variant-numeric:tabular-nums}
-.ep-play{
-  width:40px;height:40px;border:1px solid var(--mid);
-  display:flex;align-items:center;justify-content:center;
-  transition:border-color 0.2s, background 0.2s;
-  position:relative;
-}
+.ep-play{width:40px;height:40px;border:1px solid var(--mid);display:flex;align-items:center;justify-content:center;transition:border-color 0.2s,background 0.2s;position:relative}
 .ep-row:hover .ep-play{border-color:var(--white)}
 .ep-row.active .ep-play{background:var(--white);border-color:var(--white)}
-.ep-play .tri{
-  width:0;height:0;
-  border-left:8px solid var(--white);
-  border-top:5px solid transparent;border-bottom:5px solid transparent;
-  margin-left:3px;
-  transition: border-left-color 0.2s;
-}
+.ep-play .tri{width:0;height:0;border-left:8px solid var(--white);border-top:5px solid transparent;border-bottom:5px solid transparent;margin-left:3px;transition:border-left-color 0.2s}
 .ep-row.active .ep-play .tri{display:none}
 .ep-play .bars{display:none;gap:2px;align-items:end;height:14px}
 .ep-row.active .ep-play .bars{display:flex}
-.ep-play .bars i{display:block;width:2px;background:var(--black);animation: eq 0.9s ease-in-out infinite}
+.ep-play .bars i{display:block;width:2px;background:var(--black);animation:eq 0.9s ease-in-out infinite}
 .ep-play .bars i:nth-child(1){animation-delay:-0.2s}
 .ep-play .bars i:nth-child(2){animation-delay:-0.6s}
 .ep-play .bars i:nth-child(3){animation-delay:-0.4s}
-@keyframes eq{
-  0%,100%{height:3px}
-  50%{height:14px}
-}
+@keyframes eq{0%,100%{height:3px}50%{height:14px}}
 .ep-num{font-family:var(--mono);font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:var(--dim);margin-bottom:4px}
 .ep-name{font-family:var(--display);font-weight:700;font-size:15px;text-transform:uppercase;letter-spacing:-0.005em;color:var(--white)}
 .ep-tag{font-family:var(--mono);font-size:9px;letter-spacing:0.18em;color:var(--dim);text-transform:uppercase}
 .ep-date{font-family:var(--mono);font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:var(--dim);text-align:right}
 .ep-dur{font-family:var(--mono);font-size:11px;letter-spacing:0.04em;color:var(--white);text-align:right;font-variant-numeric:tabular-nums}
-
-.ep-foot{
-  display:flex;justify-content:space-between;align-items:center;
-  padding-top:22px;
-  font-family:var(--mono);font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:var(--dim);
-}
-.ep-foot a{
-  border-bottom:1px solid var(--mid);padding-bottom:4px;color:var(--dim);
-  transition:color 0.2s,border-color 0.2s;
-}
+.ep-foot{display:flex;justify-content:space-between;align-items:center;padding-top:22px;font-family:var(--mono);font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:var(--dim)}
+.ep-foot a{border-bottom:1px solid var(--mid);padding-bottom:4px;color:var(--dim);transition:color 0.2s,border-color 0.2s}
 .ep-foot a:hover{color:var(--white);border-color:var(--white)}
-
-/* ─── Sticky player panel ──────────────────────── */
-.player{
-  position:sticky;top:40px;align-self:start;
-  background:var(--gray2);border:1px solid var(--mid);
-  padding:28px;
-}
-.player-head{
-  display:flex;justify-content:space-between;align-items:center;
-  margin-bottom:24px;
-}
+.player{position:sticky;top:40px;align-self:start;background:var(--gray2);border:1px solid var(--mid);padding:28px}
+.player-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
 .player-head .ix{font-family:var(--mono);font-size:9px;letter-spacing:0.35em;text-transform:uppercase;color:var(--dim)}
-.player-head .live{
-  font-family:var(--mono);font-size:8px;letter-spacing:0.4em;text-transform:uppercase;color:var(--white);
-  display:flex;align-items:center;gap:8px;
-}
-.player-head .live::before{
-  content:'';width:6px;height:6px;background:var(--white);border-radius:50%;
-  animation:pulse 1.6s ease-in-out infinite;
-}
-
-.player-art{
-  aspect-ratio:1;background:var(--gray);position:relative;overflow:hidden;
-  display:flex;align-items:center;justify-content:center;
-  margin-bottom:24px;
-  border:1px solid var(--mid);
-}
+.player-head .live{font-family:var(--mono);font-size:8px;letter-spacing:0.4em;text-transform:uppercase;color:var(--white);display:flex;align-items:center;gap:8px}
+.player-head .live::before{content:'';width:6px;height:6px;background:var(--white);border-radius:50%;animation:pulse 1.6s ease-in-out infinite}
+.player-art{aspect-ratio:1;background:var(--gray);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;margin-bottom:24px;border:1px solid var(--mid)}
 .player-art svg.spin{width:78%;height:78%;opacity:0.35;animation:spin 18s linear infinite}
 .player-art.paused svg.spin{animation-play-state:paused}
-.player-art .center{
-  position:absolute;width:36px;height:36px;background:var(--white);border-radius:50%;
-}
-.player-art .center::after{
-  content:'';position:absolute;inset:14px;background:var(--black);border-radius:50%;
-}
-.player-art .cat{
-  position:absolute;top:14px;left:14px;
-  font-family:var(--mono);font-size:8px;letter-spacing:0.35em;text-transform:uppercase;color:var(--white);
-  background:var(--black);padding:5px 9px;border:1px solid var(--mid);
-}
+.player-art .center{position:absolute;width:36px;height:36px;background:var(--white);border-radius:50%}
+.player-art .center::after{content:'';position:absolute;inset:14px;background:var(--black);border-radius:50%}
+.player-art .cat{position:absolute;top:14px;left:14px;font-family:var(--mono);font-size:8px;letter-spacing:0.35em;text-transform:uppercase;color:var(--white);background:var(--black);padding:5px 9px;border:1px solid var(--mid)}
 @keyframes spin{to{transform:rotate(360deg)}}
-
 .player-meta{font-family:var(--mono);font-size:9px;letter-spacing:0.35em;text-transform:uppercase;color:var(--dim);margin-bottom:10px}
-.player-title{
-  font-family:var(--display);font-weight:900;font-size:26px;line-height:1;letter-spacing:-0.015em;
-  text-transform:uppercase;color:var(--white);margin-bottom:8px;
-}
-.player-artist{
-  font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--white);margin-bottom:24px;
-}
-
-/* progress */
+.player-title{font-family:var(--display);font-weight:900;font-size:26px;line-height:1;letter-spacing:-0.015em;text-transform:uppercase;color:var(--white);margin-bottom:8px}
+.player-artist{font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--white);margin-bottom:24px}
 .p-progress{position:relative;height:1px;background:var(--mid);margin-bottom:10px;cursor:pointer}
 .p-progress .fill{position:absolute;inset:0 auto 0 0;background:var(--white)}
 .p-progress .knob{position:absolute;top:50%;width:9px;height:9px;background:var(--white);transform:translate(-50%,-50%)}
 .p-progress::before{content:'';position:absolute;inset:-10px 0}
 .p-time{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;letter-spacing:0.18em;color:var(--dim);margin-bottom:28px;font-variant-numeric:tabular-nums}
-
-.p-controls{
-  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;
-  margin-bottom:24px;
-}
-.p-ctrl{
-  font-family:var(--mono);font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:var(--dim);
-  transition:color 0.2s;display:flex;align-items:center;gap:8px;
-}
+.p-controls{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;margin-bottom:24px}
+.p-ctrl{font-family:var(--mono);font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:var(--dim);transition:color 0.2s;display:flex;align-items:center;gap:8px}
 .p-ctrl.r{justify-content:flex-end}
 .p-ctrl:hover{color:var(--white)}
-.p-play{
-  width:58px;height:58px;border:1px solid var(--white);border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  transition:background 0.2s;
-  cursor:pointer;
-}
+.p-play{width:58px;height:58px;border:1px solid var(--white);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:background 0.2s;cursor:none}
 .p-play:hover{background:var(--white)}
-.p-play .tri{
-  width:0;height:0;border-left:13px solid var(--white);
-  border-top:8px solid transparent;border-bottom:8px solid transparent;
-  margin-left:4px;transition:border-left-color 0.2s;
-}
+.p-play .tri{width:0;height:0;border-left:13px solid var(--white);border-top:8px solid transparent;border-bottom:8px solid transparent;margin-left:4px;transition:border-left-color 0.2s}
 .p-play:hover .tri{border-left-color:var(--black)}
 .p-play.playing{background:var(--white)}
 .p-play.playing .tri{display:none}
 .p-play.playing .pause{display:flex;gap:4px}
 .p-play .pause{display:none;align-items:center}
 .p-play .pause span{display:block;width:4px;height:16px;background:var(--black)}
-
-.p-tools{
-  display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--mid);border:1px solid var(--mid);
-  margin-bottom:22px;
-}
-.p-tools button{
-  background:var(--gray2);padding:14px 6px;
-  font-family:var(--mono);font-size:7px;letter-spacing:0.3em;text-transform:uppercase;color:var(--dim);
-  transition:color 0.2s, background 0.2s;
-}
+.p-tools{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--mid);border:1px solid var(--mid);margin-bottom:22px}
+.p-tools button{background:var(--gray2);padding:14px 6px;font-family:var(--mono);font-size:7px;letter-spacing:0.3em;text-transform:uppercase;color:var(--dim);transition:color 0.2s,background 0.2s;cursor:none}
 .p-tools button:hover{color:var(--white);background:var(--gray)}
-
 .p-streams{display:flex;flex-direction:column;gap:6px}
-.p-stream{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:11px 14px;border:1px solid var(--mid);
-  font-family:var(--mono);font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--dim);
-  transition:color 0.2s, border-color 0.2s;
-}
+.p-stream{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border:1px solid var(--mid);font-family:var(--mono);font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--dim);transition:color 0.2s,border-color 0.2s}
 .p-stream:hover{color:var(--white);border-color:var(--white)}
 .p-stream .mark{color:var(--dim);transition:color 0.2s}
 .p-stream:hover .mark{color:var(--white)}
 
-/* ─── Tweaks panel ─────────────────────────────── */
-.tweaks{
-  position:fixed;bottom:20px;right:20px;z-index:9999;
-  background:var(--gray2);border:1px solid var(--mid);
-  padding:18px 18px 16px;min-width:240px;
-  font-family:var(--mono);
-  display:none;
-}
-.tweaks.open{display:block}
-.tweaks h4{font-family:var(--mono);font-size:9px;letter-spacing:0.4em;text-transform:uppercase;color:var(--white);margin-bottom:14px;font-weight:400;display:flex;justify-content:space-between;align-items:center}
-.tweaks h4 span{color:var(--dim)}
-.tw-row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px;font-size:8px;letter-spacing:0.3em;text-transform:uppercase;color:var(--dim)}
-.tw-opts{display:flex;gap:2px}
-.tw-opt{padding:6px 10px;border:1px solid var(--mid);color:var(--dim);font-size:8px;letter-spacing:0.25em;text-transform:uppercase;cursor:pointer;transition:color 0.2s, border-color 0.2s}
-.tw-opt:hover{color:var(--white)}
-.tw-opt.on{color:var(--white);border-color:var(--white)}
+/* SHOP */
+.shop{background:var(--g1)}
+.shop-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:64px}
+.shop-card{background:var(--g2);border:1px solid transparent;transition:border-color 0.22s;cursor:none}
+.shop-card:hover{border-color:rgba(240,237,230,0.1)}
+.shop-img{aspect-ratio:3/4;background:var(--g1);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.shop-img svg{width:38%;height:38%;color:var(--cream);opacity:0.06;transition:transform 0.4s,opacity 0.4s}
+.shop-card:hover .shop-img svg{transform:scale(1.08);opacity:0.1}
+.shop-tag{position:absolute;top:12px;right:12px;font-size:7px;letter-spacing:0.2em;text-transform:uppercase;padding:5px 10px;background:rgba(8,8,8,0.8);color:var(--dim);border:1px solid var(--g3)}
+.shop-body{padding:20px}
+.shop-name{font-family:var(--display);font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:0.02em;margin-bottom:8px}
+.shop-price-row{display:flex;justify-content:space-between;align-items:center}
+.shop-price{font-size:11px;color:var(--cream);letter-spacing:0.1em}
+.shop-add{font-size:7.5px;letter-spacing:0.24em;text-transform:uppercase;padding:7px 14px;border:1px solid var(--g3);color:var(--dim);transition:all 0.18s;cursor:none}
+.shop-add:hover{border-color:var(--cream);color:var(--cream)}
 
-/* responsive */
-@media (max-width: 1100px){
+/* BOOKING */
+.booking{background:var(--bg)}
+.booking-inner{display:grid;grid-template-columns:1fr 1fr;gap:100px;align-items:start}
+.booking-copy{font-size:10px;line-height:2.1;color:var(--dim);margin-bottom:40px;max-width:380px;text-wrap:pretty}
+.set-types{display:flex;flex-direction:column;gap:2px;margin-bottom:40px}
+.set-item{display:flex;gap:20px;align-items:flex-start;padding:18px;background:var(--g1);border:1px solid transparent;transition:border-color 0.2s}
+.set-item:hover{border-color:rgba(240,237,230,0.1)}
+.set-lbl{font-family:var(--display);font-size:10px;font-weight:700;color:var(--cream);letter-spacing:0.1em;text-transform:uppercase;min-width:72px;padding-top:1px}
+.set-desc{font-size:9.5px;color:var(--dim);line-height:1.8}
+.form-g{margin-bottom:2px}
+.f-input{width:100%;background:var(--g1);border:1px solid transparent;color:var(--cream);font-family:var(--mono);font-size:10px;letter-spacing:0.04em;padding:15px 18px;outline:none;transition:border-color 0.2s}
+.f-input::placeholder{color:var(--dim)}
+.f-input:focus{border-color:var(--g3)}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+textarea.f-input{resize:vertical;min-height:110px}
+.form-footer{margin-top:14px;display:flex;justify-content:space-between;align-items:center}
+.form-note{font-size:8.5px;color:var(--dim);letter-spacing:0.08em}
+
+/* CONTACT */
+.contact{background:var(--g1);border-top:1px solid var(--g3)}
+.contact-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:64px}
+.c-item{padding:36px 28px;background:var(--g2);text-decoration:none;color:inherit;display:block;border:1px solid transparent;transition:border-color 0.2s}
+.c-item:hover{border-color:rgba(240,237,230,0.1)}
+.c-type{font-size:7px;letter-spacing:0.34em;text-transform:uppercase;color:var(--dim);margin-bottom:14px}
+.c-val{font-size:9.5px;letter-spacing:0.04em;color:var(--cream);word-break:break-all;line-height:1.6}
+.social-row{display:flex;gap:2px;margin-top:2px}
+.soc-item{flex:1;padding:22px;background:var(--g2);font-size:8px;letter-spacing:0.26em;text-transform:uppercase;text-align:center;color:var(--dim);transition:all 0.2s;border:1px solid transparent}
+.soc-item:hover{color:var(--cream);border-color:rgba(240,237,230,0.1)}
+
+/* FOOTER */
+footer{padding:40px 48px;border-top:1px solid var(--g3);display:flex;justify-content:space-between;align-items:center;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--dim)}
+.foot-logo{display:flex;align-items:center;gap:11px}
+.foot-logo svg{width:20px;height:20px;color:var(--cream);opacity:0.4}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  nav{grid-template-columns:1fr 1fr;padding:0 24px}
+  .nav-links{display:none}
+  .hero{grid-template-columns:1fr;padding:80px 24px 60px}
+  .hero-right{display:none}
+  .section{padding:80px 24px}
+  .release-inner{grid-template-columns:1fr;gap:40px}
+  .releases-grid{grid-template-columns:repeat(2,1fr)}
+  .ev-card{grid-template-columns:70px 1fr;gap:24px;padding:20px}
+  .ev-right{display:none}
+  .shop-grid{grid-template-columns:repeat(2,1fr)}
+  .booking-inner{grid-template-columns:1fr;gap:48px}
+  .contact-grid{grid-template-columns:repeat(2,1fr)}
+  footer{flex-direction:column;gap:14px;text-align:center}
+  .radio{padding:80px 24px 100px}
   .radio-body{grid-template-columns:1fr;gap:40px}
   .player{position:relative;top:0}
-  .ep-head, .ep-row{grid-template-columns: 40px 48px 1fr 80px;gap:16px}
-  .ep-head .d-hide, .ep-row .d-hide{display:none}
-  .viz-stage{grid-template-columns:1fr;gap:24px;padding:32px 24px}
+  .ep-head,.ep-row{grid-template-columns:40px 48px 1fr 80px;gap:14px}
+  .ep-head .d-hide,.ep-row .d-hide{display:none}
+  .viz-stage{grid-template-columns:1fr;gap:24px;padding:28px 20px}
   .viz-left,.viz-right{min-width:0;align-items:flex-start}
-  .viz-right{align-items:flex-start}
-  .viz-bars{height:120px}
 }
 </style>
 </head>
 <body>
 
-<div class="cursor" id="cur"></div>
-<div class="cursor-ring" id="curR"></div>
+<!-- CURSOR -->
+<div class="c-dot" id="cDot"></div>
+<div class="c-ring" id="cRing"></div>
 
-<!-- LOGO SVG INLINE DEF (reused) -->
-<svg style="display:none" id="logoSvg">
+<!-- LOGO SYMBOL (reused) -->
+<svg style="display:none">
   <symbol id="logo" viewBox="0 0 1000 1000">
-    <path d="M128.5,350.4c63.5-61.2,131.8-127.2,204.9-197.8,8.8-2.2,17.6-4,26.4-5.4,11.7-11.4,23.5-22.8,35.4-34.4-32,9-64.1,22.4-96,40.5-6.3,6.1-12.6,12.2-18.8,18.2,8.5-4,17-7.5,25.6-10.7-59.2,57.2-113.4,109.5-162.5,156.6-5.6,10.9-10.6,22-15.2,32.9h0ZM98.2,501.5c111.5-108,225.9-218.8,343.2-332.5,48.9-47.3,60.8-72.3,34.4-70.2-8,.5-16.1,1.3-24.2,2.4-26.7,4.1-58.1,25.6-93,59.3-86,83.3-168.3,162.9-246.7,238.6-3,11-5.5,21.9-7.4,32.8,39.7-38.5,80.1-77.6,121.2-117.4,3.2,7.2,6.8,14.5,10.8,22-46.3,44.9-91.9,89.1-137,132.8-.9,10.8-1.3,21.5-1.3,32.2h0ZM381.9,163.5c13.6-13.2,24.5-20,32.8-19.8,2.6,0,5.2.1,7.8.3,8.2.4,4.7,8.2-10.6,23.1-43.5,42.1-86.6,83.7-129,124.8-5.6-5.9-10.9-11.6-16-17,37.8-36.5,76.2-73.6,115.1-111.3h0ZM609.4,94.8c17.9,4.8,35.2,10.8,52.1,17.8-5.2-14.2-10.7-28.4-16.7-42.5-8-18.9-16.8-37.6-26.7-56.1-19.7-4.8-39.8-8.3-60.3-10.7,15,21.8,28.2,44.3,39.8,67.2,4.1,8.1,8,16.2,11.7,24.3h0ZM126.3,645c3.8,9.5,8,18.9,12.5,28,65.9-64,132-128.2,198.4-192.7,7.2,8.6,14.6,17.2,22.2,25.7-68,66.1-135.9,132-203.6,197.8,5.3,8.7,10.9,17.3,16.8,25.5,155.9-151.1,312.4-303,469.5-455.3,64.9-63,88-102.5,67.1-115.5-6.5-4-13-7.9-19.7-11.5-21.8-11.5-64,13.8-124.7,72.8-147.7,143.2-293.9,285-438.5,425.2h0ZM628.6,215.8c2.3,1.5,4.6,3.1,6.9,4.6,7.3,4.9-.1,18.2-22,39.5-62.3,60.4-124.5,120.6-186.5,180.7-8-8.1-16-16.2-23.8-24.2,60.5-58.6,121.3-117.4,182.2-176.5,21.3-20.8,35.8-28.9,43.1-24.1h0ZM354.7,351.6c88.4-72.8,181.6-149.9,278.4-230.3-8.8-3.2-17.8-6.1-26.9-8.7-95,79.2-185.8,154.5-271.1,224.8-1.3,1.3-2.6,2.6-3.9,3.9-69.3,82.2-142.9,168.9-219.8,259.2,2.7,10,5.8,19.8,9.2,29.5,81.5-96.5,159.8-189.7,234-278.3h0ZM516.8,69.5c2.7,3.8,5.4,7.7,8,11.6,14.4.8,28.5,2.4,42.5,4.6-13.6-24.5-29-48.4-47.2-71.4-3.9-4.8-8-9.6-12.1-14.4-2.6,0-5.3,0-7.9,0-14.2,0-28.2.6-42.1,1.8,1.4,1.4,2.9,2.7,4.3,4.1,20.9,20.1,38.7,41.5,54.5,63.7h0ZM573.1,104.8c-10.2-2-20.5-3.5-30.9-4.6C390.8,247,243.1,390.1,99.3,529.5c.8,10.5,2,20.9,3.6,31.2,153.3-148.7,310.1-300.7,470.2-455.9ZM901.2,476.2c-141.8,137.4-287.6,278.7-437.1,423.7,10.5.9,21,1.5,31.7,1.6,139.5-135.3,274.9-266.5,405.9-393.4.3-10.7,0-21.3-.5-31.8h0ZM691.3,851.3c47.9-46.3,91.2-88,129.8-125,14.9-14.5,30.8-34.8,43.8-62,3.7-8.2,7.2-16.3,10.3-24.5,10.6-27.1-2.7-24.7-36.2,8-80,77.4-163.9,158.5-251.4,243.2,10.9-2.6,21.9-5.7,32.9-9.3,33.5-32.4,66.2-64.2,98.2-95.1,6.4,1.9,12.6,3.4,18.5,4.4-25.5,24.7-51.7,50.1-78.8,76.3,11-4.8,22-10.1,32.9-16ZM834.1,675.4c9.6-9.4,13.5-9.9,11.2-1.9-.7,2.5-1.4,5-2.2,7.5-2.6,8-7.7,15.5-15,22.6-21.1,20.4-43.1,41.5-65.7,63.3-3.7-3.2-7.7-6.8-12-10.7,28.6-27.6,56.6-54.6,83.8-80.8h0ZM711.7,120c2.1,7.1,4.1,14.2,6.2,21.3,104.9,63.8,179.5,172.2,197.6,298.9,6.3-15,12.6-30.1,18.9-45.2,10.5-25.1,21.2-50.1,32.4-75-14-36.2-32.1-70.4-53.7-102-.5.7-1,1.4-1.5,2-6,8.1-12.2,16-19.8,23.4-3.4,3.3-6.8,6.6-11.2,9.3-2.6,1.6-5.4,3.1-8.4,4.2-5.6,2.2-11.5,2.1-16.9-.5-2.5-1.2-4.8-2.7-6.9-4.3-5.2-4.1-8.7-8.9-12.1-13.8-6.7-9.8-11.5-20.2-15.9-30.5-7.9-18.3-14.4-36.9-20.7-55.5-7.4-21.9-14.6-43.9-21.8-65.8-.4-1-.7-2-1-3.1-29.7-19.8-61.7-36.4-95.4-49.6,4.3,10.7,8.5,21.4,12.3,32.2,6.5,17.9,12.6,35.8,17.9,53.9h0ZM899.2,543.5c-58,46.1-124.2,99.8-197.6,160l-3.3,3.3c-59.1,70.3-112.9,134.9-160.4,192.6,10.8-1.1,21.7-2.7,32.6-4.7,41.8-52,91.3-112.2,147.2-179.4,67-54.7,126.3-102.4,176.7-142,2-10,3.5-19.9,4.7-29.8h0ZM436.7,896.4c130.5-126.5,258.6-250.7,384.3-372.5,51.3-49.9,76-87.5,70.9-112.2-1.8-7.5-3.7-14.9-5.9-22.3-6.9-24-41.9-6.2-102,52.3-145.3,140.8-292.1,283.3-440.4,427,9.4,4.1,18.9,7.9,28.7,11.2,63.4-61.6,126.5-122.8,189.2-183.8,8.5,6.5,16.9,12.7,25.2,18.7-59.7,58-119.9,116.4-180.4,175.2,10,2.5,20.2,4.6,30.5,6.3h0ZM793.4,471.6c19.7-19.2,31.4-24.9,34.5-16.9,1,2.5,2,5,2.9,7.5,2.9,8-5.1,21.1-23.7,39.2-53.4,51.7-107.1,103.7-161.3,156.1-7.3-7-14.7-14.2-22.2-21.6,56.9-55.1,113.5-109.9,169.8-164.3ZM416.4,88.8c23.5-4.8,47.8-7.6,72.6-8.2-8.7-11.1-18.1-22-28.2-32.5-13.8-14.4-28.7-28.2-45.4-40.9-29.6,5-58.3,12.7-85.9,22.7,21.1,10,40.1,21.8,57.7,34.9,10.3,7.7,20,15.7,29.1,24.1h0ZM300.6,843.5c162.9-158,324.7-314.9,485.2-470.5,5.2,8.1,10,16.3,14.7,24.7,21.5-20.9,43-41.9,64.5-62.8-12.2-27.2-27.4-53-45.2-76.8-22.8,22.2-45.7,44.5-68.6,66.7,6.1,7.6,12,15.3,17.6,23.1-163.8,158.8-328.6,318.6-494.1,479.2,8.4,5.8,17,11.2,25.9,16.3ZM523.9,508.6c0-11.7-9.5-21.3-21.3-21.3s-21.3,9.5-21.3,21.3,9.5,21.3,21.3,21.3,21.3-9.5,21.3-21.3ZM606.7,960c-.9-7.3-2-14.6-3-21.9-.9-7.2-1.8-14.3-2.7-21.5-.4-3-.8-6-1.3-9-6.7,1.6-13.4,3.1-20.2,4.4,0,.5.1,1,.2,1.5,1,6.2,2,12.4,2.9,18.6,1,6.6,2,13.2,3,19.8.9,6.5,1.8,13,2.7,19.4,1,6.8,2,13.5,2.9,20.2,6.2-1.1,12.5-2.4,18.6-3.8-.2-1.5-.4-2.9-.6-4.3-.9-7.9-1.7-15.7-2.7-23.5h0ZM624.3,956.4c-1.6-14.8-3.2-29.5-4.9-44.3-.4-3.1-.8-6.3-1.2-9.4-3.3,1-6.7,1.9-10,2.8,1,7.2,2,14.4,3,21.6.9,6.9,1.7,13.8,2.5,20.7,1.1,9.3,2.1,18.7,3.2,28,.4,3.4.7,6.8,1.1,10.2,3.1-.7,6.2-1.5,9.3-2.3-.6-4.9-1.1-9.8-1.6-14.7-.5-4.2-.9-8.4-1.4-12.6h0ZM351.8,107.4c10.9-4.1,22.1-7.8,33.4-11-22.3-17.4-47.3-32.7-76-44.9-5.4-2.3-11-4.5-16.6-6.5-13.5,6.1-26.6,12.9-39.4,20.1,17.4,4.1,34,9.6,50.2,16.4,17.5,7.4,33.5,16.2,48.4,25.8h0ZM639.3,920.6c-.8-7.9-1.6-15.9-2.4-23.8-3.4,1.2-6.8,2.3-10.2,3.4.6,5.5,1.3,11,1.9,16.4,1.1,9.6,2.1,19.2,3.1,28.8.6,5.5,1.1,11.1,1.6,16.7.7,6.5,1.3,13,2,19.5,3.3-.9,6.5-1.9,9.7-2.8-.8-8.8-1.6-17.6-2.5-26.4-1-10.6-2.2-21.1-3.3-31.7h0ZM559.3,974.7c-1.3-7.4-2.8-14.8-4.2-22.2-1.6-8.7-3.2-17.5-4.9-26.2-.6-3.2-1.3-6.3-1.9-9.5-4.3.5-8.7.9-13,1.3,2.9,13.5,5.5,27,8.2,40.6,2.5,12.9,5,25.8,7.4,38.8,4-.4,8-.8,11.9-1.4-.1-.8-.2-1.6-.4-2.4-1-6.3-2.1-12.7-3.2-19h0ZM660.6,928.7c-1.2-13.2-2.5-26.3-3.7-39.4-3.6,1.4-7.2,2.8-10.8,4.2.6,6.3,1.3,12.6,1.9,18.9.9,9.1,1.7,18.1,2.5,27.2,1,11.1,2.1,22.2,3.1,33.3.1,1,.2,2,.2,3,3.5-1.2,7-2.3,10.6-3.6-.1-1.7-.3-3.4-.4-5.1-1.1-12.9-2.1-25.7-3.3-38.6ZM523.3,924.2c-.4-1.7-.8-3.4-1.2-5.2-5.8.3-11.7.5-17.6.6,2.8,10.2,5.4,20.3,7.9,30.5,3.9,15.8,7.5,31.6,11.3,47.4.2.6.4,1.3.5,1.9,5.1-.2,10.2-.6,15.2-1-2.1-10.4-4.2-20.8-6.5-31.3-3.1-14.3-6.3-28.7-9.6-43h0ZM989.5,397.2c-1.9,4.5-3.7,8.9-5.5,13.4-15,36.8-28.7,73.8-41.3,111-10.3,30.2-20.2,60.5-30,90.8-8.3,25.7-16.2,51.4-24.4,77.1-10.7,33.8-21.1,67.6-33.4,101.1-4.8,13-9.8,26-16.3,38.6-2.4,4.6-5.2,9-8.2,13.4-1.7,2.4-4,4.6-6.6,6.6-3.5,2.7-7.7,2.7-10.9-.1-2.1-1.9-3.9-4-5.3-6.3-3.2-4.9-5.2-10.2-7-15.5-3.1-8.9-5.5-18-7.5-27-13.3,13-27.5,25.1-42.4,36.2.1,1.1.2,2.1.3,3.2,1,10.7,2.1,21.4,3.1,32.1.7,7.7,1.3,15.4,1.9,23.2.9,11,1.9,22,2.9,33,58.2-35.2,108.5-82,148-137.2,4.5-17.6,9-35.1,13.8-52.7,6.1-22.5,12.4-45,19-67.5,7.5-25.5,15.3-51,23.4-76.4,7.2-22.2,14.9-44.4,22.7-66.5,4.5-12.7,9.3-25.4,14.1-38-.6-31.6-4.2-62.6-10.5-92.5h0ZM729.3,868.1c-.4-5.3-.8-10.6-1.2-15.9-6.3,4.1-12.8,8.1-19.4,11.9.1,1.2.2,2.4.3,3.6,1.1,13.8,2,27.6,3,41.5,1,14.2,2,28.3,2.9,42.5,6.7-3.2,13.3-6.5,19.7-10-.6-8.5-1.3-17.1-1.9-25.6-1.2-16-2.3-32-3.5-48h0ZM698.9,933.9c-.9-12.9-2-25.7-3-38.6-.6-7.3-1-14.6-1.6-22,0-.4,0-.8-.1-1.3-8.8,4.6-17.7,8.9-26.8,12.8,0,.8.2,1.5.2,2.3.5,4.9.8,9.8,1.2,14.7.6,7.2,1.2,14.3,1.8,21.5,1,11.8,2,23.6,2.9,35.3.2,3.4.5,6.8.7,10.1,8.9-3.3,17.6-6.8,26.3-10.6,0-.2,0-.5,0-.7-.5-7.9-.9-15.7-1.5-23.6h0ZM570.1,913.8c-3.7.6-7.4,1.2-11.2,1.8,1.3,7,2.6,14,3.9,20.9,1.7,9.7,3.3,19.4,4.8,29.1,1.6,9.8,3.1,19.5,4.7,29.3,3.4-.5,6.9-1,10.3-1.6-1.7-11.2-3.2-22.3-4.9-33.5-2.5-15.3-5-30.7-7.6-46h0ZM107.2,284c12.7-4.7,25.9-8.3,39.7-10.8,16.2-25.2,35-48.5,56.1-69.6-11.7-.9-23.5-1-35.4-.1-27.4,1.9-52.8,8.1-76.6,17.6-2.8,1.1-5.6,2.3-8.4,3.5-21,31.8-38.5,66.2-51.9,102.5,7-5.5,14.4-10.7,22.2-15.7,16.5-10.7,34.4-20,54.3-27.3ZM47.2,396.7c14.6-11.4,30.4-21.9,48.3-30.8,2.7-1.3,5.4-2.6,8.1-3.9,5.9-17,12.9-33.6,20.9-49.6-16.3,5-31.4,11.6-45.6,19.3-22.9,12.4-42.5,27-60.2,43.1-1.3,1.2-2.6,2.4-3.9,3.6-4.8,19.1-8.5,38.6-10.9,58.5,13-14.2,27.3-27.7,43.3-40.3h0ZM197.4,174.5c11.3.6,22.3,1.9,33,4,9.9-8.3,20.3-16.2,30.9-23.6-16.6-5.1-33.8-8.7-51.8-10.5-15.3-1.5-30.6-1.5-46-.4-5.5.4-11,1-16.4,1.8-12.3,12.3-24.1,25.2-35.1,38.8,7.3-2.1,14.8-4,22.6-5.5,20.6-4.1,41.5-5.6,62.7-4.5h0ZM495.5,953.5c-3.3-11.4-6.7-22.8-10.2-34.2-25-.8-49.4-3.9-73.1-8.9,12.2,20.9,22.6,42.2,32,63.8,3.4,7.9,6.6,15.8,9.8,23.8,15.2,1.4,30.5,2.1,46.1,2.1s5.4,0,8.1,0c-.6-1.9-1.1-3.8-1.6-5.6-3.7-13.6-7.2-27.2-11.1-40.8h0ZM290,136.7c10.4-6,21.1-11.6,32.1-16.8-4.7-2.5-9.4-4.9-14.3-7.2-24.5-11.5-50.9-20-79.7-24.4-3.3-.5-6.5-.9-9.8-1.3-13,8.9-25.6,18.4-37.7,28.5,7.9,0,15.8.2,23.7.7,31.1,2.2,59.4,9.5,85.8,20.5h0ZM339.4,919.3c-7-4.5-14.6-8.4-23.1-11.4-17.3-6.2-35.1-7.5-53.6-3.1-10.1,2.5-19.1,6.3-27.4,11-2.3,1.3-4.6,2.7-6.8,4.1,53.2,34.4,113.3,59.1,177.8,71.3-9.7-15.2-20.5-30-33.6-43.9-9.6-10.2-20.3-19.8-33.2-28ZM111.3,658.3c-6.8,6-13.2,12.3-19.3,18.8-14.5,15.5-27.1,31.7-38.4,48.4,24.8,48.9,57.4,93.2,96.1,131.3,4.7-5.5,9.6-11,14.9-16.3,8.8-8.9,18.6-17.3,29.7-24.9,5.6-3.8,11.5-7.3,17.9-10.3-43.4-40.9-78-90.9-100.8-147ZM81.4,472c1.3-20.4,4.1-40.4,8.3-59.9-2.8,1.6-5.5,3.2-8.2,4.9-21.9,13.8-40.4,29.7-57.2,46.7-8.6,8.7-16.6,17.7-24.2,26.9,0,3.1-.1,6.2-.1,9.3,0,17.3.9,34.3,2.6,51.1,12.7-16.8,26.6-33.2,42.5-48.6,11.1-10.8,23-21,36.2-30.4h0ZM91.5,596c-5.1-21.5-8.4-43.7-10-66.3-9.2,7.4-17.7,15.2-25.7,23.3-16.8,16.9-31.3,34.8-44.4,53.3,4.6,21.1,10.5,41.8,17.6,61.8,11.7-17.1,24.7-33.8,39.6-49.8,7.2-7.7,14.8-15.2,22.9-22.3Z" fill="currentColor"/>
+    <path d="M128.5,350.4c63.5-61.2,131.8-127.2,204.9-197.8,8.8-2.2,17.6-4,26.4-5.4,11.7-11.4,23.5-22.8,35.4-34.4-32,9-64.1,22.4-96,40.5-6.3,6.1-12.6,12.2-18.8,18.2,8.5-4,17-7.5,25.6-10.7-59.2,57.2-113.4,109.5-162.5,156.6-5.6,10.9-10.6,22-15.2,32.9h0ZM98.2,501.5c111.5-108,225.9-218.8,343.2-332.5,48.9-47.3,60.8-72.3,34.4-70.2-8,.5-16.1,1.3-24.2,2.4-26.7,4.1-58.1,25.6-93,59.3-86,83.3-168.3,162.9-246.7,238.6-3,11-5.5,21.9-7.4,32.8,39.7-38.5,80.1-77.6,121.2-117.4,3.2,7.2,6.8,14.5,10.8,22-46.3,44.9-91.9,89.1-137,132.8-.9,10.8-1.3,21.5-1.3,32.2h0ZM628.6,215.8c2.3,1.5,4.6,3.1,6.9,4.6,7.3,4.9-.1,18.2-22,39.5-62.3,60.4-124.5,120.6-186.5,180.7-8-8.1-16-16.2-23.8-24.2,60.5-58.6,121.3-117.4,182.2-176.5,21.3-20.8,35.8-28.9,43.1-24.1h0ZM523.9,508.6c0-11.7-9.5-21.3-21.3-21.3s-21.3,9.5-21.3,21.3,9.5,21.3,21.3,21.3,21.3-9.5,21.3-21.3ZM126.3,645c3.8,9.5,8,18.9,12.5,28,65.9-64,132-128.2,198.4-192.7,7.2,8.6,14.6,17.2,22.2,25.7-68,66.1-135.9,132-203.6,197.8,5.3,8.7,10.9,17.3,16.8,25.5,155.9-151.1,312.4-303,469.5-455.3,64.9-63,88-102.5,67.1-115.5-6.5-4-13-7.9-19.7-11.5-21.8-11.5-64,13.8-124.7,72.8-147.7,143.2-293.9,285-438.5,425.2h0Z"/>
   </symbol>
 </svg>
 
-<!-- NAV -->
+<!-- ══ 1. NAV ════════════════════════════════════════════ -->
 <nav>
-  <a href="#home" class="nav-logo">
-    <svg viewBox="0 0 1000 1000" fill="none" xmlns="http://www.w3.org/2000/svg" style="color:var(--white)">
-      <use href="#logo"/>
-    </svg>
-    <span class="nav-logo-text">TakaTaka</span>
+  <a class="nav-logo" href="#">
+    <svg viewBox="0 0 1000 1000" width="24" height="24"><use href="#logo"/></svg>
+    <span class="nav-logo-name">TakaTaka</span>
   </a>
   <ul class="nav-links">
     <li><a href="#releases">Releases</a></li>
-    <li><a href="#artists">Artists</a></li>
-    <li><a href="#radio">Radio</a></li>
     <li><a href="#events">Events</a></li>
+    <li><a href="#radio">Radio</a></li>
     <li><a href="#shop">Shop</a></li>
     <li><a href="#booking">Booking</a></li>
-    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
   </ul>
   <div class="nav-right">
     <a href="https://soundcloud.com/takatakaspb" target="_blank">SoundCloud</a>
@@ -925,820 +426,524 @@ body{cursor:none}
   </div>
 </nav>
 
-<!-- HERO -->
-<section class="hero" id="home">
-  <div class="hero-bg"></div>
-  <div class="hero-grid"></div>
-  <div class="hero-logo-bg">
-    <svg viewBox="0 0 1000 1000" fill="none" xmlns="http://www.w3.org/2000/svg" style="color:white">
-      <use href="#logo"/>
-    </svg>
-  </div>
-  <div class="hero-content reveal">
-    <div class="hero-eyebrow">Underground Movement · Saint Petersburg · Since 2015</div>
+<!-- ══ 2. HERO ════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-pgrid"><div class="hero-pgrid-inner"></div></div>
+
+  <div class="hero-left reveal">
+    <p class="hero-tag">Underground Movement · Saint Petersburg</p>
     <h1 class="hero-title">
-      TAKA<br>
+      <span>TAKA</span>
       <span class="outline">TAKA</span>
     </h1>
-    <p class="hero-sub">A movement of the modern underground music scene — microhouse &amp; minimal waves. Gathering the best sets of talented DJs and musicians.</p>
+    <p class="hero-sub">A movement of the modern underground music scene — microhouse &amp; minimal waves. Gathering the best sets of talented DJs and musicians from Saint Petersburg.</p>
     <div class="hero-ctas">
-      <a href="https://soundcloud.com/takatakaspb" target="_blank" class="btn btn-prim">↗ SoundCloud</a>
-      <a href="#releases" class="btn btn-out">Releases</a>
-      <a href="#radio" class="btn btn-out">Podcast</a>
+      <a href="#releases" class="btn btn-fill">Latest Releases</a>
+      <a href="#radio" class="btn btn-ghost">Listen Live</a>
     </div>
   </div>
-  <div class="hero-scroll">Scroll</div>
+
+  <div class="hero-right reveal">
+    <div class="vinyl-wrap">
+      <div class="vinyl-disc">
+        <div class="vinyl-label">
+          <svg viewBox="0 0 1000 1000"><use href="#logo"/></svg>
+        </div>
+        <div class="vinyl-spindle"></div>
+        <div class="vinyl-shine"></div>
+      </div>
+      <div class="vinyl-shadow"></div>
+    </div>
+  </div>
+
+  <div class="hero-scroll" style="right:48px;left:auto"><span>Scroll</span><span class="hero-scroll-line"></span></div>
 </section>
 
-<!-- TICKER -->
+<!-- ══ 3. TICKER ════════════════════════════════════════════ -->
 <div class="ticker">
   <div class="ticker-track">
-    <span class="ticker-item">TAKATAKA <em>·</em> MICROHOUSE <em>·</em> MINIMAL WAVE <em>·</em> UNDERGROUND MOVEMENT <em>·</em> SPB <em>·</em> VINYL &amp; DIGITAL <em>·</em> </span>
-    <span class="ticker-item">PODCAST SERIES <em>·</em> TAKATAKA <em>·</em> MICROHOUSE <em>·</em> MINIMAL WAVE <em>·</em> UNDERGROUND MOVEMENT <em>·</em> SPB <em>·</em> VINYL &amp; DIGITAL <em>·</em> </span>
+    <span class="ticker-item">Takataka Records <em class="hi">·</em> Underground Movement <em class="hi">·</em> Saint Petersburg <em class="hi">·</em> Est. 2015 <em class="hi">·</em> Microhouse <em class="hi">·</em> Minimal Wave <em class="hi">·</em> Underground <em class="hi">·</em> Vinyl &amp; Digital <em class="hi">·</em> </span>
+    <span class="ticker-item">Takataka Records <em class="hi">·</em> Underground Movement <em class="hi">·</em> Saint Petersburg <em class="hi">·</em> Est. 2015 <em class="hi">·</em> Microhouse <em class="hi">·</em> Minimal Wave <em class="hi">·</em> Underground <em class="hi">·</em> Vinyl &amp; Digital <em class="hi">·</em> </span>
+    <span class="ticker-item">Takataka Records <em class="hi">·</em> Underground Movement <em class="hi">·</em> Saint Petersburg <em class="hi">·</em> Est. 2015 <em class="hi">·</em> Microhouse <em class="hi">·</em> Minimal Wave <em class="hi">·</em> Underground <em class="hi">·</em> Vinyl &amp; Digital <em class="hi">·</em> </span>
+    <span class="ticker-item">Takataka Records <em class="hi">·</em> Underground Movement <em class="hi">·</em> Saint Petersburg <em class="hi">·</em> Est. 2015 <em class="hi">·</em> Microhouse <em class="hi">·</em> Minimal Wave <em class="hi">·</em> Underground <em class="hi">·</em> Vinyl &amp; Digital <em class="hi">·</em> </span>
   </div>
 </div>
 
-<!-- LATEST RELEASE -->
-<section class="release-feat reveal">
-  <div class="sec-label">Latest Release</div>
-  <div class="release-inner">
-    <div class="artwork-wrap">
-      <div class="artwork-inner">
-        <svg viewBox="0 0 1000 1000" fill="none" style="color:white">
-          <use href="#logo"/>
-        </svg>
+<!-- ══ 4. LATEST RELEASE ════════════════════════════════════ -->
+<section class="latest section" id="latest">
+  <div class="release-inner reveal">
+    <div class="rel-art-wrap">
+      <div class="rel-art-inner">
+        <div class="rel-art-lines"></div>
+        <svg viewBox="0 0 1000 1000"><use href="#logo"/></svg>
       </div>
-      <div class="artwork-badge">New · 2024</div>
+      <span class="rel-badge">New Release</span>
     </div>
-    <div>
-      <div class="rel-catalog">TKT-012 · Digital + Vinyl</div>
-      <h2 class="rel-title">Pattern<br>Variations</h2>
-      <div class="rel-artist">Various Artists</div>
-      <p class="rel-desc">A hypnotic journey through microhouse and minimal wave structures. Four tracks exploring rhythm as architecture — each release on the TakaTaka imprint is a precise statement.</p>
+    <div class="rel-info">
+      <p class="rel-cat">TTK-014 · 12" Vinyl · 2024</p>
+      <h2 class="rel-title">Parallel<br>Drift</h2>
+      <p class="rel-artist">Voss &amp; Möhr</p>
       <div class="tracklist">
-        <div class="track"><span class="track-n">A1</span><span>Oscillation Protocol</span><span>07:42</span></div>
-        <div class="track"><span class="track-n">A2</span><span>Micro Ritual</span><span>06:18</span></div>
-        <div class="track"><span class="track-n">B1</span><span>Phase Collapse</span><span>08:05</span></div>
-        <div class="track"><span class="track-n">B2</span><span>Signal Drift</span><span>07:33</span></div>
+        <div class="track"><div class="track-left"><span class="track-n">A1</span><span>Parallel Drift</span></div><span class="track-dur">7:14</span></div>
+        <div class="track"><div class="track-left"><span class="track-n">A2</span><span>Static Bloom</span></div><span class="track-dur">6:42</span></div>
+        <div class="track"><div class="track-left"><span class="track-n">B1</span><span>Thermal Loop</span></div><span class="track-dur">8:03</span></div>
+        <div class="track"><div class="track-left"><span class="track-n">B2</span><span>Afterburn (Dub)</span></div><span class="track-dur">9:28</span></div>
+        <div class="track"><div class="track-left"><span class="track-n">B3</span><span>Null Carrier</span></div><span class="track-dur">5:55</span></div>
       </div>
-      <div class="stream-links">
-        <a href="https://soundcloud.com/takatakaspb" target="_blank" class="s-btn">SoundCloud</a>
-        <a href="#" class="s-btn">Bandcamp</a>
-        <a href="#" class="s-btn">Spotify</a>
-        <a href="#" class="s-btn">Buy Vinyl ↗</a>
+      <div class="stream-row">
+        <a class="s-btn" href="#">Spotify</a>
+        <a class="s-btn" href="#">Bandcamp</a>
+        <a class="s-btn" href="#">Apple Music</a>
+        <a class="s-btn" href="#">SoundCloud</a>
+        <a class="s-btn" href="#">Order Vinyl</a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- RELEASES -->
-<section id="releases" style="padding-top:0" class="reveal">
-  <div class="row-header">
-    <div class="sec-label" style="margin-bottom:0">Releases Archive</div>
-    <div class="filter-row">
-      <button class="f-btn on">All</button>
-      <button class="f-btn">Digital</button>
-      <button class="f-btn">Vinyl</button>
-      <button class="f-btn">EP</button>
-      <button class="f-btn">VA</button>
-    </div>
-  </div>
-  <div class="releases-grid">
-    <div class="rel-card" style="background:#161616">
-      <div class="rel-card-art" style="background:#161616"><svg viewBox="0 0 1000 1000" fill="none" style="color:white"><use href="#logo"/></svg></div>
-      <div class="rel-card-ov"><div class="rc-title">TKT-011</div><div class="rc-meta">Vinyl · 2024</div></div>
-    </div>
-    <div class="rel-card" style="background:#1a1714">
-      <div class="rel-card-art" style="background:#1a1714"><svg viewBox="0 0 1000 1000" fill="none"><circle cx="500" cy="500" r="350" fill="none" stroke="white" stroke-width="1" opacity="0.15"/><circle cx="500" cy="500" r="50" fill="white" opacity="0.1"/></svg></div>
-      <div class="rel-card-ov"><div class="rc-title">TKT-010</div><div class="rc-meta">Digital · 2024</div></div>
-    </div>
-    <div class="rel-card" style="background:#121212">
-      <div class="rel-card-art" style="background:#121212"><svg viewBox="0 0 1000 1000" fill="none"><rect x="200" y="200" width="600" height="600" fill="none" stroke="white" stroke-width="1" opacity="0.1" transform="rotate(45 500 500)"/><circle cx="500" cy="500" r="100" fill="white" opacity="0.04"/></svg></div>
-      <div class="rel-card-ov"><div class="rc-title">TKT-009</div><div class="rc-meta">Vinyl · 2023</div></div>
-    </div>
-    <div class="rel-card" style="background:#181614">
-      <div class="rel-card-art" style="background:#181614"><svg viewBox="0 0 1000 1000" fill="none"><line x1="100" y1="100" x2="900" y2="900" stroke="#c8b89a" stroke-width="0.5" opacity="0.2"/><line x1="900" y1="100" x2="100" y2="900" stroke="#c8b89a" stroke-width="0.5" opacity="0.2"/><circle cx="500" cy="500" r="250" fill="none" stroke="white" stroke-width="1" opacity="0.06"/></svg></div>
-      <div class="rel-card-ov"><div class="rc-title">TKT-008</div><div class="rc-meta">EP · 2023</div></div>
-    </div>
-    <div class="rel-card" style="background:#141414">
-      <div class="rel-card-art" style="background:#141414"><svg viewBox="0 0 1000 1000" fill="none"><polygon points="500,80 920,760 80,760" fill="none" stroke="white" stroke-width="1" opacity="0.08"/></svg></div>
-      <div class="rel-card-ov"><div class="rc-title">TKT-007</div><div class="rc-meta">Vinyl · 2022</div></div>
-    </div>
-    <div class="rel-card" style="background:#161818">
-      <div class="rel-card-art" style="background:#161818"><svg viewBox="0 0 1000 1000" fill="none"><path d="M200 500 Q500 100 800 500 Q500 900 200 500Z" fill="none" stroke="white" stroke-width="1" opacity="0.08"/></svg></div>
-      <div class="rel-card-ov"><div class="rc-title">TKT-006</div><div class="rc-meta">Digital · 2022</div></div>
-    </div>
-    <div class="rel-card" style="background:#131313">
-      <div class="rel-card-art" style="background:#131313"><svg viewBox="0 0 1000 1000" fill="none"><circle cx="500" cy="500" r="400" fill="none" stroke="white" stroke-width="0.5" stroke-dasharray="18 9" opacity="0.08"/><circle cx="500" cy="500" r="200" fill="none" stroke="#c8b89a" stroke-width="0.5" stroke-dasharray="9 9" opacity="0.08"/></svg></div>
-      <div class="rel-card-ov"><div class="rc-title">TKT-005</div><div class="rc-meta">VA · 2021</div></div>
-    </div>
-    <div class="rel-card" style="background:#181818">
-      <div class="rel-card-art" style="background:#181818"><svg viewBox="0 0 1000 1000" fill="none"><rect x="250" y="250" width="500" height="500" fill="none" stroke="white" stroke-width="1" opacity="0.06"/><rect x="350" y="350" width="300" height="300" fill="none" stroke="#c8b89a" stroke-width="1" opacity="0.07"/></svg></div>
-      <div class="rel-card-ov"><div class="rc-title">TKT-004</div><div class="rc-meta">Vinyl · 2021</div></div>
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- ARTISTS -->
-<section id="artists" class="reveal">
-  <div class="row-header">
+<!-- ══ 5. RELEASES ════════════════════════════════════════════ -->
+<section class="section bg1" id="releases" style="background:var(--bg)">
+  <div class="sec-header-row reveal">
     <div>
-      <div class="sec-label">Artists</div>
-      <h2 class="sec-title">The Movement</h2>
+      <p class="sec-eyebrow">Catalogue</p>
+      <h2 class="sec-title">Releases</h2>
     </div>
-    <a href="#booking" class="btn btn-out">Booking Enquiry</a>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:20px">
+      <a class="sec-link" href="#">View All</a>
+      <div class="filter-row">
+        <button class="f-btn on" data-filter="all">All</button>
+        <button class="f-btn" data-filter="album">Album</button>
+        <button class="f-btn" data-filter="ep">EP</button>
+        <button class="f-btn" data-filter="single">Single</button>
+      </div>
+    </div>
   </div>
-  <div class="artists-grid">
-    <div class="artist-card" style="background:#141414">
-      <div class="ac-bg"><svg viewBox="0 0 1000 1000" fill="none" style="color:white"><use href="#logo"/></svg></div>
-      <div class="ac-ov"></div>
-      <div class="ac-info">
-        <div class="ac-name">TakaTaka</div>
-        <div class="ac-loc">Saint Petersburg, RU</div>
-        <div class="tags"><span class="tag">Microhouse</span><span class="tag">Minimal</span><span class="tag">DJ</span></div>
-      </div>
-    </div>
-    <div class="artist-card" style="background:#181410">
-      <div class="ac-bg"><svg viewBox="0 0 1000 1000" fill="none"><circle cx="500" cy="500" r="320" fill="none" stroke="white" stroke-width="1" opacity="0.4"/><circle cx="500" cy="500" r="160" fill="none" stroke="#c8b89a" stroke-width="1" opacity="0.3"/><circle cx="500" cy="500" r="40" fill="white" opacity="0.1"/></svg></div>
-      <div class="ac-ov"></div>
-      <div class="ac-info">
-        <div class="ac-name">Resident 01</div>
-        <div class="ac-loc">Saint Petersburg, RU</div>
-        <div class="tags"><span class="tag">Minimal Wave</span><span class="tag">Live</span></div>
-      </div>
-    </div>
-    <div class="artist-card" style="background:#141618">
-      <div class="ac-bg"><svg viewBox="0 0 1000 1000" fill="none"><rect x="200" y="200" width="600" height="600" fill="none" stroke="white" stroke-width="1" opacity="0.3" transform="rotate(30 500 500)"/><rect x="300" y="300" width="400" height="400" fill="none" stroke="#c8b89a" stroke-width="0.5" opacity="0.2" transform="rotate(15 500 500)"/></svg></div>
-      <div class="ac-ov"></div>
-      <div class="ac-info">
-        <div class="ac-name">Resident 02</div>
-        <div class="ac-loc">Moscow, RU</div>
-        <div class="tags"><span class="tag">Microhouse</span><span class="tag">Vinyl</span></div>
-      </div>
-    </div>
+  <div class="releases-grid reveal">
+    <div class="rel-card" data-type="ep"><div class="rel-card-bg tone-a"><svg viewBox="0 0 1000 1000"><use href="#logo"/></svg></div><div class="rel-card-ov"><p class="rc-type">EP</p><p class="rc-title">Null Signal</p><p class="rc-year">TTK-013 · 2024</p></div></div>
+    <div class="rel-card" data-type="single"><div class="rel-card-bg tone-b"><svg viewBox="0 0 1000 1000"><use href="#logo"/></svg></div><div class="rel-card-ov"><p class="rc-type">Single</p><p class="rc-title">Ferro</p><p class="rc-year">TTK-012 · 2023</p></div></div>
+    <div class="rel-card" data-type="album"><div class="rel-card-bg tone-c"><svg viewBox="0 0 1000 1000"><use href="#logo"/></svg></div><div class="rel-card-ov"><p class="rc-type">Album</p><p class="rc-title">Deep Strata</p><p class="rc-year">TTK-011 · 2023</p></div></div>
+    <div class="rel-card" data-type="ep"><div class="rel-card-bg tone-d"><svg viewBox="0 0 1000 1000"><use href="#logo"/></svg></div><div class="rel-card-ov"><p class="rc-type">EP</p><p class="rc-title">Rift Zone</p><p class="rc-year">TTK-010 · 2023</p></div></div>
+    <div class="rel-card" data-type="single"><div class="rel-card-bg tone-c"><svg viewBox="0 0 1000 1000"><use href="#logo"/></svg></div><div class="rel-card-ov"><p class="rc-type">Single</p><p class="rc-title">Radial</p><p class="rc-year">TTK-009 · 2022</p></div></div>
+    <div class="rel-card" data-type="album"><div class="rel-card-bg tone-b"><svg viewBox="0 0 1000 1000"><use href="#logo"/></svg></div><div class="rel-card-ov"><p class="rc-type">Album</p><p class="rc-title">Lumen</p><p class="rc-year">TTK-008 · 2022</p></div></div>
+    <div class="rel-card" data-type="ep"><div class="rel-card-bg tone-a"><svg viewBox="0 0 1000 1000"><use href="#logo"/></svg></div><div class="rel-card-ov"><p class="rc-type">EP</p><p class="rc-title">Cold Seam</p><p class="rc-year">TTK-007 · 2022</p></div></div>
+    <div class="rel-card" data-type="single"><div class="rel-card-bg tone-d"><svg viewBox="0 0 1000 1000"><use href="#logo"/></svg></div><div class="rel-card-ov"><p class="rc-type">Single</p><p class="rc-title">Phase Gate</p><p class="rc-year">TTK-006 · 2021</p></div></div>
   </div>
 </section>
 
-<div class="divider"></div>
+<!-- ══ 6. EVENTS ════════════════════════════════════════════ -->
+<section class="section" id="events" style="background:var(--g1);padding-top:120px;padding-bottom:120px">
+  <div class="sec-header-row reveal">
+    <div>
+      <p class="sec-eyebrow">Live</p>
+      <h2 class="sec-title">Events</h2>
+    </div>
+    <a class="sec-link" href="#">All Dates</a>
+  </div>
+  <div class="events-list reveal">
+    <a class="ev-card" href="#">
+      <div class="ev-date"><span class="ev-day">14</span><span class="ev-mon">Jun</span></div>
+      <div class="ev-info"><span class="ev-label">Berlin, DE</span><span class="ev-name">Berghain</span><span class="ev-venue">Voss &amp; Möhr<span class="ev-sep">—</span>TakaTaka Night</span></div>
+      <div class="ev-right"><span class="ev-time">23:00</span><span class="ev-ticket">Tickets</span></div>
+    </a>
+    <a class="ev-card" href="#">
+      <div class="ev-date"><span class="ev-day">22</span><span class="ev-mon">Jun</span></div>
+      <div class="ev-info"><span class="ev-label">Amsterdam, NL</span><span class="ev-name">Shelter</span><span class="ev-venue">Kolm<span class="ev-sep">—</span>Catalogue Series</span></div>
+      <div class="ev-right"><span class="ev-time">22:00</span><span class="ev-ticket">Tickets</span></div>
+    </a>
+    <a class="ev-card" href="#">
+      <div class="ev-date"><span class="ev-day">06</span><span class="ev-mon">Jul</span></div>
+      <div class="ev-info"><span class="ev-label">London, UK</span><span class="ev-name">Fabric</span><span class="ev-venue">Various Artists<span class="ev-sep">—</span>Label Showcase</span></div>
+      <div class="ev-right"><span class="ev-time">22:00</span><span class="ev-ticket">Tickets</span></div>
+    </a>
+    <a class="ev-card" href="#">
+      <div class="ev-date"><span class="ev-day">19</span><span class="ev-mon">Jul</span></div>
+      <div class="ev-info"><span class="ev-label">Warsaw, PL</span><span class="ev-name">Jasna 1</span><span class="ev-venue">Voss &amp; Möhr<span class="ev-sep">—</span>Open Format</span></div>
+      <div class="ev-right"><span class="ev-time">23:59</span><span class="ev-ticket">Tickets</span></div>
+    </a>
+    <a class="ev-card" href="#">
+      <div class="ev-date"><span class="ev-day">03</span><span class="ev-mon">Aug</span></div>
+      <div class="ev-info"><span class="ev-label">Prague, CZ</span><span class="ev-name">Cross Club</span><span class="ev-venue">Kolm<span class="ev-sep">—</span>TTK Residency</span></div>
+      <div class="ev-right"><span class="ev-time">23:00</span><span class="ev-ticket">Tickets</span></div>
+    </a>
+  </div>
+</section>
 
-<!-- RADIO (Claude Design) -->
+<!-- ══ 7. RADIO (preserved exactly) ══════════════════════════ -->
 <section class="radio" id="radio">
   <div class="radio-grid"></div>
   <div class="radio-glow"></div>
-  <svg class="radio-noise" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 0.94  0 0 0 0 0.93  0 0 0 0 0.9  0 0 0 0.045 0"/></filter>
-    <rect width="100%" height="100%" filter="url(#n)"/>
-  </svg>
 
-  <!-- Section head -->
   <div class="radio-head">
     <div>
-      <div class="r-eyebrow"><span class="dash"></span>004 — Radio</div>
+      <p class="r-eyebrow"><span class="dash"></span>Broadcast</p>
       <h2 class="r-title">
-        <span class="solid">Signal</span>
-        <span class="outline">Drift</span>
+        <span class="solid">TAKA</span>
+        <span class="outline">RADIO</span>
       </h2>
     </div>
     <div class="r-meta">
-      <div class="row">— Series<b>TakaTaka Podcast</b></div>
-      <div class="row">— Archive<b>47 Episodes · Since 2019</b></div>
-      <a class="link" href="#">All Episodes →</a>
+      <div class="row">Frequency<b>TTK FM 94.8</b></div>
+      <div class="row">Schedule<b>Thu – Sun</b></div>
+      <a class="link" href="#">Subscribe to Feed</a>
     </div>
   </div>
 
   <!-- Visualizer stage -->
-  <div class="viz-stage">
+  <div class="viz-stage" id="vizStage">
     <div class="viz-left">
-      <div class="viz-status"><span class="viz-dot" id="vizDot"></span><span id="vizStatus">On Air · Now Playing</span></div>
-      <div class="viz-ep" id="vizEp">EP 047 · Feb 2026</div>
-      <div class="viz-name" id="vizName">Nikolai Drift</div>
-      <div class="viz-genre">Microhouse · Minimal Wave</div>
+      <div class="viz-status"><div class="viz-dot" id="vizDot"></div><span id="vizStatusTxt">On Air</span></div>
+      <div class="viz-ep" id="vizEp">Episode 018</div>
+      <div class="viz-name" id="vizName">Phase Shift</div>
+      <div class="viz-genre" id="vizGenre">Deep Techno · 140 BPM</div>
     </div>
     <div class="viz-bars" id="vizBars"></div>
     <div class="viz-right">
-      <div class="viz-dur" id="vizDur">58:14</div>
-      <div class="viz-elapsed"><span id="vizElapsed">23:14</span> · Elapsed</div>
+      <div class="viz-dur" id="vizDur">58:20</div>
+      <div class="viz-elapsed" id="vizElapsed">Elapsed</div>
       <div class="viz-actions">
-        <button class="viz-btn" id="vizHz">Low</button>
+        <button class="viz-btn" id="vizPlayBtn">▶ Play</button>
         <button class="viz-btn">Share</button>
       </div>
     </div>
   </div>
-
-  <!-- Progress strip -->
   <div class="viz-progress-wrap">
-    <span class="lbl" id="wrapElapsed">23:14</span>
-    <div class="viz-progress" id="wrapProg">
-      <div class="fill" id="wrapFill" style="width:40%"></div>
-      <div class="knob" id="wrapKnob" style="left:40%"></div>
-    </div>
-    <span class="lbl" id="wrapTotal">58:14</span>
+    <span class="lbl" id="vizCur">00:00</span>
+    <div class="viz-progress" id="vizProg"><div class="fill" id="vizFill" style="width:0%"></div><div class="knob" id="vizKnob" style="left:0%"></div></div>
+    <span class="lbl" id="vizTot">58:20</span>
   </div>
 
-  <!-- Body grid -->
+  <!-- Episode list + player -->
   <div class="radio-body">
-
-    <!-- Episode list -->
     <div>
       <div class="ep-head">
-        <span>№</span>
-        <span></span>
-        <span>Host · Artist</span>
-        <span class="d-hide">Genre</span>
-        <span class="r d-hide">Released</span>
-        <span class="r">Length</span>
+        <span>#</span><span></span><span>Episode</span><span class="d-hide">Genre</span><span class="d-hide r">Date</span><span class="r">Duration</span>
       </div>
-      <div class="ep-list" id="epList"></div>
+      <div class="ep-list" id="epList">
+        <div class="ep-row active" data-ep="0">
+          <span class="ep-index">018</span>
+          <div class="ep-play"><div class="tri"></div><div class="bars"><i></i><i></i><i></i></div></div>
+          <div><div class="ep-num">TTK Radio</div><div class="ep-name">Phase Shift</div></div>
+          <span class="ep-tag d-hide">Deep Techno</span>
+          <span class="ep-date d-hide r">May 2024</span>
+          <span class="ep-dur">58:20</span>
+        </div>
+        <div class="ep-row" data-ep="1">
+          <span class="ep-index">017</span>
+          <div class="ep-play"><div class="tri"></div><div class="bars"><i></i><i></i><i></i></div></div>
+          <div><div class="ep-num">TTK Radio</div><div class="ep-name">Subterranean</div></div>
+          <span class="ep-tag d-hide">Dub Techno</span>
+          <span class="ep-date d-hide r">Apr 2024</span>
+          <span class="ep-dur">61:44</span>
+        </div>
+        <div class="ep-row" data-ep="2">
+          <span class="ep-index">016</span>
+          <div class="ep-play"><div class="tri"></div><div class="bars"><i></i><i></i><i></i></div></div>
+          <div><div class="ep-num">TTK Radio</div><div class="ep-name">Iron Meridian</div></div>
+          <span class="ep-tag d-hide">Industrial</span>
+          <span class="ep-date d-hide r">Mar 2024</span>
+          <span class="ep-dur">55:10</span>
+        </div>
+        <div class="ep-row" data-ep="3">
+          <span class="ep-index">015</span>
+          <div class="ep-play"><div class="tri"></div><div class="bars"><i></i><i></i><i></i></div></div>
+          <div><div class="ep-num">TTK Radio</div><div class="ep-name">Pressure Drop</div></div>
+          <span class="ep-tag d-hide">Techno</span>
+          <span class="ep-date d-hide r">Feb 2024</span>
+          <span class="ep-dur">63:02</span>
+        </div>
+        <div class="ep-row" data-ep="4">
+          <span class="ep-index">014</span>
+          <div class="ep-play"><div class="tri"></div><div class="bars"><i></i><i></i><i></i></div></div>
+          <div><div class="ep-num">TTK Radio</div><div class="ep-name">Dark Matter</div></div>
+          <span class="ep-tag d-hide">Ambient Techno</span>
+          <span class="ep-date d-hide r">Jan 2024</span>
+          <span class="ep-dur">59:48</span>
+        </div>
+      </div>
       <div class="ep-foot">
-        <span>Showing 8 of 47</span>
-        <a href="#">Full Archive →</a>
+        <span>5 of 18 episodes</span>
+        <a href="#">Load More</a>
       </div>
     </div>
 
     <!-- Sticky player -->
-    <aside class="player" id="player">
+    <div class="player" id="stickyPlayer">
       <div class="player-head">
-        <span class="ix" id="pIx">EP 047 / 047</span>
-        <span class="live" id="pLive">On Air</span>
+        <span class="ix">Now Playing</span>
+        <span class="live">On Air</span>
       </div>
       <div class="player-art" id="pArt">
-        <span class="cat" id="pCat">TKT·PC-047</span>
-        <svg class="spin" viewBox="0 0 100 100" stroke="#f0ede6" fill="none" stroke-width="0.5">
-          <circle cx="50" cy="50" r="44"/>
-          <circle cx="50" cy="50" r="32" stroke-dasharray="2 4"/>
-          <circle cx="50" cy="50" r="20"/>
-          <circle cx="50" cy="50" r="8"/>
-        </svg>
+        <svg class="spin" viewBox="0 0 1000 1000"><use href="#logo"/></svg>
         <div class="center"></div>
+        <div class="cat">TTK FM</div>
       </div>
-      <div class="player-meta" id="pMeta">EP 047 · Feb 2026 · 58:14</div>
-      <div class="player-title" id="pTitle">Nikolai Drift</div>
-      <div class="player-artist" id="pArtist">Microhouse Mix · 58 min</div>
-      <div class="p-progress" id="pProg">
-        <div class="fill" id="pFill" style="width:40%"></div>
-        <div class="knob" id="pKnob" style="left:40%"></div>
-      </div>
-      <div class="p-time"><span id="pElapsed">23:14</span><span id="pTotal">58:14</span></div>
-
+      <div class="player-meta" id="pMeta">Episode 018</div>
+      <div class="player-title" id="pTitle">Phase Shift</div>
+      <div class="player-artist" id="pArtist">TTK Radio · Deep Techno</div>
+      <div class="p-progress" id="pProg"><div class="fill" id="pFill" style="width:0%"></div><div class="knob" id="pKnob" style="left:0%"></div></div>
+      <div class="p-time"><span id="pCur">0:00</span><span id="pTot">58:20</span></div>
       <div class="p-controls">
-        <span class="p-ctrl">← Prev</span>
-        <button class="p-play" id="pPlay">
-          <span class="tri"></span>
-          <span class="pause"><span></span><span></span></span>
-        </button>
-        <span class="p-ctrl r">Next →</span>
+        <button class="p-ctrl">Prev</button>
+        <div class="p-play" id="pPlayBtn"><div class="tri"></div><div class="pause"><span></span><span></span></div></div>
+        <button class="p-ctrl r">Next</button>
       </div>
-
       <div class="p-tools">
-        <button>-15s</button>
-        <button>+15s</button>
-        <button>1.0×</button>
-        <button>Queue</button>
+        <button>Loop</button><button>Shuffle</button><button>Speed</button><button>Share</button>
       </div>
-
       <div class="p-streams">
-        <a class="p-stream" href="#"><span>SoundCloud</span><span class="mark">↗</span></a>
+        <a class="p-stream" href="#"><span>Spotify</span><span class="mark">↗</span></a>
+        <a class="p-stream" href="#"><span>Apple Podcasts</span><span class="mark">↗</span></a>
         <a class="p-stream" href="#"><span>Mixcloud</span><span class="mark">↗</span></a>
-        <a class="p-stream" href="#"><span>Spotify · Podcast</span><span class="mark">↗</span></a>
       </div>
-    </aside>
-
+    </div>
   </div>
 </section>
 
-<div class="divider"></div>
-
-<!-- EVENTS -->
-<section id="events" class="reveal">
-  <div class="row-header" style="margin-bottom:56px">
+<!-- ══ 8. SHOP ════════════════════════════════════════════ -->
+<section class="shop section" id="shop">
+  <div class="sec-header-row reveal">
     <div>
-      <div class="sec-label">003 — Events</div>
-      <h2 class="sec-title">Upcoming</h2>
+      <p class="sec-eyebrow">Merch</p>
+      <h2 class="sec-title">Shop</h2>
     </div>
-    <a href="#" class="btn btn-out">All Events</a>
+    <a class="sec-link" href="#">View All</a>
   </div>
-  <div class="events-grid">
-
-    <a href="#" class="event-card reveal">
-      <div class="event-date-block">
-        <div class="event-day">12</div>
-        <div class="event-month">May</div>
-      </div>
-      <div class="event-info">
-        <div class="event-label">TakaTaka Night</div>
-        <div class="event-title">Microhouse Session Vol.3</div>
-        <div class="event-meta">
-          <span class="event-venue">Zoccolo 2.0</span>
-          <span class="event-sep">·</span>
-          <span class="event-city">Saint Petersburg</span>
-        </div>
-      </div>
-      <div class="event-right">
-        <div class="event-time">23:00</div>
-        <div class="event-ticket">Tickets ↗</div>
-      </div>
-    </a>
-
-    <a href="#" class="event-card reveal" style="transition-delay:.08s">
-      <div class="event-date-block">
-        <div class="event-day">31</div>
-        <div class="event-month">May</div>
-      </div>
-      <div class="event-info">
-        <div class="event-label">Festival</div>
-        <div class="event-title">Intervals Open Air</div>
-        <div class="event-meta">
-          <span class="event-venue">Sevkabel Port</span>
-          <span class="event-sep">·</span>
-          <span class="event-city">Saint Petersburg</span>
-        </div>
-      </div>
-      <div class="event-right">
-        <div class="event-time">18:00</div>
-        <div class="event-ticket">Tickets ↗</div>
-      </div>
-    </a>
-
-    <a href="#" class="event-card reveal" style="transition-delay:.16s">
-      <div class="event-date-block">
-        <div class="event-day">14</div>
-        <div class="event-month">Jun</div>
-      </div>
-      <div class="event-info">
-        <div class="event-label">TakaTaka Night</div>
-        <div class="event-title">Minimal Wave Edition</div>
-        <div class="event-meta">
-          <span class="event-venue">Arma17</span>
-          <span class="event-sep">·</span>
-          <span class="event-city">Moscow</span>
-        </div>
-      </div>
-      <div class="event-right">
-        <div class="event-time">00:00</div>
-        <div class="event-ticket">Tickets ↗</div>
-      </div>
-    </a>
-
-    <a href="#" class="event-card event-card--past reveal" style="transition-delay:.24s">
-      <div class="event-date-block">
-        <div class="event-day">06</div>
-        <div class="event-month">Apr</div>
-      </div>
-      <div class="event-info">
-        <div class="event-label">Club Night</div>
-        <div class="event-title">Underground Movement #11</div>
-        <div class="event-meta">
-          <span class="event-venue">Zoccolo 2.0</span>
-          <span class="event-sep">·</span>
-          <span class="event-city">Saint Petersburg</span>
-        </div>
-      </div>
-      <div class="event-right">
-        <div class="event-time">Past</div>
-        <div class="event-ticket">Archive ↗</div>
-      </div>
-    </a>
-
+  <div class="shop-grid reveal">
+    <div class="shop-card">
+      <div class="shop-img"><svg viewBox="0 0 1000 1000"><use href="#logo"/></svg><span class="shop-tag">Limited</span></div>
+      <div class="shop-body"><div class="shop-name">TTK Logo Tee — Black</div><div class="shop-price-row"><span class="shop-price">€32</span><button class="shop-add">Add to Cart</button></div></div>
+    </div>
+    <div class="shop-card">
+      <div class="shop-img"><svg viewBox="0 0 1000 1000"><use href="#logo"/></svg><span class="shop-tag">New</span></div>
+      <div class="shop-body"><div class="shop-name">Parallel Drift 12" Vinyl</div><div class="shop-price-row"><span class="shop-price">€18</span><button class="shop-add">Add to Cart</button></div></div>
+    </div>
+    <div class="shop-card">
+      <div class="shop-img"><svg viewBox="0 0 1000 1000"><use href="#logo"/></svg></div>
+      <div class="shop-body"><div class="shop-name">TTK Tote Bag</div><div class="shop-price-row"><span class="shop-price">€24</span><button class="shop-add">Add to Cart</button></div></div>
+    </div>
+    <div class="shop-card">
+      <div class="shop-img"><svg viewBox="0 0 1000 1000"><use href="#logo"/></svg><span class="shop-tag">Bundle</span></div>
+      <div class="shop-body"><div class="shop-name">Label Bundle — 3 Records</div><div class="shop-price-row"><span class="shop-price">€48</span><button class="shop-add">Add to Cart</button></div></div>
+    </div>
+    <div class="shop-card">
+      <div class="shop-img"><svg viewBox="0 0 1000 1000"><use href="#logo"/></svg></div>
+      <div class="shop-body"><div class="shop-name">TTK Hoodie — Cream</div><div class="shop-price-row"><span class="shop-price">€65</span><button class="shop-add">Add to Cart</button></div></div>
+    </div>
+    <div class="shop-card">
+      <div class="shop-img"><svg viewBox="0 0 1000 1000"><use href="#logo"/></svg><span class="shop-tag">Last Units</span></div>
+      <div class="shop-body"><div class="shop-name">Deep Strata LP Box Set</div><div class="shop-price-row"><span class="shop-price">€55</span><button class="shop-add">Add to Cart</button></div></div>
+    </div>
   </div>
 </section>
 
-<div class="divider"></div>
-
-<!-- SHOP -->
-<section class="merch-bg reveal" id="shop">
-  <div class="row-header">
+<!-- ══ 9. BOOKING ════════════════════════════════════════════ -->
+<section class="section booking" id="booking" style="background:var(--g1);padding-top:120px">
+  <div class="sec-header-row reveal">
     <div>
-      <div class="sec-label">Merch Store</div>
-      <h2 class="sec-title">Objects</h2>
-    </div>
-    <div class="filter-row">
-      <button class="f-btn on">All</button>
-      <button class="f-btn">Vinyl</button>
-      <button class="f-btn">Apparel</button>
-      <button class="f-btn">Limited</button>
+      <p class="sec-eyebrow">Work with us</p>
+      <h2 class="sec-title">Booking</h2>
     </div>
   </div>
-  <div class="merch-grid">
-    <a href="#" class="merch-card">
-      <div class="m-img">
-        <svg viewBox="0 0 1000 1000" fill="none"><circle cx="500" cy="500" r="370" fill="none" stroke="white" stroke-width="1" opacity="0.12"/><circle cx="500" cy="500" r="52" fill="white" opacity="0.08"/></svg>
-        <span class="m-tag">12" Vinyl</span>
-      </div>
-      <div class="m-body"><div class="m-name">TKT-012 Vinyl</div><div class="m-price">€ 18.00</div></div>
-    </a>
-    <a href="#" class="merch-card">
-      <div class="m-img">
-        <svg viewBox="0 0 1000 1000" fill="none"><rect x="260" y="180" width="480" height="640" rx="3" fill="none" stroke="white" stroke-width="1" opacity="0.09"/></svg>
-        <span class="m-tag">T-Shirt</span>
-      </div>
-      <div class="m-body"><div class="m-name">Logo Tee — Black</div><div class="m-price">€ 28.00</div></div>
-    </a>
-    <a href="#" class="merch-card">
-      <div class="m-img">
-        <svg viewBox="0 0 1000 1000" fill="none"><rect x="180" y="120" width="640" height="760" rx="2" fill="none" stroke="white" stroke-width="1" opacity="0.08"/></svg>
-        <span class="m-tag" style="background:rgba(200,184,154,0.1);border:1px solid var(--accent);color:var(--accent)">Limited</span>
-      </div>
-      <div class="m-body"><div class="m-name">Poster A1 — Vol.1</div><div class="m-price">€ 22.00</div></div>
-    </a>
-    <a href="#" class="merch-card">
-      <div class="m-img">
-        <svg viewBox="0 0 1000 1000" fill="none"><circle cx="500" cy="500" r="280" fill="none" stroke="#c8b89a" stroke-width="1" opacity="0.1"/><circle cx="500" cy="500" r="370" fill="none" stroke="white" stroke-width="0.5" stroke-dasharray="12 8" opacity="0.06"/></svg>
-        <span class="m-tag">Bundle</span>
-      </div>
-      <div class="m-body"><div class="m-name">Vinyl Bundle x3</div><div class="m-price">€ 48.00</div></div>
-    </a>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- BOOKING -->
-<section id="booking" class="reveal">
-  <div class="booking-layout">
+  <div class="booking-inner reveal">
     <div>
-      <div class="sec-label">Booking</div>
-      <h2 class="sec-title" style="margin-bottom:28px">Work With<br>the Movement</h2>
-      <p class="booking-copy">TakaTaka artists are available for bookings at clubs, festivals, and private events. Our residents bring deep knowledge of the microhouse and minimal wave spectrum, with both DJ and live set capabilities.</p>
+      <p class="booking-copy">We represent a tight roster of artists across the spectrum of electronic music. For bookings, festivals, and label showcases, get in touch below.</p>
       <div class="set-types">
-        <div class="set-item"><div class="set-lbl">DJ Set</div><div class="set-desc">2–4 hour vinyl / digital sets · deep house, microhouse, minimal</div></div>
-        <div class="set-item"><div class="set-lbl">Live</div><div class="set-desc">Original live hardware performances · 60–90 min</div></div>
-        <div class="set-item"><div class="set-lbl">B2B</div><div class="set-desc">Back-to-back formats available with resident artists</div></div>
+        <div class="set-item"><span class="set-lbl">Club</span><span class="set-desc">4–8 hour open-format sets; b2b available</span></div>
+        <div class="set-item"><span class="set-lbl">Festival</span><span class="set-desc">Stage headlining and support slots</span></div>
+        <div class="set-item"><span class="set-lbl">Live</span><span class="set-desc">Full live AV productions with modular setup</span></div>
+        <div class="set-item"><span class="set-lbl">Private</span><span class="set-desc">Corporate events and private functions</span></div>
       </div>
     </div>
     <div>
-      <div class="sec-label" style="margin-bottom:28px">Booking Request</div>
-      <div class="f-row"><div class="form-g"><input type="text" class="f-input" placeholder="Your Name"></div><div class="form-g"><input type="text" class="f-input" placeholder="Organisation / Venue"></div></div>
-      <div class="f-row"><div class="form-g"><input type="text" class="f-input" placeholder="City / Country"></div><div class="form-g"><input type="text" class="f-input" placeholder="Event Date"></div></div>
-      <div class="f-row"><div class="form-g"><input type="text" class="f-input" placeholder="Venue Capacity"></div><div class="form-g"><input type="text" class="f-input" placeholder="Budget Range"></div></div>
-      <div class="form-g"><textarea class="f-input" placeholder="Tell us about your event..."></textarea></div>
-      <div class="form-g"><input type="email" class="f-input" placeholder="Your Email"></div>
-      <div class="form-footer">
-        <span class="form-note">or: takatakaspb@gmail.com</span>
-        <button class="btn btn-prim" style="border:none;cursor:none">Send Request →</button>
-      </div>
-      <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--mid);display:flex;align-items:center;justify-content:space-between">
-        <span style="font-family:var(--font-mono);font-size:9px;letter-spacing:0.12em;color:var(--dim)">Need to attach a rider, tech spec or press kit?</span>
-        <a href="booking.html" style="font-family:var(--font-mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--white);text-decoration:none;display:flex;align-items:center;gap:8px;transition:opacity 0.2s" onmouseover="this.style.opacity='.6'" onmouseout="this.style.opacity='1'">Full Booking Form ↗</a>
-      </div>
+      <form onsubmit="return false">
+        <div class="f-row form-g">
+          <input class="f-input" type="text" placeholder="Name">
+          <input class="f-input" type="email" placeholder="Email">
+        </div>
+        <div class="form-g">
+          <input class="f-input" type="text" placeholder="Event / Venue">
+        </div>
+        <div class="f-row form-g">
+          <input class="f-input" type="text" placeholder="Date">
+          <input class="f-input" type="text" placeholder="Budget (€)">
+        </div>
+        <div class="form-g">
+          <textarea class="f-input" placeholder="Tell us about your event"></textarea>
+        </div>
+        <div class="form-footer">
+          <span class="form-note">We reply within 48 hrs</span>
+          <button class="btn btn-fill" type="submit">Send Request</button>
+        </div>
+      </form>
     </div>
   </div>
 </section>
 
-<div class="divider"></div>
-
-<!-- ABOUT -->
-<section id="about" class="reveal">
-  <div class="about-layout">
-    <div class="about-logo-box">
-      <svg viewBox="0 0 1000 1000" fill="none" xmlns="http://www.w3.org/2000/svg" style="color:var(--accent)">
-        <use href="#logo"/>
-      </svg>
-    </div>
+<!-- ══ 10. CONTACT ════════════════════════════════════════════ -->
+<section class="contact section" id="contact">
+  <div class="sec-header-row reveal">
     <div>
-      <div class="sec-label">About</div>
-      <p class="about-quote">"A movement of the modern underground music scene — microhouse &amp; minimal waves."</p>
-      <p class="about-body">TakaTaka is an independent music label and collective based in Saint Petersburg, Russia. Founded as a platform for the deepest sounds of the underground electronic spectrum — where microhouse meets minimal wave, where rhythm becomes ritual.<br><br>The TakaTaka Podcast series gathers the best sets of talented DJs and musicians from across the underground community, presenting each episode as a close look at the intentions and ideas that drive this movement.<br><br>We operate at the intersection of digital and physical — releasing music on vinyl and digital platforms, building community around the sound, and maintaining a commitment to artistic integrity.</p>
+      <p class="sec-eyebrow">Get in Touch</p>
+      <h2 class="sec-title">Connect</h2>
     </div>
+  </div>
+  <div class="contact-grid reveal">
+    <a class="c-item" href="/cdn-cgi/l/email-protection#63010c0c080a0d042317020802170208024d0d0617">
+      <p class="c-type">Booking</p>
+      <p class="c-val"><span class="__cf_email__" data-cfemail="d4b6bbbbbfbdbab394a0b5bfb5a0b5bfb5fabab1a0">[email&#160;protected]</span></p>
+    </a>
+    <a class="c-item" href="/cdn-cgi/l/email-protection#1d6d6f786e6e5d697c767c697c767c33737869">
+      <p class="c-type">Press &amp; Media</p>
+      <p class="c-val"><span class="__cf_email__" data-cfemail="2c5c5e495f5f6c584d474d584d474d02424958">[email&#160;protected]</span></p>
+    </a>
+    <a class="c-item" href="/cdn-cgi/l/email-protection#0b6f6e6664784b7f6a606a7f6a606a25656e7f">
+      <p class="c-type">Demo Submissions</p>
+      <p class="c-val"><span class="__cf_email__" data-cfemail="3753525a58447743565c5643565c5619595243">[email&#160;protected]</span></p>
+    </a>
+    <a class="c-item" href="/cdn-cgi/l/email-protection#7811161e17380c1913190c19131956161d0c">
+      <p class="c-type">General</p>
+      <p class="c-val"><span class="__cf_email__" data-cfemail="2940474f46695d4842485d48424807474c5d">[email&#160;protected]</span></p>
+    </a>
+  </div>
+  <div class="social-row reveal" style="margin-top:2px">
+    <a class="soc-item" href="#">Instagram</a>
+    <a class="soc-item" href="#">Bandcamp</a>
+    <a class="soc-item" href="#">Spotify</a>
+    <a class="soc-item" href="#">SoundCloud</a>
+    <a class="soc-item" href="#">Mixcloud</a>
+    <a class="soc-item" href="#">Facebook</a>
+    <a class="soc-item" href="#">YouTube</a>
   </div>
 </section>
 
-<div class="divider"></div>
-
-<!-- CONTACT -->
-<section class="contact-bg reveal" id="contact">
-  <div class="sec-label">Contact</div>
-  <h2 class="sec-title">Connect</h2>
-  <div class="contact-grid">
-    <a href="mailto:takatakaspb@gmail.com" class="c-item">
-      <div class="c-type">Demo Submissions</div>
-      <div class="c-val">takatakaspb@gmail.com</div>
-    </a>
-    <a href="mailto:takatakaspb@gmail.com" class="c-item">
-      <div class="c-type">Booking</div>
-      <div class="c-val">takatakaspb@gmail.com</div>
-    </a>
-    <a href="mailto:takatakaspb@gmail.com" class="c-item">
-      <div class="c-type">Press</div>
-      <div class="c-val">takatakaspb@gmail.com</div>
-    </a>
-    <div class="c-item" style="border-color:rgba(200,184,154,0.08)">
-      <div class="c-type">Demos</div>
-      <div class="c-val" style="color:var(--dim);font-size:9px;line-height:1.7">Send WAV/MP3 + short bio. We listen to everything received.</div>
-    </div>
-  </div>
-  <div class="social-row">
-    <a href="https://soundcloud.com/takatakaspb" target="_blank" class="soc-item">SoundCloud</a>
-    <a href="https://www.instagram.com/takatakaspb" target="_blank" class="soc-item">Instagram</a>
-    <a href="https://t.me/takatakaspb" target="_blank" class="soc-item">Telegram</a>
-    <a href="https://www.facebook.com/takatakaspb" target="_blank" class="soc-item">Facebook</a>
-    <a href="https://www.vk.com/takatakaspb" target="_blank" class="soc-item">VKontakte</a>
-  </div>
-</section>
-
-<!-- FOOTER -->
+<!-- ══ 11. FOOTER ════════════════════════════════════════════ -->
 <footer>
   <div class="foot-logo">
-    <svg viewBox="0 0 1000 1000" fill="none" style="color:var(--white)"><use href="#logo"/></svg>
-    TakaTaka — Underground Movement
+    <svg viewBox="0 0 1000 1000" width="20" height="20"><use href="#logo"/></svg>
+    <span>TakaTaka Records</span>
   </div>
-  <div>© 2024 TakaTaka · Saint Petersburg</div>
-  <div>Microhouse · Minimal Wave · Underground</div>
+  <span>© 2024 TakaTaka Records — Berlin</span>
+  <span>Underground Movement</span>
 </footer>
 
-<script>
-  // Cursor
-  const cur = document.getElementById('cur');
-  const curR = document.getElementById('curR');
-  let mx=0,my=0,rx=0,ry=0;
-  document.addEventListener('mousemove', e=>{
-    mx=e.clientX; my=e.clientY;
-    cur.style.left=mx+'px'; cur.style.top=my+'px';
-  });
-  (function animR(){
-    rx+=(mx-rx)*0.11; ry+=(my-ry)*0.11;
-    curR.style.left=rx+'px'; curR.style.top=ry+'px';
-    requestAnimationFrame(animR);
-  })();
-
-  // Filter btns
-  document.querySelectorAll('.filter-row, .filter-row').forEach(row=>{
-    row.querySelectorAll('.f-btn').forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        row.querySelectorAll('.f-btn').forEach(b=>b.classList.remove('on'));
-        btn.classList.add('on');
-      });
-    });
-  });
-
-  // Scroll reveal
-  const obs = new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis')})},{threshold:0.08});
-  document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
-
-  // Episode select
-  document.querySelectorAll('.ep-item').forEach(item=>{
-    item.addEventListener('click',e=>{
-      e.preventDefault();
-      document.querySelectorAll('.ep-item').forEach(i=>i.classList.remove('on'));
-      item.classList.add('on');
-    });
-  });
-
-  // Nav scroll
-  document.querySelectorAll('a[href^="#"]').forEach(a=>{
-    a.addEventListener('click',e=>{
-      const t=document.querySelector(a.getAttribute('href'));
-      if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'});}
-    });
-  });
-</script>
-
-<!-- Radio JS (Claude Design) -->
-<script>
-/*EDITMODE-BEGIN*/const TWEAKS = {
-  "barCount": 72,
-  "motion": "calm",
-  "shape": "mirror"
-}/*EDITMODE-END*/;
-</script>
-<script>
-/* ── Episode data ─────────────────────────────────────── */
-const EPISODES = [
-  { num:'047', name:'Nikolai Drift',      tag:'Microhouse',        date:'Feb 2026', dur:'58:14', total: 58*60+14 },
-  { num:'046', name:'Yelena Vokov',       tag:'Minimal Wave',      date:'Jan 2026', dur:'01:12:08', total: 72*60+8 },
-  { num:'045', name:'Artem Kovach',       tag:'Minimal House',     date:'Dec 2025', dur:'01:04:22', total: 64*60+22 },
-  { num:'044', name:'Polina Stern — Live',tag:'Microhouse · Live', date:'Nov 2025', dur:'52:08',    total: 52*60+8 },
-  { num:'043', name:'Guest · Volkov',     tag:'Minimal Wave',      date:'Oct 2025', dur:'59:47',    total: 59*60+47 },
-  { num:'042', name:'Vera Nocturne',      tag:'Microhouse',        date:'Sep 2025', dur:'01:02:11', total: 62*60+11 },
-  { num:'041', name:'Sergei Malkov',      tag:'Minimal House',     date:'Aug 2025', dur:'55:30',    total: 55*60+30 },
-  { num:'040', name:'Various · Summer Mix',tag:'V/A · Microhouse', date:'Jul 2025', dur:'01:30:00', total: 90*60 },
-];
-
-/* ── State ────────────────────────────────────────────── */
-let activeIdx = 0;
-let playing   = true;
-let elapsed   = 23*60 + 14;    // seconds
-let barEls    = [];
-let baseline  = [];            // cached base heights 0..1
-let rafId     = null;
-
-/* ── Helpers ──────────────────────────────────────────── */
-function fmt(s){
-  s = Math.max(0, Math.floor(s));
-  const h = Math.floor(s/3600), m = Math.floor((s%3600)/60), sec = s%60;
-  const mm = String(m).padStart(2,'0'), ss = String(sec).padStart(2,'0');
-  return h ? `${String(h).padStart(2,'0')}:${mm}:${ss}` : `${mm}:${ss}`;
-}
-function qs(s){return document.querySelector(s)}
-
-/* ── Render episodes ──────────────────────────────────── */
-function renderEpisodes(){
-  const list = qs('#epList');
-  list.innerHTML = EPISODES.map((e,i)=>`
-    <div class="ep-row ${i===activeIdx?'active':''}" data-i="${i}">
-      <span class="ep-index">${String(i+1).padStart(2,'0')}</span>
-      <span class="ep-play">
-        <span class="tri"></span>
-        <span class="bars"><i></i><i></i><i></i></span>
-      </span>
-      <span>
-        <div class="ep-num">EP ${e.num}</div>
-        <div class="ep-name">${e.name}</div>
-      </span>
-      <span class="ep-tag d-hide">${e.tag}</span>
-      <span class="ep-date d-hide">${e.date}</span>
-      <span class="ep-dur">${e.dur}</span>
-    </div>
-  `).join('');
-  list.querySelectorAll('.ep-row').forEach(row=>{
-    row.addEventListener('click', ()=>{
-      const i = parseInt(row.dataset.i,10);
-      activeIdx = i;
-      elapsed = 0;
-      playing = true;
-      syncAll();
-    });
-  });
-}
-
-/* ── Visualizer ──────────────────────────────────────── */
-function buildBars(){
-  const container = qs('#vizBars');
-  container.innerHTML = '';
-  barEls = [];
-  baseline = [];
-  const N = TWEAKS.barCount|0;
-  for (let i=0;i<N;i++){
-    const el = document.createElement('span');
-    el.className = 'viz-bar';
-    container.appendChild(el);
-    barEls.push(el);
-    // baseline — dependent on shape
-    baseline.push(shapeBase(i, N));
-  }
-}
-function shapeBase(i, N){
-  const t = i/(N-1);
-  switch(TWEAKS.shape){
-    case 'mirror': {
-      // mirror around center — tall at middle
-      const d = 1 - Math.abs(t - 0.5)*2;
-      return 0.25 + d*0.55;
-    }
-    case 'ridge': {
-      // repeating ridges
-      return 0.3 + 0.45*Math.abs(Math.sin(t*Math.PI*4));
-    }
-    case 'sine':
-    default:
-      return 0.4 + 0.35*Math.sin(t*Math.PI*2);
-  }
-}
-
-function motionSpeed(){
-  switch(TWEAKS.motion){
-    case 'slow':   return 0.0006;
-    case 'active': return 0.003;
-    case 'calm':
-    default:       return 0.0014;
-  }
-}
-
-function tick(ts){
-  const N = barEls.length;
-  const speed = motionSpeed();
-  const amp = playing ? 1 : 0.18;
-  const floor = playing ? 4 : 6;
-  const max  = 140;
-  const time = ts * speed;
-  for (let i=0;i<N;i++){
-    const b = baseline[i];
-    // Layered low-frequency oscillators — slow pulse, feels like breathing
-    const a = Math.sin(time + i*0.13);
-    const c = Math.sin(time*0.6 + i*0.07 + 2.1);
-    const d = Math.sin(time*0.25 + i*0.21 - 1.3);
-    const v = (a*0.5 + c*0.35 + d*0.15) * 0.5 + 0.5; // 0..1
-    const h = playing
-      ? Math.max(floor, (b*0.55 + v*0.45) * max * amp)
-      : Math.max(floor, b * 14 + v * 10);
-    barEls[i].style.height = h + 'px';
-    barEls[i].style.opacity = playing ? (0.55 + b*0.45) : 0.35;
-  }
-  rafId = requestAnimationFrame(tick);
-}
-
-/* ── Elapsed / progress ──────────────────────────────── */
-function progressTick(){
-  if (!playing) return;
-  const ep = EPISODES[activeIdx];
-  elapsed += 1;
-  if (elapsed >= ep.total){
-    elapsed = 0;
-    activeIdx = (activeIdx+1) % EPISODES.length;
-    syncAll();
-    return;
-  }
-  syncProgress();
-}
-
-function syncProgress(){
-  const ep = EPISODES[activeIdx];
-  const pct = Math.min(100, (elapsed/ep.total)*100);
-  qs('#vizElapsed').textContent  = fmt(elapsed);
-  qs('#wrapElapsed').textContent = fmt(elapsed);
-  qs('#wrapTotal').textContent   = ep.dur;
-  qs('#wrapFill').style.width    = pct+'%';
-  qs('#wrapKnob').style.left     = pct+'%';
-  qs('#pElapsed').textContent    = fmt(elapsed);
-  qs('#pTotal').textContent      = ep.dur;
-  qs('#pFill').style.width       = pct+'%';
-  qs('#pKnob').style.left        = pct+'%';
-}
-
-function syncAll(){
-  const ep = EPISODES[activeIdx];
-  qs('#vizEp').textContent   = `EP ${ep.num} · ${ep.date}`;
-  qs('#vizName').textContent = ep.name;
-  qs('#vizDur').textContent  = ep.dur;
-  qs('#pIx').textContent     = `EP ${ep.num} / 047`;
-  qs('#pCat').textContent    = `TKT·PC-${ep.num}`;
-  qs('#pMeta').textContent   = `EP ${ep.num} · ${ep.date} · ${ep.dur}`;
-  qs('#pTitle').textContent  = ep.name;
-  qs('#pArtist').textContent = `${ep.tag} · ${ep.dur}`;
-  qs('#vizStatus').textContent = playing ? 'On Air · Now Playing' : 'Paused · Stand By';
-  qs('#vizDot').classList.toggle('off', !playing);
-  qs('#pLive').style.opacity = playing ? 1 : 0.35;
-  qs('#pPlay').classList.toggle('playing', playing);
-  qs('#pArt').classList.toggle('paused', !playing);
-  document.querySelectorAll('.ep-row').forEach((r,i)=>r.classList.toggle('active', i===activeIdx));
-  syncProgress();
-}
-
-/* ── Event wiring ────────────────────────────────────── */
-function wire(){
-  qs('#pPlay').addEventListener('click', ()=>{
-    playing = !playing;
-    syncAll();
-  });
-  // Scrub via progress bars
-  [['#wrapProg'], ['#pProg']].forEach(([sel])=>{
-    qs(sel).addEventListener('click', (e)=>{
-      const r = e.currentTarget.getBoundingClientRect();
-      const p = (e.clientX - r.left)/r.width;
-      const ep = EPISODES[activeIdx];
-      elapsed = Math.max(0, Math.min(ep.total-1, Math.floor(p*ep.total)));
-      syncProgress();
-    });
-  });
-  // Tweaks panel — edit mode protocol
-  const panel = qs('#tweaks');
-  window.addEventListener('message', (ev)=>{
-    if (!ev.data) return;
-    if (ev.data.type === '__activate_edit_mode')   panel.classList.add('open');
-    if (ev.data.type === '__deactivate_edit_mode') panel.classList.remove('open');
-  });
-  try{ window.parent.postMessage({type:'__edit_mode_available'},'*'); }catch(e){}
-  // Tweak option clicks
-  panel.querySelectorAll('.tw-opts').forEach(g=>{
-    const key = g.dataset.key;
-    g.querySelectorAll('.tw-opt').forEach(b=>{
-      if (String(TWEAKS[key]) === b.dataset.v) b.classList.add('on');
-      b.addEventListener('click', ()=>{
-        const v = b.dataset.v;
-        TWEAKS[key] = (key === 'barCount') ? parseInt(v,10) : v;
-        g.querySelectorAll('.tw-opt').forEach(x=>x.classList.remove('on'));
-        b.classList.add('on');
-        buildBars();
-        try{ window.parent.postMessage({type:'__edit_mode_set_keys', edits:{[key]:TWEAKS[key]}},'*'); }catch(e){}
-      });
-    });
-  });
-}
-
-/* ── Init ────────────────────────────────────────────── */
-renderEpisodes();
-buildBars();
-wire();
-syncAll();
-rafId = requestAnimationFrame(tick);
-setInterval(progressTick, 1000);
-</script>
-
-<script>
-/* cursor */
-const dot  = document.getElementById('cursorDot');
-const ring = document.getElementById('cursorRing');
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+/* ── Cursor ─────────────────────────────────────────── */
+const dot = document.getElementById('cDot');
+const ring = document.getElementById('cRing');
 let mx=0,my=0,rx=0,ry=0;
-window.addEventListener('mousemove', e=>{
-  mx=e.clientX; my=e.clientY;
-  dot.style.left=mx+'px'; dot.style.top=my+'px';
-});
-setInterval(()=>{
-  rx += (mx-rx)*0.18; ry += (my-ry)*0.18;
-  ring.style.left=rx+'px'; ring.style.top=ry+'px';
-}, 16);
-</script>
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px'});
+(function lerp(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(lerp)})();
 
+/* ── Scroll reveal ─────────────────────────────────── */
+const ro = new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis')})},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+/* ── Release filter ────────────────────────────────── */
+document.querySelectorAll('.f-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.f-btn').forEach(b=>b.classList.remove('on'));
+    btn.classList.add('on');
+    const f=btn.dataset.filter;
+    document.querySelectorAll('.rel-card').forEach(card=>{
+      if(f==='all'||card.dataset.type===f){delete card.dataset.hidden}
+      else{card.dataset.hidden='1'}
+    });
+  });
+});
+
+/* ── Vinyl pause on scroll ─────────────────────────── */
+const vDisc = document.querySelector('.vinyl-disc');
+let scrolling=false,scrollTimer;
+window.addEventListener('scroll',()=>{
+  if(!scrolling){vDisc.style.animationPlayState='paused';scrolling=true}
+  clearTimeout(scrollTimer);
+  scrollTimer=setTimeout(()=>{vDisc.style.animationPlayState='running';scrolling=false},300);
+});
+
+/* ── Radio / Visualizer ─────────────────────────────── */
+const episodes = [
+  {num:'018',ep:'Episode 018',name:'Phase Shift',genre:'Deep Techno · 140 BPM',dur:'58:20',totSec:3500,tag:'Deep Techno',date:'May 2024',artist:'TTK Radio · Deep Techno'},
+  {num:'017',ep:'Episode 017',name:'Subterranean',genre:'Dub Techno · 128 BPM',dur:'61:44',totSec:3704,tag:'Dub Techno',date:'Apr 2024',artist:'TTK Radio · Dub Techno'},
+  {num:'016',ep:'Episode 016',name:'Iron Meridian',genre:'Industrial · 145 BPM',dur:'55:10',totSec:3310,tag:'Industrial',date:'Mar 2024',artist:'TTK Radio · Industrial'},
+  {num:'015',ep:'Episode 015',name:'Pressure Drop',genre:'Techno · 138 BPM',dur:'63:02',totSec:3782,tag:'Techno',date:'Feb 2024',artist:'TTK Radio · Techno'},
+  {num:'014',ep:'Episode 014',name:'Dark Matter',genre:'Ambient Techno · 125 BPM',dur:'59:48',totSec:3588,tag:'Ambient Techno',date:'Jan 2024',artist:'TTK Radio · Ambient Techno'},
+];
+let curEp=0, isPlaying=false, elapsed=0, raf=null, lastTs=null;
+const BAR_COUNT=48;
+const vizBars=document.getElementById('vizBars');
+for(let i=0;i<BAR_COUNT;i++){const b=document.createElement('span');b.className='viz-bar';b.style.height='4px';b.style.opacity='0.15';vizBars.appendChild(b);}
+const bars=[...vizBars.querySelectorAll('.viz-bar')];
+
+function fmt(s){const m=Math.floor(s/60);const sec=Math.floor(s%60);return m+':'+(sec<10?'0':'')+sec}
+function loadEp(i){
+  const ep=episodes[i];curEp=i;elapsed=0;
+  document.getElementById('vizEp').textContent=ep.ep;
+  document.getElementById('vizName').textContent=ep.name;
+  document.getElementById('vizGenre').textContent=ep.genre;
+  document.getElementById('vizDur').textContent=ep.dur;
+  document.getElementById('vizTot').textContent=ep.dur;
+  document.getElementById('pMeta').textContent=ep.ep;
+  document.getElementById('pTitle').textContent=ep.name;
+  document.getElementById('pArtist').textContent=ep.artist;
+  document.getElementById('pTot').textContent=ep.dur;
+  updateProgress(0,ep.totSec);
+  document.querySelectorAll('.ep-row').forEach((r,j)=>{r.classList.toggle('active',j===i)});
+}
+function updateProgress(el,tot){
+  const pct=(el/tot)*100;
+  document.getElementById('vizCur').textContent=fmt(el);
+  document.getElementById('vizFill').style.width=pct+'%';
+  document.getElementById('vizKnob').style.left=pct+'%';
+  document.getElementById('pFill').style.width=pct+'%';
+  document.getElementById('pKnob').style.left=pct+'%';
+  document.getElementById('pCur').textContent=fmt(el);
+  document.getElementById('vizElapsed').textContent=fmt(el)+' elapsed';
+}
+function animBars(playing){
+  bars.forEach((b,i)=>{
+    if(playing){
+      const base=Math.sin(Date.now()/400+i*0.35)*0.35+0.55;
+      const noise=Math.sin(Date.now()/180+i*0.9)*0.25;
+      const h=Math.max(4,Math.round((base+noise)*80));
+      b.style.height=h+'px';
+      b.style.opacity=(0.3+(base+noise)*0.5).toFixed(2);
+    } else {b.style.height='4px';b.style.opacity='0.12';}
+  });
+}
+let barRaf;function startBars(){if(barRaf)cancelAnimationFrame(barRaf);(function loop(){animBars(isPlaying);barRaf=requestAnimationFrame(loop)})();}
+startBars();
+
+function tickTime(ts){
+  if(lastTs){elapsed+=Math.min((ts-lastTs)/1000,0.5)}
+  lastTs=ts;
+  const ep=episodes[curEp];
+  if(elapsed>=ep.totSec){elapsed=ep.totSec;stopPlay();return}
+  updateProgress(elapsed,ep.totSec);
+  raf=requestAnimationFrame(tickTime);
+}
+function startPlay(){
+  isPlaying=true;lastTs=null;
+  raf=requestAnimationFrame(tickTime);
+  document.getElementById('pPlayBtn').classList.add('playing');
+  document.getElementById('vizPlayBtn').textContent='⏸ Pause';
+  document.getElementById('pArt').classList.remove('paused');
+}
+function stopPlay(){
+  isPlaying=false;if(raf)cancelAnimationFrame(raf);raf=null;
+  document.getElementById('pPlayBtn').classList.remove('playing');
+  document.getElementById('vizPlayBtn').textContent='▶ Play';
+  document.getElementById('pArt').classList.add('paused');
+}
+document.getElementById('pPlayBtn').addEventListener('click',()=>{isPlaying?stopPlay():startPlay()});
+document.getElementById('vizPlayBtn').addEventListener('click',()=>{isPlaying?stopPlay():startPlay()});
+document.querySelectorAll('.ep-row').forEach((row,i)=>{
+  row.addEventListener('click',()=>{
+    if(curEp===i&&isPlaying){stopPlay()}
+    else{loadEp(i);startPlay()}
+  });
+});
+loadEp(0);
+</script>
 </body>
 </html>
