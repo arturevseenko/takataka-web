@@ -574,127 +574,162 @@ footer{padding:40px 48px;border-top:1px solid var(--g3);display:flex;justify-con
   <div class="radio-grid"></div>
   <div class="radio-glow"></div>
 
+  <!-- Скрытый SoundCloud плеер — управляется через Widget API -->
+  <iframe id="sc-iframe"
+    src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/takatakaspb/sets/taka-taka-podcast&color=%23f0ede6&auto_play=false&hide_related=true&show_comments=false&show_user=false&buying=false&liking=false&download=false&sharing=false&show_artwork=false&show_playcount=false&show_reposts=false&visual=false&start_track=0"
+    style="display:none" allow="autoplay">
+  </iframe>
+
   <div class="radio-head">
     <div>
-      <p class="r-eyebrow"><span class="dash"></span>Broadcast</p>
+      <p class="r-eyebrow"><span class="dash"></span>004 — Podcast</p>
       <h2 class="r-title">
         <span class="solid">TAKA</span>
-        <span class="outline">RADIO</span>
+        <span class="outline">PODCAST</span>
       </h2>
     </div>
     <div class="r-meta">
-      <div class="row">Frequency<b>TTK FM 94.8</b></div>
-      <div class="row">Schedule<b>Thu – Sun</b></div>
-      <a class="link" href="#">Subscribe to Feed</a>
+      <div class="row">— Series<b>TakaTaka Podcast</b></div>
+      <div class="row">— Archive<b>56 Episodes · Since 2019</b></div>
+      <a class="link" href="https://soundcloud.com/takatakaspb/sets/taka-taka-podcast" target="_blank">All Episodes ↗</a>
     </div>
   </div>
 
   <!-- Visualizer stage -->
   <div class="viz-stage" id="vizStage">
     <div class="viz-left">
-      <div class="viz-status"><div class="viz-dot" id="vizDot"></div><span id="vizStatusTxt">On Air</span></div>
-      <div class="viz-ep" id="vizEp">Episode 018</div>
-      <div class="viz-name" id="vizName">Phase Shift</div>
-      <div class="viz-genre" id="vizGenre">Deep Techno · 140 BPM</div>
+      <div class="viz-status"><div class="viz-dot" id="vizDot"></div><span id="vizStatusTxt">Ready</span></div>
+      <div class="viz-ep" id="vizEp">TTP 056 · Apr 2026</div>
+      <div class="viz-name" id="vizName">Shyam</div>
+      <div class="viz-genre">Microhouse · Minimal Wave</div>
     </div>
     <div class="viz-bars" id="vizBars"></div>
     <div class="viz-right">
-      <div class="viz-dur" id="vizDur">58:20</div>
-      <div class="viz-elapsed" id="vizElapsed">Elapsed</div>
+      <div class="viz-dur" id="vizDur">—:——</div>
+      <div class="viz-elapsed"><span id="vizElapsed">00:00</span> · Elapsed</div>
       <div class="viz-actions">
-        <button class="viz-btn" id="vizPlayBtn">▶ Play</button>
-        <button class="viz-btn">Share</button>
+        <button class="viz-btn" id="vizPlayBtn" onclick="togglePlay()">▶ Play</button>
+        <a class="viz-btn" href="https://soundcloud.com/takatakaspb" target="_blank">SoundCloud ↗</a>
       </div>
     </div>
   </div>
   <div class="viz-progress-wrap">
     <span class="lbl" id="vizCur">00:00</span>
-    <div class="viz-progress" id="vizProg"><div class="fill" id="vizFill" style="width:0%"></div><div class="knob" id="vizKnob" style="left:0%"></div></div>
-    <span class="lbl" id="vizTot">58:20</span>
+    <div class="viz-progress" id="vizProg" onclick="scrubTo(event)">
+      <div class="fill" id="vizFill" style="width:0%"></div>
+      <div class="knob" id="vizKnob" style="left:0%"></div>
+    </div>
+    <span class="lbl" id="vizTot">—:——</span>
   </div>
 
   <!-- Episode list + player -->
   <div class="radio-body">
     <div>
       <div class="ep-head">
-        <span>#</span><span></span><span>Episode</span><span class="d-hide">Genre</span><span class="d-hide r">Date</span><span class="r">Duration</span>
+        <span>#</span><span></span><span>Host · Artist</span>
+        <span class="d-hide">Genre</span>
+        <span class="r d-hide">Released</span>
+        <span class="r">Length</span>
       </div>
       <div class="ep-list" id="epList">
-        <div class="ep-row active" data-ep="0">
-          <span class="ep-index">018</span>
+
+        <div class="ep-row active" data-ep="0" data-url="https://soundcloud.com/takatakaspb/shyam-ttp-056" onclick="selectEp(this)">
+          <span class="ep-index">056</span>
           <div class="ep-play"><div class="tri"></div><div class="bars"><i></i><i></i><i></i></div></div>
-          <div><div class="ep-num">TTK Radio</div><div class="ep-name">Phase Shift</div></div>
-          <span class="ep-tag d-hide">Deep Techno</span>
-          <span class="ep-date d-hide r">May 2024</span>
-          <span class="ep-dur">58:20</span>
+          <div><div class="ep-num">TTP 056</div><div class="ep-name">Shyam</div></div>
+          <span class="ep-tag d-hide">Microhouse</span>
+          <span class="ep-date d-hide r">Apr 2026</span>
+          <span class="ep-dur">—:——</span>
         </div>
-        <div class="ep-row" data-ep="1">
-          <span class="ep-index">017</span>
+
+        <div class="ep-row" data-ep="1" data-url="https://soundcloud.com/takatakaspb/lisien-taka-taka-podcast-0551-1" onclick="selectEp(this)">
+          <span class="ep-index">055</span>
           <div class="ep-play"><div class="tri"></div><div class="bars"><i></i><i></i><i></i></div></div>
-          <div><div class="ep-num">TTK Radio</div><div class="ep-name">Subterranean</div></div>
-          <span class="ep-tag d-hide">Dub Techno</span>
-          <span class="ep-date d-hide r">Apr 2024</span>
-          <span class="ep-dur">61:44</span>
+          <div><div class="ep-num">TTP 055.1</div><div class="ep-name">Lisien</div></div>
+          <span class="ep-tag d-hide">Minimal Wave</span>
+          <span class="ep-date d-hide r">Oct 2025</span>
+          <span class="ep-dur">—:——</span>
         </div>
-        <div class="ep-row" data-ep="2">
-          <span class="ep-index">016</span>
+
+        <div class="ep-row" data-ep="2" data-url="https://soundcloud.com/takatakaspb/marseeey-taka-taka-podcast-054" onclick="selectEp(this)">
+          <span class="ep-index">054</span>
           <div class="ep-play"><div class="tri"></div><div class="bars"><i></i><i></i><i></i></div></div>
-          <div><div class="ep-num">TTK Radio</div><div class="ep-name">Iron Meridian</div></div>
-          <span class="ep-tag d-hide">Industrial</span>
-          <span class="ep-date d-hide r">Mar 2024</span>
-          <span class="ep-dur">55:10</span>
+          <div><div class="ep-num">TTP 054</div><div class="ep-name">Marseeey (Live @ Phuket)</div></div>
+          <span class="ep-tag d-hide">Minimal House</span>
+          <span class="ep-date d-hide r">Jun 2025</span>
+          <span class="ep-dur">—:——</span>
         </div>
-        <div class="ep-row" data-ep="3">
-          <span class="ep-index">015</span>
+
+        <div class="ep-row" data-ep="3" data-url="https://soundcloud.com/takatakaspb/vid-taka-taka-podcast-053" onclick="selectEp(this)">
+          <span class="ep-index">053</span>
           <div class="ep-play"><div class="tri"></div><div class="bars"><i></i><i></i><i></i></div></div>
-          <div><div class="ep-num">TTK Radio</div><div class="ep-name">Pressure Drop</div></div>
-          <span class="ep-tag d-hide">Techno</span>
-          <span class="ep-date d-hide r">Feb 2024</span>
-          <span class="ep-dur">63:02</span>
+          <div><div class="ep-num">TTP 053</div><div class="ep-name">VID</div></div>
+          <span class="ep-tag d-hide">Microhouse</span>
+          <span class="ep-date d-hide r">Feb 2025</span>
+          <span class="ep-dur">—:——</span>
         </div>
-        <div class="ep-row" data-ep="4">
-          <span class="ep-index">014</span>
+
+        <div class="ep-row" data-ep="4" data-url="https://soundcloud.com/takatakaspb/igro-taka-taka-podcast-052" onclick="selectEp(this)">
+          <span class="ep-index">052</span>
           <div class="ep-play"><div class="tri"></div><div class="bars"><i></i><i></i><i></i></div></div>
-          <div><div class="ep-num">TTK Radio</div><div class="ep-name">Dark Matter</div></div>
-          <span class="ep-tag d-hide">Ambient Techno</span>
-          <span class="ep-date d-hide r">Jan 2024</span>
-          <span class="ep-dur">59:48</span>
+          <div><div class="ep-num">TTP 052</div><div class="ep-name">Igro</div></div>
+          <span class="ep-tag d-hide">Minimal Wave</span>
+          <span class="ep-date d-hide r">Sep 2024</span>
+          <span class="ep-dur">—:——</span>
         </div>
+
+        <div class="ep-row" data-ep="5" data-url="https://soundcloud.com/takatakaspb/sets/taka-taka-podcast" onclick="selectEp(this)">
+          <span class="ep-index">001–051</span>
+          <div class="ep-play"><div class="tri"></div><div class="bars"><i></i><i></i><i></i></div></div>
+          <div><div class="ep-num">Archive</div><div class="ep-name">Full Podcast Series</div></div>
+          <span class="ep-tag d-hide">All genres</span>
+          <span class="ep-date d-hide r">2019–2024</span>
+          <span class="ep-dur">56 ep</span>
+        </div>
+
       </div>
       <div class="ep-foot">
-        <span>5 of 18 episodes</span>
-        <a href="#">Load More</a>
+        <span>Showing 6 of 56 episodes</span>
+        <a href="https://soundcloud.com/takatakaspb/sets/taka-taka-podcast" target="_blank">Full Archive on SoundCloud ↗</a>
       </div>
     </div>
 
     <!-- Sticky player -->
     <div class="player" id="stickyPlayer">
       <div class="player-head">
-        <span class="ix">Now Playing</span>
-        <span class="live">On Air</span>
+        <span class="ix" id="pIx">TTP 056</span>
+        <span class="live" id="pLive">Ready</span>
       </div>
       <div class="player-art" id="pArt">
         <svg class="spin" viewBox="0 0 1000 1000"><use href="#logo"/></svg>
         <div class="center"></div>
-        <div class="cat">TTK FM</div>
+        <div class="cat">TKT·PC</div>
       </div>
-      <div class="player-meta" id="pMeta">Episode 018</div>
-      <div class="player-title" id="pTitle">Phase Shift</div>
-      <div class="player-artist" id="pArtist">TTK Radio · Deep Techno</div>
-      <div class="p-progress" id="pProg"><div class="fill" id="pFill" style="width:0%"></div><div class="knob" id="pKnob" style="left:0%"></div></div>
-      <div class="p-time"><span id="pCur">0:00</span><span id="pTot">58:20</span></div>
+      <div class="player-meta" id="pMeta">TTP 056 · Apr 2026</div>
+      <div class="player-title" id="pTitle">Shyam</div>
+      <div class="player-artist" id="pArtist">Microhouse · Minimal Wave</div>
+      <div class="p-progress" id="pProg" onclick="scrubTo(event)">
+        <div class="fill" id="pFill" style="width:0%"></div>
+        <div class="knob" id="pKnob" style="left:0%"></div>
+      </div>
+      <div class="p-time"><span id="pCur">0:00</span><span id="pTot">—:——</span></div>
       <div class="p-controls">
-        <button class="p-ctrl">Prev</button>
-        <div class="p-play" id="pPlayBtn"><div class="tri"></div><div class="pause"><span></span><span></span></div></div>
-        <button class="p-ctrl r">Next</button>
+        <button class="p-ctrl" onclick="prevEp()">← Prev</button>
+        <div class="p-play" id="pPlayBtn" onclick="togglePlay()">
+          <div class="tri"></div>
+          <div class="pause"><span></span><span></span></div>
+        </div>
+        <button class="p-ctrl r" onclick="nextEp()">Next →</button>
       </div>
       <div class="p-tools">
-        <button>Loop</button><button>Shuffle</button><button>Speed</button><button>Share</button>
+        <button onclick="scWidget&&scWidget.seekTo(Math.max(0,(currentPos||0)-15000))">-15s</button>
+        <button onclick="scWidget&&scWidget.seekTo((currentPos||0)+15000)">+15s</button>
+        <button onclick="this.textContent=this.textContent==='1.0×'?'1.5×':'1.0×'">1.0×</button>
+        <button onclick="window.open('https://soundcloud.com/takatakaspb/sets/taka-taka-podcast','_blank')">SC ↗</button>
       </div>
       <div class="p-streams">
-        <a class="p-stream" href="#"><span>Spotify</span><span class="mark">↗</span></a>
-        <a class="p-stream" href="#"><span>Apple Podcasts</span><span class="mark">↗</span></a>
-        <a class="p-stream" href="#"><span>Mixcloud</span><span class="mark">↗</span></a>
+        <a class="p-stream" href="https://soundcloud.com/takatakaspb/sets/taka-taka-podcast" target="_blank"><span>SoundCloud</span><span class="mark">↗</span></a>
+        <a class="p-stream" href="https://soundcloud.com/takatakaspb" target="_blank"><span>Full Profile</span><span class="mark">↗</span></a>
       </div>
     </div>
   </div>
@@ -861,89 +896,151 @@ window.addEventListener('scroll',()=>{
   scrollTimer=setTimeout(()=>{vDisc.style.animationPlayState='running';scrolling=false},300);
 });
 
-/* ── Radio / Visualizer ─────────────────────────────── */
-const episodes = [
-  {num:'018',ep:'Episode 018',name:'Phase Shift',genre:'Deep Techno · 140 BPM',dur:'58:20',totSec:3500,tag:'Deep Techno',date:'May 2024',artist:'TTK Radio · Deep Techno'},
-  {num:'017',ep:'Episode 017',name:'Subterranean',genre:'Dub Techno · 128 BPM',dur:'61:44',totSec:3704,tag:'Dub Techno',date:'Apr 2024',artist:'TTK Radio · Dub Techno'},
-  {num:'016',ep:'Episode 016',name:'Iron Meridian',genre:'Industrial · 145 BPM',dur:'55:10',totSec:3310,tag:'Industrial',date:'Mar 2024',artist:'TTK Radio · Industrial'},
-  {num:'015',ep:'Episode 015',name:'Pressure Drop',genre:'Techno · 138 BPM',dur:'63:02',totSec:3782,tag:'Techno',date:'Feb 2024',artist:'TTK Radio · Techno'},
-  {num:'014',ep:'Episode 014',name:'Dark Matter',genre:'Ambient Techno · 125 BPM',dur:'59:48',totSec:3588,tag:'Ambient Techno',date:'Jan 2024',artist:'TTK Radio · Ambient Techno'},
+/* ── Podcast / SoundCloud Widget API ───────────────── */
+const EPISODES = [
+  {num:'056',label:'TTP 056',name:'Shyam',genre:'Microhouse · Minimal Wave',date:'Apr 2026',artist:'Shyam',url:'https://soundcloud.com/takatakaspb/shyam-ttp-056'},
+  {num:'055',label:'TTP 055.1',name:'Lisien',genre:'Minimal Wave',date:'Oct 2025',artist:'Lisien',url:'https://soundcloud.com/takatakaspb/lisien-taka-taka-podcast-0551-1'},
+  {num:'054',label:'TTP 054',name:'Marseeey (Live @ Phuket)',genre:'Minimal House · Live',date:'Jun 2025',artist:'Marseeey',url:'https://soundcloud.com/takatakaspb/marseeey-taka-taka-podcast-054'},
+  {num:'053',label:'TTP 053',name:'VID',genre:'Microhouse',date:'Feb 2025',artist:'VID',url:'https://soundcloud.com/takatakaspb/vid-taka-taka-podcast-053'},
+  {num:'052',label:'TTP 052',name:'Igro',genre:'Minimal Wave',date:'Sep 2024',artist:'Igro',url:'https://soundcloud.com/takatakaspb/igro-taka-taka-podcast-052'},
+  {num:'001-051',label:'Archive',name:'Full Podcast Series',genre:'All genres',date:'2019–2024',artist:'Various',url:'https://soundcloud.com/takatakaspb/sets/taka-taka-podcast'},
 ];
-let curEp=0, isPlaying=false, elapsed=0, raf=null, lastTs=null;
-const BAR_COUNT=48;
-const vizBars=document.getElementById('vizBars');
-for(let i=0;i<BAR_COUNT;i++){const b=document.createElement('span');b.className='viz-bar';b.style.height='4px';b.style.opacity='0.15';vizBars.appendChild(b);}
+
+let curEp = 0, isPlaying = false, scWidget = null, currentPos = 0, totalDur = 0;
+
+/* Visualizer bars */
+const vizBars = document.getElementById('vizBars');
+const BAR_COUNT = 72;
+for(let i=0;i<BAR_COUNT;i++){const b=document.createElement('span');b.className='viz-bar';b.style.height='4px';b.style.opacity='0.12';vizBars.appendChild(b);}
 const bars=[...vizBars.querySelectorAll('.viz-bar')];
 
-function fmt(s){const m=Math.floor(s/60);const sec=Math.floor(s%60);return m+':'+(sec<10?'0':'')+sec}
-function loadEp(i){
-  const ep=episodes[i];curEp=i;elapsed=0;
-  document.getElementById('vizEp').textContent=ep.ep;
-  document.getElementById('vizName').textContent=ep.name;
-  document.getElementById('vizGenre').textContent=ep.genre;
-  document.getElementById('vizDur').textContent=ep.dur;
-  document.getElementById('vizTot').textContent=ep.dur;
-  document.getElementById('pMeta').textContent=ep.ep;
-  document.getElementById('pTitle').textContent=ep.name;
-  document.getElementById('pArtist').textContent=ep.artist;
-  document.getElementById('pTot').textContent=ep.dur;
-  updateProgress(0,ep.totSec);
-  document.querySelectorAll('.ep-row').forEach((r,j)=>{r.classList.toggle('active',j===i)});
-}
-function updateProgress(el,tot){
-  const pct=(el/tot)*100;
-  document.getElementById('vizCur').textContent=fmt(el);
-  document.getElementById('vizFill').style.width=pct+'%';
-  document.getElementById('vizKnob').style.left=pct+'%';
-  document.getElementById('pFill').style.width=pct+'%';
-  document.getElementById('pKnob').style.left=pct+'%';
-  document.getElementById('pCur').textContent=fmt(el);
-  document.getElementById('vizElapsed').textContent=fmt(el)+' elapsed';
-}
-function animBars(playing){
+let barRaf;
+function animBars(){
+  const ts = Date.now();
   bars.forEach((b,i)=>{
-    if(playing){
-      const base=Math.sin(Date.now()/400+i*0.35)*0.35+0.55;
-      const noise=Math.sin(Date.now()/180+i*0.9)*0.25;
-      const h=Math.max(4,Math.round((base+noise)*80));
+    if(isPlaying){
+      const N=bars.length, t=i/(N-1);
+      const center = 1-Math.abs(t-0.5)*2;
+      const a=Math.sin(ts/600+i*0.13);
+      const c=Math.sin(ts*0.6/600+i*0.07+2.1);
+      const d=Math.sin(ts*0.25/600+i*0.21-1.3);
+      const v=(a*0.5+c*0.35+d*0.15)*0.5+0.5;
+      const h=Math.max(4,(center*0.55+v*0.45)*120);
       b.style.height=h+'px';
-      b.style.opacity=(0.3+(base+noise)*0.5).toFixed(2);
-    } else {b.style.height='4px';b.style.opacity='0.12';}
+      b.style.opacity=(0.45+center*0.45).toFixed(2);
+    } else {
+      b.style.height='4px';
+      b.style.opacity='0.12';
+    }
   });
+  barRaf=requestAnimationFrame(animBars);
 }
-let barRaf;function startBars(){if(barRaf)cancelAnimationFrame(barRaf);(function loop(){animBars(isPlaying);barRaf=requestAnimationFrame(loop)})();}
-startBars();
+animBars();
 
-function tickTime(ts){
-  if(lastTs){elapsed+=Math.min((ts-lastTs)/1000,0.5)}
-  lastTs=ts;
-  const ep=episodes[curEp];
-  if(elapsed>=ep.totSec){elapsed=ep.totSec;stopPlay();return}
-  updateProgress(elapsed,ep.totSec);
-  raf=requestAnimationFrame(tickTime);
+function fmt(ms){
+  const s=Math.floor(ms/1000);
+  const m=Math.floor(s/60); const sec=s%60;
+  return m+':'+(sec<10?'0':'')+sec;
 }
-function startPlay(){
-  isPlaying=true;lastTs=null;
-  raf=requestAnimationFrame(tickTime);
-  document.getElementById('pPlayBtn').classList.add('playing');
-  document.getElementById('vizPlayBtn').textContent='⏸ Pause';
-  document.getElementById('pArt').classList.remove('paused');
+
+function updateUI(ep){
+  document.getElementById('vizEp').textContent=ep.label+' · '+ep.date;
+  document.getElementById('vizName').textContent=ep.name;
+  document.getElementById('pIx').textContent=ep.label;
+  document.getElementById('pMeta').textContent=ep.label+' · '+ep.date;
+  document.getElementById('pTitle').textContent=ep.name;
+  document.getElementById('pArtist').textContent=ep.genre;
 }
-function stopPlay(){
-  isPlaying=false;if(raf)cancelAnimationFrame(raf);raf=null;
-  document.getElementById('pPlayBtn').classList.remove('playing');
-  document.getElementById('vizPlayBtn').textContent='▶ Play';
-  document.getElementById('pArt').classList.add('paused');
+
+function updateProgress(pos, dur){
+  currentPos=pos; totalDur=dur;
+  const pct=dur>0?(pos/dur*100):0;
+  const posStr=fmt(pos), durStr=dur>0?fmt(dur):'—:——';
+  ['vizCur','pCur'].forEach(id=>document.getElementById(id).textContent=posStr);
+  ['vizTot','pTot'].forEach(id=>document.getElementById(id).textContent=durStr);
+  ['vizFill','pFill'].forEach(id=>document.getElementById(id).style.width=pct+'%');
+  ['vizKnob','pKnob'].forEach(id=>document.getElementById(id).style.left=pct+'%');
+  document.getElementById('vizElapsed').textContent=posStr;
 }
-document.getElementById('pPlayBtn').addEventListener('click',()=>{isPlaying?stopPlay():startPlay()});
-document.getElementById('vizPlayBtn').addEventListener('click',()=>{isPlaying?stopPlay():startPlay()});
-document.querySelectorAll('.ep-row').forEach((row,i)=>{
-  row.addEventListener('click',()=>{
-    if(curEp===i&&isPlaying){stopPlay()}
-    else{loadEp(i);startPlay()}
-  });
-});
-loadEp(0);
+
+function setPlayState(playing){
+  isPlaying=playing;
+  document.getElementById('pPlayBtn').classList.toggle('playing',playing);
+  document.getElementById('vizPlayBtn').textContent=playing?'⏸ Pause':'▶ Play';
+  document.getElementById('pArt').classList.toggle('paused',!playing);
+  document.getElementById('vizDot').classList.toggle('off',!playing);
+  document.getElementById('vizStatusTxt').textContent=playing?'On Air · Now Playing':'Ready';
+  document.getElementById('pLive').textContent=playing?'On Air':'Ready';
+}
+
+/* SoundCloud Widget API */
+function loadSCWidget(url){
+  const iframe=document.getElementById('sc-iframe');
+  iframe.src='https://w.soundcloud.com/player/?url='+encodeURIComponent(url)+'&color=%23f0ede6&auto_play=true&hide_related=true&show_comments=false&buying=false&liking=false&download=false&sharing=false&show_artwork=false&show_playcount=false&show_reposts=false&visual=false';
+  
+  if(typeof SC!=='undefined' && SC.Widget){
+    scWidget=SC.Widget(iframe);
+    scWidget.bind(SC.Widget.Events.READY,()=>{
+      scWidget.play();
+      scWidget.bind(SC.Widget.Events.PLAY,()=>{setPlayState(true)});
+      scWidget.bind(SC.Widget.Events.PAUSE,()=>{setPlayState(false)});
+      scWidget.bind(SC.Widget.Events.PLAY_PROGRESS,e=>{updateProgress(e.currentPosition,e.loadedProgress&&e.soundDuration?e.soundDuration:totalDur)});
+      scWidget.getDuration(d=>{totalDur=d;document.getElementById('vizTot').textContent=fmt(d);document.getElementById('pTot').textContent=fmt(d);});
+    });
+  }
+}
+
+function selectEp(row){
+  const i=parseInt(row.dataset.ep);
+  curEp=i;
+  document.querySelectorAll('.ep-row').forEach((r,j)=>r.classList.toggle('active',j===i));
+  updateUI(EPISODES[i]);
+  updateProgress(0,0);
+  loadSCWidget(EPISODES[i].url);
+  setPlayState(true);
+}
+
+function togglePlay(){
+  if(scWidget){scWidget.toggle()}
+  else{
+    loadSCWidget(EPISODES[curEp].url);
+    setPlayState(true);
+  }
+}
+
+function prevEp(){if(curEp>0){curEp--;selectEpByIdx(curEp)}}
+function nextEp(){if(curEp<EPISODES.length-1){curEp++;selectEpByIdx(curEp)}}
+function selectEpByIdx(i){
+  const row=document.querySelectorAll('.ep-row')[i];
+  if(row)selectEp(row);
+}
+
+function scrubTo(e){
+  if(!scWidget||!totalDur)return;
+  const r=e.currentTarget.getBoundingClientRect();
+  const pct=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width));
+  scWidget.seekTo(pct*totalDur);
+}
+
+/* Load SC Widget API script */
+(function(){
+  const s=document.createElement('script');
+  s.src='https://w.soundcloud.com/player/api.js';
+  s.onload=()=>{
+    scWidget=SC.Widget(document.getElementById('sc-iframe'));
+    scWidget.bind(SC.Widget.Events.READY,()=>{
+      scWidget.bind(SC.Widget.Events.PLAY,()=>setPlayState(true));
+      scWidget.bind(SC.Widget.Events.PAUSE,()=>setPlayState(false));
+      scWidget.bind(SC.Widget.Events.PLAY_PROGRESS,e=>{
+        if(e.soundDuration)totalDur=e.soundDuration;
+        updateProgress(e.currentPosition,totalDur);
+      });
+    });
+  };
+  document.head.appendChild(s);
+})();
+
+updateUI(EPISODES[0]);
 </script>
 </body>
 </html>
